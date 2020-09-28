@@ -1,5 +1,7 @@
 <?php
 
+require_once("Heroes_of_VM-21_Stone_Age/application/game/entities/units/Animal.php");
+
 class Human extends Animal {
     function __construct($data)
     {
