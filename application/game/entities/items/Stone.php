@@ -3,6 +3,8 @@
 class Stone extends Entity {
     function __construct($data) {
         parent::__construct($data);
-        $this->pebbles = $data->pebbles;
+        $this->count = $data->count;
+        $this->x = $data->x;
+        $this->y = $data->y;
     }
 }

@@ -3,13 +3,8 @@
 class Wood extends Entity {
     function __construct($data) {
         parent::__construct($data);
-        $this->flinders = $data->flinders;
+        $this->count = $data->count;
+        $this->x = $data->x;
+        $this->y = $data->y;
     }
-
-    public function timber() {
-        if ($this->damage === 3) {
-            $this->flinders = 15;
-        }
-    }
-
 }
