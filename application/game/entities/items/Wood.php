@@ -5,3 +5,4 @@ class Wood extends Entity {
         parent::__construct($data);
         $this->count = $data->count;
     }
+}
