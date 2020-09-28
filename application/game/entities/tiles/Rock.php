@@ -7,4 +7,10 @@ require_once ("Entity.php");
             parent::__construct($data);
             $this->count = $data->count;
         }
+        public function hit($damage = 0) {
+            if ($damage > 0) {
+                return parent::hit($damage);
+            }
+
+        }
     }
