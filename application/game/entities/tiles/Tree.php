@@ -8,4 +8,16 @@ require_once ("Entity.php");
             $this->type = $data->type;
             $this->count = $data->count;
         }
-    }
+        
+        public function hit($damage = 0) {
+            if ($damage > 0) {
+                $this->count -= $damage;
+            }
+            if ($this->count <= 0) {
+                
+            }
+        }
+            protected function destroy(){
+
+            }
+        }
