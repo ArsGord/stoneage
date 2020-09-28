@@ -1,6 +1,6 @@
 <?php
 
-require_once ("Animal.php");
+require_once ("Entity.php");
 
     class Rock extends Entity {
         function __construct($data) {
