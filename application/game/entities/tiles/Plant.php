@@ -13,8 +13,4 @@ class Plant extends Entity
     private function stageUp() {
         $this->stage++;
     }
-
-    public function voice() {
-        print_r("Hello, I'm Plant!!!");
-    }
 }

@@ -6,10 +6,6 @@ class Grass extends Entity
     {
         parent::__construct($data);
         $this->size = $data->size; // стадия роста
-        $this->count = $$data->count; // пищевая ценность для животного
-    }
-
-    public function voice() {
-        print_r("Hello, I'm grass!!!");
+        $this->count = $data->count; // пищевая ценность для животного
     }
 }

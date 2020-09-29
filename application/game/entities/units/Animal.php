@@ -1,7 +1,5 @@
 <?php
 
-require_once "../Entity.php";
-
 class Animal extends Entity {
     public function __construct($data){
         parent::__construct($data);

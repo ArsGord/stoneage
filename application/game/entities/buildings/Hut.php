@@ -1,6 +1,6 @@
 <?php
 
-class Shelter extends Entity {
+class Hut extends Entity {
     function __construct($data){
         parent::__construct($data);
         $this->armor = $data->armor; //броня
