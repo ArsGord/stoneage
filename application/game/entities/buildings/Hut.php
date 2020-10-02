@@ -7,6 +7,7 @@ class Hut extends Entity {
         $this->capacity = $data->capacity; //вместимость
     }
 
+
     function put_item($item) {
         if($this->capacity < 10) {
             $item->x = $this->x;

@@ -15,6 +15,7 @@ class Entity {
         return null;
     }
 
+
     public function repair($item, $resource) {
         if($item->hp < 100 && $resource->count > 0) {
             $item->hp += 10;
@@ -22,6 +23,7 @@ class Entity {
         }
         return $item->hp;
     }
+
 
     public function hit($damage = 0) {
         // если урон нанесен - вычесть здоровье
