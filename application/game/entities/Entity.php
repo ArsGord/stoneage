@@ -15,8 +15,12 @@ class Entity {
         return null;
     }
 
-    public function repair() {
-        return $this->hp;
+    public function repair($item, $resource) {
+        if($item->hp < 100 && $resource->count > 0) {
+            $item->hp += 10;
+            $resource -= 1;
+        }
+        return $item->hp;
     }
 
     public function hit($damage = 0) {
