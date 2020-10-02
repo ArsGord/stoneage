@@ -3,19 +3,24 @@
 class Tree extends Entity {
     function __construct($data) {
         parent::__construct($data);
-        $this->type = $data->type;
-        $this->count = $data->count;
+        $this->type = $data->type; // тип
+        $this->count = $data->count; // сколько дерева выпадет
     }
 
     public function hit($damage = 0) {
+        // если нанесен урон, то нанести его
         if ($damage > 0) {
-            $this->count -= $damage;
+            return parent::hit($damage);
         }
-        if ($this->count <= 0) {
-
-        }
+        return parent::hit();
     }
-        protected function destroy(){
 
-        }
+    // уничтожение
+    protected function destroy(){
+        return new Wood((object) [
+            'count' => $this->count,
+            'x' => $this->x,
+            'y' => $this->y
+        ]);
     }
+}

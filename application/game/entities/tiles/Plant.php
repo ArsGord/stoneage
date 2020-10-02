@@ -7,10 +7,26 @@ class Plant extends Entity
         parent::__construct($data);
         $this->size = $data->size; // стадия роста
         $this->count = $data->count; // энергетическая ценность для животных
-        $this->edible = $data->edible; // съедобное или не съедобное
+        $this->isEdible = $data->isEdible; // съедобное или не съедобное
     }
 
-    private function stageUp() {
-        $this->stage++;
+    public function hit($damage = 0) {
+        // если нанесен урон, то нанести его
+        if ($damage > 0) {
+            return parent::hit($damage);
+        }
+        return parent::hit();
+    }
+
+    // уничтожение
+    protected function destroy() {
+        return null;
+    }
+
+    // увеличение размера
+    private function sizeUp($flag) {
+        if ($flag) {
+            $this->size++;
+        }
     }
 }

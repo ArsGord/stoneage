@@ -17,7 +17,6 @@ class Animal extends Entity {
             return null;
         }
         // нанести урон, если сытость стала нулевой
-        $this->hp--;
-        return parent::hit();
+        return parent::hit(1);
     }
 }

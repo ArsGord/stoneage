@@ -3,10 +3,11 @@
 class Human extends Animal {
     function __construct($data) {
         parent::__construct($data);
-        $this->body=$data->body;
-        $this->left_hand=$data->left_hand;
-        $this->right_hand=$data->right_hand;
-        $this->backpack=$data->backpack;
+        $this->body = $data->body;
+        $this->left_hand = $data->left_hand;
+        $this->right_hand = $data->right_hand;
+        $this->backpack = $data->backpack;
+        $this->protection = $data->protection;
     }
 
     public function hit($damage = 0) {
@@ -14,7 +15,7 @@ class Human extends Animal {
         if ($damage > 0) {
             // учесть защиту игрока, вычесть часть дамаги из предметов
             if($this->protection > 0){
-                $damage--;
+                $damage -= $this->protection;
             }
             // нанести оставшуюся дамагу с помощью
             return parent::hit($damage);
@@ -24,5 +25,17 @@ class Human extends Animal {
 
     protected function destroy() {
         // Все, что лежит в карманах, вывалить на карту (предметам задать x, y)
+        // предмет из левой руки
+        $this->left_hand->x = $this->x;
+        $this->left_hand->y = $this->y;
+        // предмет из правой руки
+        $this->right_hand->x = $this->x;
+        $this->right_hand->y = $this->y;
+        // предмет из рюкзака
+        $this->backpack->x = $this->x;
+        $this->backpack->y = $this->y;
+        // надетая на тело одежда
+        $this->body->x = $this->x;
+        $this->body->y = $this->y;
     }
 }
