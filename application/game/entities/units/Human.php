@@ -26,16 +26,24 @@ class Human extends Animal {
     protected function destroy() {
         // Все, что лежит в карманах, вывалить на карту (предметам задать x, y)
         // предмет из левой руки
-        $this->left_hand->x = $this->x;
-        $this->left_hand->y = $this->y;
+        if ($this->left_hand) {
+            $this->left_hand->x = $this->x;
+            $this->left_hand->y = $this->y;
+        }
         // предмет из правой руки
-        $this->right_hand->x = $this->x;
-        $this->right_hand->y = $this->y;
+        if ($this->right_hand) {
+            $this->right_hand->x = $this->x;
+            $this->right_hand->y = $this->y;
+        }
         // предмет из рюкзака
-        $this->backpack->x = $this->x;
-        $this->backpack->y = $this->y;
+        if ($this->backpack) {
+            $this->backpack->x = $this->x;
+            $this->backpack->y = $this->y;
+        }
         // надетая на тело одежда
-        $this->body->x = $this->x;
-        $this->body->y = $this->y;
+        if ($this->body) {
+            $this->body->x = $this->x;
+            $this->body->y = $this->y;
+        }
     }
 }
