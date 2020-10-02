@@ -14,8 +14,8 @@ class Human extends Animal {
         // если нанесен урон, то нанести его с учетом брони и одежды
         if ($damage > 0) {
             // учесть защиту игрока, вычесть часть дамаги из предметов
-            if($this->protection > 0){
-                $damage -= $this->protection;
+            if($this->body->protection){
+                $damage -= $this->body->protection;
             }
             // нанести оставшуюся дамагу с помощью
             return parent::hit($damage);

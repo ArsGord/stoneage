@@ -6,8 +6,6 @@ class Cow extends Animal {
     function __construct($data) {
         parent::__construct($data);
         $this->weight = $data->weight;
-        $this->x = $data->x;
-        $this->y = $data->y;
     }
 
     protected function destroy() {
