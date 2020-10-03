@@ -28,35 +28,13 @@ require_once "entities/units/Cow.php";
 
 
 class Game {
+    function __construct($db) {
+        $this->db = $db;
 
-    function __construct() {
-        /*
-        // ПРОВЕРКА КЛАССОВ
-        $entity = new Entity(new stdClass());
-        // buildings
-        $hut = new Hut(new stdClass());
-        $wall = new Wall(new stdClass());
-        // items
-        $arrow = new Arrow(new stdClass());
-        $axe = new Axe(new stdClass());
-        $bow = new Bow(new stdClass());
-        $clothes = new Clothes(new stdClass());
-        $food = new Food(new stdClass());
-        $shield = new Shield(new stdClass());
-        $spear = new Spear(new stdClass());
-        $stone = new Stone(new stdClass());
-        $weapon = new Weapon(new stdClass());
-        $wood = new Wood(new stdClass());
-        // tiles
-        $grass = new Grass(new stdClass());
-        $plant = new Plant(new stdClass());
-        $rock = new Rock(new stdClass());
-        $tree = new Tree(new stdClass());
-        // units
-        $animal = new Animal(new stdClass());
-        $cow = new Cow(new stdClass());
-        $human = new Human(new stdClass());
-        */
+        // моки
+        $this->map = array(array(
+            new Tree()
+        ), array());
     }
 
     public function test($entity) {
@@ -64,32 +42,35 @@ class Game {
         // создать её экземпляр и вернуть его
         // иначе вернуть false
     }
-        //войти в игру(создать персонажа, подгрузить персонажа)
-        //выйти из игры
-        //умереть игорька(если он умер)
-        //сделать шаг
-        public function move($userId, $direction) {
-            $human = $this -> $db -> getHumanByUserId($userId);
-            if($human && $direction) {
-                //взять карту
-                //взять непроходимые предметы на карте
-                //взять юниты
-                //сходить
-            }
+
+    // войти в игру (создать персонажа, подгрузить персонажа)
+    // выйти из игры
+    // умерерть игорька (если он помер)
+
+    // сделать шаг
+    // http://stoneage/api/?method=move&token=123&direction=left
+    public function move($userId, $direction) {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        if ($userId && $direction) {
+            // првоерить, что direction нормальный
+            return $human->move($this->map);
         }
-        //поднять предмет
-        //бросить предмет
-        //надеть предмет
-        //положить предмет в карман
-        //ударить
-        //положить предмет в (?)
-        //починить то, что в руках/надето/лежит в кармане
-        //починить то, что лежит/стоит(строение)
-        //поесть
-        //сделать предмет
-        //сделать строение
-        //продолжить строить строение
-        //обновить игровое окружение
-        //сходить коровками вырасти траву
-        //вернуть список игроков которых я слышу
+    }
+
+    // поднять предмет
+    // бросить предмет
+    // надеть предмет
+    // положить предмет в карман
+    // ударить
+    // положить предмет в (?)
+    // починить то, что в руках/надето/лежит в кармане
+    // починить то, что лежит/стоит (строение)
+    // поесть
+    // сделать предмет
+    // сделать строение
+    // продолжить строить строение
+    // обновить игровое окружение
+        // (проголодать всех живых существ, умереть голодных,
+        // сходить коровками, вырасти травку, сменить время суток, протухнуть еду)
+    // вернуть слова игроков, которых я слышу
 }

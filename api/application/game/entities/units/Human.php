@@ -46,4 +46,11 @@ class Human extends Animal {
             $this->body->y = $this->y;
         }
     }
+
+    public function move($map) {
+        // взять непроходимые предметы на карте
+        // взять юниты (все)
+        // сходить
+        return true;
+    }
 }

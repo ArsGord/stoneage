@@ -10,9 +10,12 @@ function router($params) {
     if ($method) {
         $app = new Application();
         switch ($method) {
+            // user
             //case 'login': return $app->login($params);
             case 'test': return $app->test($params);
             // ..
+            // game
+            case 'move': return $app->move($params);
         }
     }
     return false;
