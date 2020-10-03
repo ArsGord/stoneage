@@ -1,6 +1,10 @@
 <?php
 
+error_reporting(-1);
+
 // ИМПОРТ ФАЙЛОВ
+require_once "application/Application.php";
+// entity
 require_once "application/game/entities/Entity.php";
 // buildings
 require_once "application/game/entities/buildings/Hut.php";
@@ -25,6 +29,32 @@ require_once "application/game/entities/tiles/Tree.php";
 require_once "application/game/entities/units/Animal.php";
 require_once "application/game/entities/units/Human.php";
 require_once "application/game/entities/units/Cow.php";
+
+function router($params) {
+    $method = $params['methods'];
+    if ($method) {
+        $app = new Application();
+        switch ($method) {
+            case 'login': return $app->login($params);
+            // ..
+        }
+    }
+    return false;
+}
+
+function answer($data) {
+    if ($data) {
+        return array(
+            'result' => 'ok',
+            'data' => $data
+        );
+    }
+    return array(
+        'result' => 'error'
+    );
+}
+
+echo json_encode(answer(router($_GET)));
 
 // ПРОВЕРКА КЛАССОВ
 $entity = new Entity(new stdClass());
