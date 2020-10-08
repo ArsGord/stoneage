@@ -32,9 +32,8 @@ class Game {
         $this->db = $db;
 
         // моки
-        // нужно ли сделать $this->db->map ???
         $this->map = array(
-            array(new Tree()),
+            array(new Tree(new stdClass())),
             array()
             // двумерный массив 3 на 3 из объектов карты
             /*array(
@@ -53,6 +52,11 @@ class Game {
         // если сущность-класс с таким названием есть, то
         // создать её экземпляр и вернуть его
         // иначе вернуть false
+        if ($entity) {
+            $ENTITY = new $entity(new stdClass());
+            return $ENTITY;
+        }
+        return false;
     }
 
     // войти в игру (создать персонажа, подгрузить персонажа)
@@ -87,7 +91,10 @@ class Game {
     }
     // ударить
     public function hit($userId, $direction) {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        if ($userId && $direction) {
 
+        }
     }
     // положить предмет в (?)
     // починить то, что в руках/надето/лежит в кармане
@@ -100,14 +107,14 @@ class Game {
     }
     // поесть
     public function eat($userId, $itemId) {
-        $human = new Human($this->db->getHumanByUserId());
+        $human = new Human($this->db->getHumanByUserId($userId));
         if ($userId && $itemId) {
             return $human->eat($itemId);
         }
     }
     // сделать предмет
     public function makeItem($userId) {
-        $human = new Human($this->db->getHumanByUserId());
+        $human = new Human($this->db->getHumanByUserId($userId));
 
     }
     // сделать строение

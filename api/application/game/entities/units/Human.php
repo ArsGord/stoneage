@@ -26,7 +26,7 @@ class Human extends Animal {
     protected function destroy() {
         // Все, что лежит в карманах, вывалить на карту (предметам задать x, y)
         // предмет из левой руки
-        // НАДО ПЕРЕДЕЛАТЬ
+        // НУЖНО ПЕРЕДЕЛАТЬ
         /*if ($this->left_hand) {
             $this->left_hand->x = $this->x;
             $this->left_hand->y = $this->y;
@@ -50,13 +50,25 @@ class Human extends Animal {
 
     public function move($map) {
         // взять непроходимые предметы на карте
-
+        $tiles = []; // массив непроходимых предметов
+        $units = [];
+        // выбираем непроходимые объекты на карте
+        foreach($map as $item) {
+            if ($item->canGo === false) {
+                $tiles[] = $item;
+            }
+        }
         // взять юниты (все)
         // сходить
+        // ???
         return true;
     }
 
     public function eat($itemId) {
+
+    }
+
+    public function takeItem($userId, $itemId) {
 
     }
 }
