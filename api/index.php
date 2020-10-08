@@ -13,7 +13,6 @@ function router($params) {
             // user
             //case 'login': return $app->login($params);
             case 'test': return $app->test($params);
-            // ..
             // game
             case 'move': return $app->move($params);
         }

@@ -26,7 +26,8 @@ class Human extends Animal {
     protected function destroy() {
         // Все, что лежит в карманах, вывалить на карту (предметам задать x, y)
         // предмет из левой руки
-        if ($this->left_hand) {
+        // НАДО ПЕРЕДЕЛАТЬ
+        /*if ($this->left_hand) {
             $this->left_hand->x = $this->x;
             $this->left_hand->y = $this->y;
         }
@@ -44,13 +45,18 @@ class Human extends Animal {
         if ($this->body) {
             $this->body->x = $this->x;
             $this->body->y = $this->y;
-        }
+        }*/
     }
 
     public function move($map) {
         // взять непроходимые предметы на карте
+
         // взять юниты (все)
         // сходить
         return true;
+    }
+
+    public function eat($itemId) {
+
     }
 }

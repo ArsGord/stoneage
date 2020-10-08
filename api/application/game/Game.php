@@ -32,9 +32,21 @@ class Game {
         $this->db = $db;
 
         // моки
-        $this->map = array(array(
-            new Tree()
-        ), array());
+        // нужно ли сделать $this->db->map ???
+        $this->map = array(
+            array(new Tree()),
+            array()
+            // двумерный массив 3 на 3 из объектов карты
+            /*array(
+                new Tree(new stdClass()), new Rock(new stdClass()), new Grass(new stdClass())
+            ),
+            array(
+                new Plant(new stdClass()), new Grass(new stdClass()), new Rock(new stdClass())
+            ),
+            array(
+                new Tree(new stdClass()), new Grass(new stdClass()), new Grass(new stdClass())
+            )*/
+        );
     }
 
     public function test($entity) {
@@ -52,23 +64,60 @@ class Game {
     public function move($userId, $direction) {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($userId && $direction) {
-            // првоерить, что direction нормальный
+            // проверить, что direction нормальный
             return $human->move($this->map);
         }
     }
 
     // поднять предмет
+    public function takeItem($userId, $itemId) {
+
+    }
     // бросить предмет
+    public function dropItem($userId, $itemId) {
+
+    }
     // надеть предмет
+    public function putOn($userId, $itemId) {
+
+    }
     // положить предмет в карман
+    public function putIn($userId, $itemId) {
+
+    }
     // ударить
+    public function hit($userId, $direction) {
+
+    }
     // положить предмет в (?)
     // починить то, что в руках/надето/лежит в кармане
+    public function repair($userId, $itemId) {
+
+    }
     // починить то, что лежит/стоит (строение)
+    public  function fix($userId, $buildingId) {
+
+    }
     // поесть
+    public function eat($userId, $itemId) {
+        $human = new Human($this->db->getHumanByUserId());
+        if ($userId && $itemId) {
+            return $human->eat($itemId);
+        }
+    }
     // сделать предмет
+    public function makeItem($userId) {
+        $human = new Human($this->db->getHumanByUserId());
+
+    }
     // сделать строение
+    public function makeBuilding($userId) {
+
+    }
     // продолжить строить строение
+    public function keepBuilding($userId, $buildingId) {
+
+    }
     // обновить игровое окружение
         // (проголодать всех живых существ, умереть голодных,
         // сходить коровками, вырасти травку, сменить время суток, протухнуть еду)
