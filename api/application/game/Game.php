@@ -33,10 +33,8 @@ class Game {
 
         // моки
         $this->map = array(
-            array(new Tree(new stdClass())),
-            array()
-            // двумерный массив 3 на 3 из объектов карты
-            /*array(
+            // массив 3 на 3 из объектов карты
+            array(
                 new Tree(new stdClass()), new Rock(new stdClass()), new Grass(new stdClass())
             ),
             array(
@@ -44,7 +42,7 @@ class Game {
             ),
             array(
                 new Tree(new stdClass()), new Grass(new stdClass()), new Grass(new stdClass())
-            )*/
+            )
         );
     }
 
@@ -52,9 +50,11 @@ class Game {
         // если сущность-класс с таким названием есть, то
         // создать её экземпляр и вернуть его
         // иначе вернуть false
-        if ($entity) {
-            $ENTITY = new $entity(new stdClass());
-            return $ENTITY;
+        foreach (get_declared_classes() as $key => $value) {
+            if ($entity == $key) {
+                $ENTITY = new $entity(new stdClass());
+                return $ENTITY;
+            }
         }
         return false;
     }
@@ -69,7 +69,7 @@ class Game {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($userId && $direction) {
             // проверить, что direction нормальный
-            return $human->move($this->map);
+            return $human->move($this->map, $direction);
         }
     }
 

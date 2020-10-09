@@ -60,7 +60,7 @@ class Application {
     public function eat($userId, $itemId) {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($userId && $itemId) {
-            return $human->eat($itemId);
+
         }
     }
 
