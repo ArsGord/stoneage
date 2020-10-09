@@ -50,8 +50,8 @@ class Game {
         // если сущность-класс с таким названием есть, то
         // создать её экземпляр и вернуть его
         // иначе вернуть false
-        foreach (get_declared_classes() as $key => $value) {
-            if ($entity == $key) {
+        foreach (get_declared_classes() as $value) {
+            if ($entity === $value) {
                 $ENTITY = new $entity(new stdClass());
                 return $ENTITY;
             }
