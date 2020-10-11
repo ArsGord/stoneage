@@ -23,6 +23,7 @@ class Application {
         }
     }
 
+
     public function takeItem($params) {
         $user = $this->user->getUserByToken(($params['token']));
         if ($user) {

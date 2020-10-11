@@ -141,20 +141,34 @@ class Game {
     }
 
     // поднять предмет
-    public function takeItem($userId, $itemId) {
-
+    public function takeItem($userId) {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        foreach ($this->db->items as $item) {
+            if ($item->x === $human->x && $item->y === $human->y) { //проверяем координаты предметов
+                $human->takeItem($item);                            //берём предмет с земли
+                $this->db->item->delete($item->id);                 //удаляем с карты
+            }
+        }
     }
     // бросить предмет
-    public function dropItem($userId, $itemId) {
-
+    public function dropItem($userId) {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        $item = $human->dropItem();
+        if ($item) {
+            $this->db->items[] = $item;                             //выбрасываем предмет
+            return true;
+        }
+        return false;
     }
     // надеть предмет
-    public function putOn($userId, $itemId) {
-
+    public function putOn($userId) {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        return $human->putOn();
     }
     // положить предмет в карман
-    public function putIn($userId, $itemId) {
-
+    public function putOnBackpack($userId) {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        return $human->putOnBackpack();
     }
     // ударить
     public function hit($userId, $direction) {

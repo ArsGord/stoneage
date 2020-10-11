@@ -96,7 +96,48 @@ class Human extends Animal {
 
     }
 
-    public function takeItem($userId, $itemId) {
+    public function takeItem($item) {
+        if ($this->right_hand || $this->left_hand) {
+            return false;
+        } elseif ($this->right_hand) {
+            $this->left_hand = $item;
+        } else {
+            $this->right_hand = $item;
+        }
+    }
 
+    public function dropItem() {
+        if($this->right_hand) {
+            $item = $this->right_hand;
+            $this->right_hand = null;
+            return $item;
+        }
+        return false;
+    }
+
+    public function putOn() {
+        if($this->right_hand->clothes) {
+            $this->body = $this->right_hand;
+            $this->right_hand = null;
+            return true;
+        } elseif ($this->left_hand->clothes) {
+            $this->body = $this->left_hand;
+            $this->left_hand = null;
+            return true;
+        }
+        return false;
+    }
+
+    public function putOnBackpack() {
+        if($this->right_hand) {
+            $this->backpack = $this->right_hand;
+            $this->right_hand = null;
+            return true;
+        } elseif ($this->left_hand) {
+            $this->backpack = $this->left_hand;
+            $this->left_hand = null;
+            return true;
+        }
+        return false;
     }
 }
