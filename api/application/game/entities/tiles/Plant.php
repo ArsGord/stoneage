@@ -8,6 +8,7 @@ class Plant extends Entity
         $this->size = $data->size; // стадия роста
         $this->count = $data->count; // энергетическая ценность для животных
         $this->isEdible = $data->isEdible; // съедобное или не съедобное
+        $this->passable = true;
     }
 
     public function hit($damage = 0) {

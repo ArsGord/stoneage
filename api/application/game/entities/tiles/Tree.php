@@ -5,6 +5,7 @@ class Tree extends Entity {
         parent::__construct($data);
         $this->type = $data->type; // тип
         $this->count = $data->count; // сколько дерева выпадет
+        $this->passable = false;
     }
 
     public function hit($damage = 0) {

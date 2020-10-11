@@ -48,79 +48,48 @@ class Human extends Animal {
         }*/
     }
 
-    public function move($map, $direction) {
+    public function move($map, $direction)
+    {
         // взять непроходимые предметы на карте
         // выбираем непроходимые объекты на карте
         switch ($direction) {
             case 'left':
-                if ($this->x > 0) {
+                if ($this->x > 0) { // проверка на границу карты
                     $X = $this->x - 1;
                     $Y = $this->y;
-                    if ($map[$X][$Y]->canGo) {
-                        $this->x = $X;
-                    } else {
-                        // нанести урон объекту на карте
-                        if ($this->right_hand->damage) {
-                            $map[$X][$Y]->hit($this->right_hand->damage);
-                        } else {
-                            $map[$X][$Y]->hit(1);
-                        }
+                    if ($map[$X][$Y]->passible) { // проверка на проходимость объекта на карте
+                        return true;
                     }
                 }
-                break;
+                return false;
             case 'right':
                 if ($this->x < count($map) - 1) {
                     $X = $this->x + 1;
                     $Y = $this->y;
-                    if ($map[$X][$Y]->canGo) {
-                        $this->x = $X;
-                    } else {
-                        // нанести урон объекту на карте
-                        if ($this->right_hand->damage) {
-                            $map[$X][$Y]->hit($this->right_hand->damage);
-                        } else {
-                            $map[$X][$Y]->hit(1);
-                        }
+                    if ($map[$X][$Y]->passible) {
+                        return true;
                     }
                 }
-                break;
+                return false;
             case 'up':
                 if ($this->y > 0) {
                     $X = $this->x;
                     $Y = $this->y - 1;
-                    if ($map[$X][$Y]->canGo) {
-                        $this->y = $Y;
-                    } else {
-                        // нанести урон объекту на карте
-                        if ($this->right_hand->damage) {
-                            $map[$X][$Y]->hit($this->right_hand->damage);
-                        } else {
-                            $map[$X][$Y]->hit(1);
-                        }
+                    if ($map[$X][$Y]->passible) {
+                        return true;
                     }
                 }
-                break;
+                return false;
             case 'down':
-                if ($this->y < count($map[0]) - 1) {
+                if ($this->y < count(map[0]) - 1) {
                     $X = $this->x;
                     $Y = $this->y + 1;
-                    if ($map[$X][$Y]->canGo) {
-                        $this->y = $Y;
-                    } else {
-                        // нанести урон объекту на карте
-                        if ($this->right_hand->damage) {
-                            $map[$X][$Y]->hit($this->right_hand->damage);
-                        } else {
-                            $map[$X][$Y]->hit(1);
-                        }
+                    if ($map[$X][$Y]->passible) {
+                        return true;
                     }
                 }
-                break;
+                return false;
         }
-        // взять юниты (все)
-        // сходить
-        // ???
-        return true;
     }
 
     public function eat($itemId) {
