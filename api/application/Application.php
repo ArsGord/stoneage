@@ -25,56 +25,67 @@ class Application {
 
 
     public function takeItem($params) {
-        $user = $this->user->getUserByToken(($params['token']));
+        $user = $this->user->getUserByToken($params['token']);
         if ($user) {
             return $this->game->takeItem($user->id);
         }
     }
 
-    public function dropItem($userId, $itemId) {
-
-    }
-
-    public function putOn($userId, $itemId) {
-
-    }
-
-    public function putIn($userId, $itemId) {
-
-    }
-
-    public function hit($userId, $direction) {
-        $human = new Human($this->db->getHumanByUserId($userId));
-        if ($userId && $direction) {
-
+    public function dropItem($params) {
+        $user = $this->user->getUserByToken($params['token']);
+        if ($user) {
+            return $this->game->dropItem($user->id);
         }
     }
 
-    public function repair($userId, $itemId) {
-
-    }
-
-    public  function fix($userId, $buildingId) {
-
-    }
-
-    public function eat($userId, $itemId) {
-        $human = new Human($this->db->getHumanByUserId($userId));
-        if ($userId && $itemId) {
-
+    public function putOn($params) {
+        $user = $this->user->getUserByToken($params['token']);
+        if ($user) {
+            return $this->game->putOn($user->id);
         }
     }
 
-    public function makeItem($userId) {
-        $human = new Human($this->db->getHumanByUserId($userId));
+    public function putOnBackpack($params) {
+        $user = $this->user->getUserByToken($params['token']);
+        if ($user) {
+            return $this->game->putOnBackpack($user->id);
+        }
+    }
+
+    public function hit($params) {
+        $user = $this->user->getUserByToken($params['token']);
 
     }
 
-    public function makeBuilding($userId) {
+    public function repair($params) {
+        $user = $this->user->getUserByToken($params['token']);
+
+    }
+
+    public  function fix($params) {
+        $user = $this->user->getUserByToken($params['token']);
+
+    }
+
+    public function eat($params) {
+        $user = $this->user->getUserByToken($params['token']);
+        if ($user) {
+            return $this->game->eat($user->id);
+        }
+    }
+
+    public function makeItem($params) {
+        $user = $this->user->getUserByToken($params['token']);
+
+    }
+
+    public function makeBuilding($params) {
+        $user = $this->user->getUserByToken($params['token']);
 
     }
 
     public function keepBuilding($params) {
+        $user = $this->user->getUserByToken($params['token']);
 
     }
 }

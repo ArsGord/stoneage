@@ -4,7 +4,7 @@ class Rock extends Entity {
     function __construct($data) {
         parent::__construct($data);
         $this->count = $data->count;
-        $this->passable = false;
+        $this->passability = false;
     }
 
     public function hit($damage = 0) {

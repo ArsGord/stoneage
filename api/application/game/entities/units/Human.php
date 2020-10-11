@@ -57,57 +57,94 @@ class Human extends Animal {
                 if ($this->x > 0) { // проверка на границу карты
                     $X = $this->x - 1;
                     $Y = $this->y;
-                    if ($map[$X][$Y]->passable) { // проверка на проходимость объекта на карте
-                        return true;
+                    if (!($map[$X][$Y]->passability)) {     // проверяем можно ли пройти
+                        if (!(get_class($map[$X][$Y]) === 'Water')) {   // если не вода, то бьем объект на карте
+                            if ($this->right_hand->damage) {
+                                $map[$X][$Y]->hit($this->right_hand->damage);
+                            } else {
+                                $map[$X][$Y]->hit(1);
+                            }
+                        }
                     }
                 }
-                return false;
+                return (object) [
+                    'result' => true,
+                    'map' => $map
+                ];
             case 'right':
                 if ($this->x < count($map) - 1) {
                     $X = $this->x + 1;
                     $Y = $this->y;
-                    if ($map[$X][$Y]->passable) {
-                        return true;
+                    if (!($map[$X][$Y]->passability)) {
+                        if (!(get_class($map[$X][$Y]) === 'Water')) {
+                            if ($this->right_hand->damage) {
+                                $map[$X][$Y]->hit($this->right_hand->damage);
+                            } else {
+                                $map[$X][$Y]->hit(1);
+                            }
+                        }
                     }
                 }
-                return false;
+                return (object) [
+                    'result' => true,
+                    'map' => $map
+                ];
             case 'up':
                 if ($this->y > 0) {
                     $X = $this->x;
                     $Y = $this->y - 1;
-                    if ($map[$X][$Y]->passable) {
-                        return true;
+                    if (!($map[$X][$Y]->passability)) {
+                        if (!(get_class($map[$X][$Y]) === 'Water')) {
+                            if ($this->right_hand->damage) {
+                                $map[$X][$Y]->hit($this->right_hand->damage);
+                            } else {
+                                $map[$X][$Y]->hit(1);
+                            }
+                        }
                     }
                 }
-                return false;
+                return (object) [
+                    'result' => true,
+                    'map' => $map
+                ];
             case 'down':
                 if ($this->y < count($map[0]) - 1) {
                     $X = $this->x;
                     $Y = $this->y + 1;
-                    if ($map[$X][$Y]->passable) {
-                        return true;
+                    if (!($map[$X][$Y]->passability)) {
+                        if (!(get_class($map[$X][$Y]) === 'Water')) {
+                            if ($this->right_hand->damage) {
+                                $map[$X][$Y]->hit($this->right_hand->damage);
+                            } else {
+                                $map[$X][$Y]->hit(1);
+                            }
+                        }
                     }
                 }
-                return false;
+                return (object) [
+                    'result' => true,
+                    'map' => $map
+                ];
         }
-    }
-
-    public function eat($itemId) {
-
+        return (object) [
+            'result' => false,
+            'map' => $map
+        ];
     }
 
     public function takeItem($item) {
-        if ($this->right_hand || $this->left_hand) {
+        if ($this->right_hand || $this->left_hand) { // если заняты обе руки, то не можем поднять предмет
             return false;
-        } elseif ($this->right_hand) {
+        } elseif ($this->right_hand) { // кладем в левую руку, если правая занята
             $this->left_hand = $item;
-        } else {
-            $this->right_hand = $item;
+            return true;
         }
+        $this->right_hand = $item; // кладем в правую руку
+        return true;
     }
 
     public function dropItem() {
-        if($this->right_hand) {
+        if($this->right_hand) { // если в правой руке что-то есть, то выбрасываем
             $item = $this->right_hand;
             $this->right_hand = null;
             return $item;
@@ -116,7 +153,7 @@ class Human extends Animal {
     }
 
     public function putOn() {
-        if($this->right_hand->clothes) {
+        if($this->right_hand->clothes) {    // переделать clothes
             $this->body = $this->right_hand;
             $this->right_hand = null;
             return true;
@@ -140,4 +177,18 @@ class Human extends Animal {
         }
         return false;
     }
+
+    public function eat() {
+        if($this->right_hand->eat) {    // переделать eat
+            $this->satiety += 10;
+            $this->right_hand = null;
+            return true;
+        } elseif ($this->left_hand) {
+            $this->satiety += 10;
+            $this->left_hand = null;
+            return true;
+        }
+        return false;
+    }
+
 }

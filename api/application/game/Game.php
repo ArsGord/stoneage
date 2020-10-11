@@ -69,75 +69,70 @@ class Game {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($userId && $direction) {
             // проверить, что direction нормальный
-            $canMove = $human->move($this->map, $direction);
+            $obj = $human->move($this->map, $direction);
 
-            switch ($direction) {
-                case 'left':
-                    $X = $human->x - 1;
-                    $Y = $human->y;
-                    $result = $this->checkMove($X, $Y, $canMove, $human);
-                    $human = $result->human;
-                    return $result->flag;
-                case 'right':
-                    $X = $human->x + 1;
-                    $Y = $human->y;
-                    $result = $this->checkMove($X, $Y, $canMove, $human);
-                    $human = $result->human;
-                    return $result->flag;
-                case 'up':
-                    $X = $human->x;
-                    $Y = $human->y - 1;
-                    $result = $this->checkMove($X, $Y, $canMove, $human);
-                    $human = $result->human;
-                    return $result->flag;
-                case 'down':
-                    $X = $human->x;
-                    $Y = $human->y + 1;
-                    $result = $this->checkMove($X, $Y, $canMove, $human);
-                    $human = $result->human;
-                    return $result->flag;
+            $canMove = $obj->result;
+            // проверка можно ли ударить игрока
+            if ($canMove) {
+                switch ($direction) {
+                    case 'left':
+                        $X = $this->x - 1;
+                        $Y = $this->y;
+                        $result = $this->checkPlayers($X, $Y, $human);
+                        $human = $result->human;
+                        return $result->result;
+                    case 'right':
+                        $X = $this->x + 1;
+                        $Y = $this->y;
+                        $result = $this->checkPlayers($X, $Y, $human);
+                        $human = $result->human;
+                        return $result->result;
+                    case 'up':
+                        $X = $this->x;
+                        $Y = $this->y - 1;
+                        $result = $this->checkPlayers($X, $Y, $human);
+                        $human = $result->human;
+                        return $result->result;
+                    case 'down':
+                        $X = $this->x;
+                        $Y = $this->y + 1;
+                        $result = $this->checkPlayers($X, $Y, $human);
+                        $human = $result->human;
+                        return $result->result;
+                }
+            } else {
+                $this->map = $obj->map; // обновляем карту
             }
+            return $obj->result;
         }
     }
-    // для функции move
-    private function checkMove($X, $Y, $canMove, $human) {
-        if ($canMove) {
-            // ищем игрока в базе данных, если нашелся, то бьем его
-            foreach ($this->db->users as $user) {
-                if ($user->x === $X && $user->y === $Y) {
-                    if ($human->right_hand->damage) { // проверяем урон human
-                        $user->hit($human->right_hand->gamage);
-                    } else {
-                        $user->hit(1);
-                    }
-                    $userFinded = true;
-                    break;
+    // для метода move
+    // X, Y - координаты, куда хотим идти
+    private function checkPlayers($X, $Y, $human) {
+        // если можем передвинуться, то
+        // ищем игрока в базе данных, если нашелся, то бьем его
+        foreach ($this->db->users as $user) {
+            if ($user->x === $X && $user->y === $Y) {
+                if ($human->right_hand->damage) { // проверяем урон human
+                    $user->hit($human->right_hand->damage);
                 } else {
-                    $userFinded = false;
+                    $user->hit(1);
                 }
+                $userFinded = true;
+                break;
+            } else {
+                $userFinded = false;
             }
-            // если игрок не найден, то передвигаемся
-            if (!$userFinded) {
-                $human->x = $X;
-            }
-            return (object) [
-                'human' => $human,
-                'flag' => true
-            ];
-        } else {
-            if (get_class($this->map[$X][$Y]) !== 'Water') { // если вода, то никуда не идем
-                // нанести урон объекту на карте
-                if ($human->right_hand->damage) {
-                    $this->map[$X][$Y]->hit($this->right_hand->damage);
-                } else {
-                    $this->map[$X][$Y]->hit(1);
-                }
-            }
-            return (object) [
-                'human' => $human,
-                'flag' => true
-            ];
         }
+        // если игрок не найден, то передвигаемся
+        if (!$userFinded) {
+            $human->x = $X;
+            $human->y = $Y;
+        }
+        return (object) [       // возвращаем human и true
+            'human' => $human,
+            'result' => true
+        ];
     }
 
     // поднять предмет
@@ -171,15 +166,13 @@ class Game {
         return $human->putOnBackpack();
     }
     // ударить
-    public function hit($userId, $direction) {
+    public function hit($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        if ($userId && $direction) {
 
-        }
     }
     // положить предмет в (?)
     // починить то, что в руках/надето/лежит в кармане
-    public function repair($userId, $itemId) {
+    public function repair($userId) {
 
     }
     // починить то, что лежит/стоит (строение)
@@ -187,10 +180,10 @@ class Game {
 
     }
     // поесть
-    public function eat($userId, $itemId) {
+    public function eat($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        if ($userId && $itemId) {
-            return $human->eat($itemId);
+        if ($userId) {
+            return $human->eat();
         }
     }
     // сделать предмет
