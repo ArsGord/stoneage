@@ -57,7 +57,7 @@ class Human extends Animal {
                 if ($this->x > 0) { // проверка на границу карты
                     $X = $this->x - 1;
                     $Y = $this->y;
-                    if ($map[$X][$Y]->passible) { // проверка на проходимость объекта на карте
+                    if ($map[$X][$Y]->passable) { // проверка на проходимость объекта на карте
                         return true;
                     }
                 }
@@ -66,7 +66,7 @@ class Human extends Animal {
                 if ($this->x < count($map) - 1) {
                     $X = $this->x + 1;
                     $Y = $this->y;
-                    if ($map[$X][$Y]->passible) {
+                    if ($map[$X][$Y]->passable) {
                         return true;
                     }
                 }
@@ -75,16 +75,16 @@ class Human extends Animal {
                 if ($this->y > 0) {
                     $X = $this->x;
                     $Y = $this->y - 1;
-                    if ($map[$X][$Y]->passible) {
+                    if ($map[$X][$Y]->passable) {
                         return true;
                     }
                 }
                 return false;
             case 'down':
-                if ($this->y < count(map[0]) - 1) {
+                if ($this->y < count($map[0]) - 1) {
                     $X = $this->x;
                     $Y = $this->y + 1;
-                    if ($map[$X][$Y]->passible) {
+                    if ($map[$X][$Y]->passable) {
                         return true;
                     }
                 }
