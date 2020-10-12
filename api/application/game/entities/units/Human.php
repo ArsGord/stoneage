@@ -196,7 +196,7 @@ class Human extends Animal {
         return false;
     }
 
-    public function eat() {
+    public function eat($eat) {
         if($this->right_hand->eat) {    // переделать eat
             $this->satiety += 10;
             $this->right_hand = null;

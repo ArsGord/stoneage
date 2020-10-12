@@ -52,19 +52,6 @@ class Game {
         );
     }
 
-    public function test($entity) {
-        // если сущность-класс с таким названием есть, то
-        // создать её экземпляр и вернуть его
-        // иначе вернуть false
-        foreach (get_declared_classes() as $value) {
-            if ($entity === $value) {
-                $ENTITY = new $entity(new stdClass());
-                return $ENTITY;
-            }
-        }
-        return false;
-    }
-
     // войти в игру (создать персонажа, подгрузить персонажа)
     // выйти из игры
     // умерерть игорька (если он помер)
@@ -118,11 +105,12 @@ class Game {
         $human = new Human($this->db->getHumanByUserId($userId));
         return $human->putOnBackpack();
     }
-    // ударить
-    public function hit($userId) {
-        $human = new Human($this->db->getHumanByUserId($userId));
 
+    // выстрелить/бросить (копье или не копье)
+    public function shot($userId) {
+        $human = new Human($this->db->getHumanByUserId($userId));
     }
+
     // положить предмет в (?)
     // починить то, что в руках/надето/лежит в кармане
     public function repair($userId) {
@@ -135,7 +123,7 @@ class Game {
     // поесть
     public function eat($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        if ($userId) {
+        if ($human) {
             return $human->eat();
         }
     }

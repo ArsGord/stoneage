@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(1);
+error_reporting(-1);
 
 // ИМПОРТ ФАЙЛОВ
 require_once "application/Application.php";
@@ -11,8 +11,7 @@ function router($params) {
         $app = new Application();
         switch ($method) {
             // user
-            //case 'login': return $app->login($params);
-            case 'test': return $app->test($params);
+            case 'login': return $app->login($params);
             // game
             case 'move': return $app->move($params);
             case 'takeItem': return $app->takeItem($params);

@@ -10,12 +10,6 @@ class Application {
         $this->game = new Game($db);
     }
 
-    public function test($params) {
-        if ($params['entity']) {
-            return $this->game->test($params['entity']);
-        }
-    }
-
     public function move($params) {
         $user = $this->user->getUserByToken($params['token']);
         if ($user) {
