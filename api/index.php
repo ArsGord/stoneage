@@ -15,6 +15,8 @@ function router($params) {
             case 'test': return $app->test($params);
             // game
             case 'move': return $app->move($params);
+            case 'takeItem': return $app->takeItem($params);
+            case 'dropItem': return $app->dropItem($params);
         }
     }
     return false;

@@ -2,13 +2,13 @@
 
 class Entity {
     function __construct($data) {
-        $this->id        = $data->id;
-        $this->entity_id = $data->entity_id;
-        $this->image     = $data->image;
-        $this->name      = $data->name;
-        $this->hp        = $data->hp;
-        $this->x         = $data->x;
-        $this->y         = $data->y;
+        $this->id    = $data->id;
+        $this->type  = $data->type;
+        $this->image = $data->image;
+        $this->name  = $data->name;
+        $this->hp    = $data->hp;
+        $this->x     = $data->x;
+        $this->y     = $data->y;
     }
 
     protected function destroy() {

@@ -35,13 +35,19 @@ class Game {
         $this->map = array(
             // массив 3 на 3 из объектов карты
             array(
-                new Tree(new stdClass()), new Rock(new stdClass()), new Grass(new stdClass())
+                new Tree(new stdClass()),
+                new Rock(new stdClass()),
+                new Grass(new stdClass())
             ),
             array(
-                new Plant(new stdClass()), new Grass(new stdClass()), new Rock(new stdClass())
+                new Plant(new stdClass()),
+                new Grass(new stdClass()),
+                new Rock(new stdClass())
             ),
             array(
-                new Tree(new stdClass()), new Grass(new stdClass()), new Grass(new stdClass())
+                new Tree(new stdClass()),
+                new Grass(new stdClass()),
+                new Grass(new stdClass())
             )
         );
     }
@@ -67,94 +73,41 @@ class Game {
     // http://stoneage/api/?method=move&token=123&direction=left
     public function move($userId, $direction) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        if ($userId && $direction) {
-            // проверить, что direction нормальный
-            $obj = $human->move($this->map, $direction);
-
-            $canMove = $obj->result;
-            // проверка можно ли ударить игрока
-            if ($canMove) {
-                switch ($direction) {
-                    case 'left':
-                        $X = $this->x - 1;
-                        $Y = $this->y;
-                        $result = $this->checkPlayers($X, $Y, $human);
-                        $human = $result->human;
-                        return $result->result;
-                    case 'right':
-                        $X = $this->x + 1;
-                        $Y = $this->y;
-                        $result = $this->checkPlayers($X, $Y, $human);
-                        $human = $result->human;
-                        return $result->result;
-                    case 'up':
-                        $X = $this->x;
-                        $Y = $this->y - 1;
-                        $result = $this->checkPlayers($X, $Y, $human);
-                        $human = $result->human;
-                        return $result->result;
-                    case 'down':
-                        $X = $this->x;
-                        $Y = $this->y + 1;
-                        $result = $this->checkPlayers($X, $Y, $human);
-                        $human = $result->human;
-                        return $result->result;
-                }
-            } else {
-                $this->map = $obj->map; // обновляем карту
-            }
-            return $obj->result;
+        //$humans = $this->db->getHumans();
+        $result = $human->move($this->map, /*$humans,*/ $direction);
+        if ($result) { // обновить данные в БД
+            //...
+            return true;
         }
-    }
-    // для метода move
-    // X, Y - координаты, куда хотим идти
-    private function checkPlayers($X, $Y, $human) {
-        // если можем передвинуться, то
-        // ищем игрока в базе данных, если нашелся, то бьем его
-        foreach ($this->db->users as $user) {
-            if ($user->x === $X && $user->y === $Y) {
-                if ($human->right_hand->damage) { // проверяем урон human
-                    $user->hit($human->right_hand->damage);
-                } else {
-                    $user->hit(1);
-                }
-                $userFinded = true;
-                break;
-            } else {
-                $userFinded = false;
-            }
-        }
-        // если игрок не найден, то передвигаемся
-        if (!$userFinded) {
-            $human->x = $X;
-            $human->y = $Y;
-        }
-        return (object) [       // возвращаем human и true
-            'human' => $human,
-            'result' => true
-        ];
+        return false;
     }
 
     // поднять предмет
     public function takeItem($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        foreach ($this->db->items as $item) {
+        foreach ($this->db->getFreeItems() as $item) {
             if ($item->x === $human->x && $item->y === $human->y) { //проверяем координаты предметов
-                $human->takeItem($item);                            //берём предмет с земли
-                $this->db->item->delete($item->id);                 //удаляем с карты
+                if ($human->takeItem($item->id)) { //берём предмет с земли
+                    $this->db->takeItem($human->id, $item->id); //удаляем с карты
+                    $this->db->updateInventory($human);
+                    return true;
+                }
             }
         }
+        return false;
     }
+
     // бросить предмет
-    public function dropItem($userId) {
+    public function dropItem($userId, $hand = 'right') {
         $human = new Human($this->db->getHumanByUserId($userId));
-        $item = $human->dropItem();
-        if ($item) {
-            $this->db->items[] = $item;                             //выбрасываем предмет
+        $itemId = $human->dropItem($hand);
+        if ($itemId) {
+            $this->db->dropItem($itemId); // выбрасываем предмет
             return true;
         }
         return false;
     }
+
     // надеть предмет
     public function putOn($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
