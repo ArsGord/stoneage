@@ -35,14 +35,17 @@
               <!-- Пароль входа -->
               <div class="form-group">
                 <label for="password">Пароль</label>
-                <input
-                  @blur="$v.formLog.password.$touch()"
-                  :class="status($v.formLog.password)"
-                  v-model.trim="formLog.password"
-                  :type="type"
-                  class="form-control"
-                  id="password"
-                />
+                <div class="passwordLog">
+                  <input
+                    @blur="$v.formLog.password.$touch()"
+                    :class="status($v.formLog.password)"
+                    v-model.trim="formLog.password"
+                    :type="type"
+                    class="form-control"
+                    id="password"
+                  />
+                  <a href="#" class="password-show" v-on:click="func"><img id="no-view" src="../public/images/view.svg"></a>
+                </div>
                 <button type="button" class="btn btn-outline-info mt-2" @click="func">{{ show ? "Скрыть" : "показать" }}</button>
                 <div v-if="!$v.formLog.password.$required" class="invalid-feedback">
                   {{reqText}}
@@ -101,14 +104,17 @@
               <!-- Пароль регистрации -->
               <div class="form-group">
                 <label for="passwordReg">Пароль</label>
-                <input
-                  @blur="$v.formReg.passwordReg.$touch()"
-                  :class="status($v.formReg.passwordReg)"
-                  v-model.trim="formReg.passwordReg"
-                  :type="type1"
-                  class="form-control"
-                  id="passwordReg"
-                />
+                  <div class="passwordLog">
+                  <input
+                    @blur="$v.formReg.passwordReg.$touch()"
+                    :class="status($v.formReg.passwordReg)"
+                    v-model.trim="formReg.passwordReg"
+                    :type="type1"
+                    class="form-control"
+                    id="passwordReg"
+                  />
+                  <a href="#" class="password-show" v-on:click="func1"><img id="no-viewReg" src="../public/images/view.svg"></a>
+                  </div>
                 <button type="button" class="btn btn-outline-info mt-2" @click="func1">{{ show1 ? "Скрыть" : "показать" }}</button>
                 <div v-if="!$v.formReg.passwordReg.$required" class="invalid-feedback">
                   {{reqText}}
@@ -122,6 +128,7 @@
               <!-- Подтверждение пароля регистрации -->
               <div class="form-group">
                 <label for="passwordConfirm">Подтверждение пароля</label>
+                <div class="passwordLog">
                 <input
                   @blur="$v.formReg.passwordConfirm.$touch()"
                   :class="status($v.formReg.passwordConfirm)"
@@ -130,6 +137,8 @@
                   class="form-control"
                   id="passwordConfirm"
                 />
+                <a href="#" class="password-show" v-on:click="func2"><img id="no-viewRegConf" src="../public/images/view.svg"></a>
+                </div>
                 <button type="button" class="btn btn-outline-info mt-2" @click="func2">{{ show2 ? "Скрыть" : "показать" }}</button>
                 <div class="invalid-feedback" v-if="!$v.formReg.passwordConfirm.$required">
                   {{reqText}}
@@ -185,7 +194,9 @@ export default {
         nicknameReg: " ",
         passwordReg: "",
         passwordConfirm: "",
-      }
+      },
+      viewUrl: require('../public/images/view.svg'),
+      noViewUrl: require('../public/images/no-view.svg')
     };
   },
   computed: {
@@ -247,24 +258,56 @@ export default {
       this.show = !this.show
       if (this.show) {
         this.type = 'text'
+        const eye = document.getElementById('no-view');
+        if (eye) {
+          eye.setAttribute('src', this.noViewUrl)
+          eye.setAttribute('id', 'view')
+        }
       } else {
         this.type = 'password'
+        const eye = document.getElementById('view');
+        if (eye) {
+          eye.setAttribute('src', this.viewUrl)
+          eye.setAttribute('id', 'no-view')
+        }
       } 
     },
     func1() {
       this.show1 = !this.show1
       if (this.show1) {
         this.type1 = 'text'
+        const eye = document.getElementById('no-viewReg');
+        console.log(eye);
+        if (eye) {
+          eye.setAttribute('src', this.noViewUrl)
+          eye.setAttribute('id', 'viewReg')
+        }
       } else {
         this.type1 = 'password'
+        const eye = document.getElementById('viewReg');
+        if (eye) {
+          eye.setAttribute('src', this.viewUrl)
+          eye.setAttribute('id', 'no-viewReg')
+        }
       } 
     },
     func2() {
       this.show2 = !this.show2
       if (this.show2) {
         this.type2 = 'text'
+        const eye = document.getElementById('no-viewRegConf');
+        console.log(eye);
+        if (eye) {
+          eye.setAttribute('src', this.noViewUrl)
+          eye.setAttribute('id', 'viewRegConf')
+        }
       } else {
         this.type2 = 'password'
+        const eye = document.getElementById('viewRegConf');
+        if (eye) {
+          eye.setAttribute('src', this.viewUrl)
+          eye.setAttribute('id', 'no-viewRegConf')
+        }
       } 
     },
     status(validation) {
@@ -322,5 +365,51 @@ form {
   transform: translateX(20px);
   opacity: 5;
 }
-
+.passwordLog {
+  position: relative;
+}
+.password-show {
+	position: absolute;
+	top: 10px;
+	right: 6px;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+}
+#view {
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+}
+#no-view {
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+}
+#viewReg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+}
+#no-viewReg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+}
+#viewRegConf {
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+}
+#no-viewRegConf {
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+}
 </style>
