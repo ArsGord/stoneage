@@ -44,7 +44,7 @@
                     class="form-control"
                     id="password"
                   />
-                  <a href="#" class="password-show" v-on:click="func"><img id="no-view" src="../public/images/view.svg"></a>
+                  <a href="#" class="password-show" v-on:click="func"><img id="no-view-eye" src="../public/images/view.svg"></a>
                 </div>
                 <button type="button" class="btn btn-outline-info mt-2" @click="func">{{ show ? "Скрыть" : "показать" }}</button>
                 <div v-if="!$v.formLog.password.$required" class="invalid-feedback">
@@ -113,7 +113,7 @@
                     class="form-control"
                     id="passwordReg"
                   />
-                  <a href="#" class="password-show" v-on:click="func1"><img id="no-viewReg" src="../public/images/view.svg"></a>
+                  <a href="#" class="password-show" v-on:click="func1"><img id="no-view-eye1" src="../public/images/view.svg"></a>
                   </div>
                 <button type="button" class="btn btn-outline-info mt-2" @click="func1">{{ show1 ? "Скрыть" : "показать" }}</button>
                 <div v-if="!$v.formReg.passwordReg.$required" class="invalid-feedback">
@@ -137,7 +137,7 @@
                   class="form-control"
                   id="passwordConfirm"
                 />
-                <a href="#" class="password-show" v-on:click="func2"><img id="no-viewRegConf" src="../public/images/view.svg"></a>
+                <a href="#" class="password-show" v-on:click="func2"><img id="no-view-eye2" src="../public/images/view.svg"></a>
                 </div>
                 <button type="button" class="btn btn-outline-info mt-2" @click="func2">{{ show2 ? "Скрыть" : "показать" }}</button>
                 <div class="invalid-feedback" v-if="!$v.formReg.passwordConfirm.$required">
@@ -258,17 +258,17 @@ export default {
       this.show = !this.show
       if (this.show) {
         this.type = 'text'
-        const eye = document.getElementById('no-view');
+        const eye = document.getElementById('no-view-eye');
         if (eye) {
           eye.setAttribute('src', this.noViewUrl)
-          eye.setAttribute('id', 'view')
+          eye.setAttribute('id', 'view-eye')
         }
       } else {
         this.type = 'password'
-        const eye = document.getElementById('view');
+        const eye = document.getElementById('view-eye');
         if (eye) {
           eye.setAttribute('src', this.viewUrl)
-          eye.setAttribute('id', 'no-view')
+          eye.setAttribute('id', 'no-view-eye')
         }
       } 
     },
@@ -276,18 +276,17 @@ export default {
       this.show1 = !this.show1
       if (this.show1) {
         this.type1 = 'text'
-        const eye = document.getElementById('no-viewReg');
-        console.log(eye);
+        const eye = document.getElementById('no-view-eye1');
         if (eye) {
           eye.setAttribute('src', this.noViewUrl)
-          eye.setAttribute('id', 'viewReg')
+          eye.setAttribute('id', 'view-eye1')
         }
       } else {
         this.type1 = 'password'
-        const eye = document.getElementById('viewReg');
+        const eye = document.getElementById('view-eye1');
         if (eye) {
           eye.setAttribute('src', this.viewUrl)
-          eye.setAttribute('id', 'no-viewReg')
+          eye.setAttribute('id', 'no-view-eye1')
         }
       } 
     },
@@ -295,18 +294,17 @@ export default {
       this.show2 = !this.show2
       if (this.show2) {
         this.type2 = 'text'
-        const eye = document.getElementById('no-viewRegConf');
-        console.log(eye);
+        const eye = document.getElementById('no-view-eye2');
         if (eye) {
           eye.setAttribute('src', this.noViewUrl)
-          eye.setAttribute('id', 'viewRegConf')
+          eye.setAttribute('id', 'view-eye2')
         }
       } else {
         this.type2 = 'password'
-        const eye = document.getElementById('viewRegConf');
+        const eye = document.getElementById('view-eye2');
         if (eye) {
           eye.setAttribute('src', this.viewUrl)
-          eye.setAttribute('id', 'no-viewRegConf')
+          eye.setAttribute('id', 'no-view-eye2')
         }
       } 
     },
@@ -376,37 +374,7 @@ form {
 	width: 20px;
 	height: 20px;
 }
-#view {
-  width: 100%;
-  height: 100%;
-  display: block;
-  margin: 0 auto;
-}
-#no-view {
-  width: 100%;
-  height: 100%;
-  display: block;
-  margin: 0 auto;
-}
-#viewReg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  margin: 0 auto;
-}
-#no-viewReg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  margin: 0 auto;
-}
-#viewRegConf {
-  width: 100%;
-  height: 100%;
-  display: block;
-  margin: 0 auto;
-}
-#no-viewRegConf {
+#view-eye, #no-view-eye, #view-eye1, #no-view-eye1, #view-eye2, #no-view-eye2 {
   width: 100%;
   height: 100%;
   display: block;
