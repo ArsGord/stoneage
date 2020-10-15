@@ -55,12 +55,12 @@ class Human extends Animal {
             case 'left':
                 $result = array();
                 if ($this->x > 0) { // проверка на границу карты
-                    $X = $this->x - 1;
-                    $Y = $this->y;
-                    if (!($map[$X][$Y]->passability)) {     // проверяем можно ли пройти
-                        if (!(get_class($map[$X][$Y]) === 'Water')) {   // если не вода, то бьем объект на карте
+                    $x = $this->x - 1;
+                    $y = $this->y;
+                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
+                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
                             if ($this->right_hand && $this->right_hand->type === 'weapon') {
-                                $map[$X][$Y]->hit($this->right_hand->damage);
+                                $map[$x][$y]->hit($this->right_hand->damage); // нужно ли менять, если в right_hand лежит id ???
                                 $this->right_hand->hit(1);
                                 $result[] = (object) [
                                     'type' => 'item',
@@ -68,13 +68,13 @@ class Human extends Animal {
                                     'hp' => $this->right_hand->hp
                                 ];
                             } else {
-                                $map[$X][$Y]->hit(1);
+                                $map[$x][$y]->hit(1);
                                 $this->hit(1);
                             }
                             $result[] = (object) [
                                 'type' => 'tile',
-                                'id' => $map[$X][$Y]->id,
-                                'hp' => $map[$X][$Y]->hp
+                                'id' => $map[$x][$y]->id,
+                                'hp' => $map[$x][$y]->hp
                             ];
                         }
                     }
@@ -88,58 +88,103 @@ class Human extends Animal {
                 return $result;
             case 'right':
                 if ($this->x < count($map) - 1) {
-                    $X = $this->x + 1;
-                    $Y = $this->y;
-                    if (!($map[$X][$Y]->passability)) {
-                        if (!(get_class($map[$X][$Y]) === 'Water')) {
-                            if ($this->right_hand->damage) {
-                                $map[$X][$Y]->hit($this->right_hand->damage);
+                    $x = $this->x + 1;
+                    $y = $this->y;
+                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
+                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
+                            if ($this->right_hand && $this->right_hand->type === 'weapon') {
+                                $map[$x][$y]->hit($this->right_hand->damage);
+                                $this->right_hand->hit(1);
+                                $result[] = (object)[
+                                    'type' => 'item',
+                                    'id' => $this->right_hand->id,
+                                    'hp' => $this->right_hand->hp
+                                ];
                             } else {
-                                $map[$X][$Y]->hit(1);
+                                $map[$x][$y]->hit(1);
+                                $this->hit(1);
                             }
+                            $result[] = (object)[
+                                'type' => 'tile',
+                                'id' => $map[$x][$y]->id,
+                                'hp' => $map[$x][$y]->hp
+                            ];
                         }
                     }
+                    $result[] = (object)[
+                        'type' => 'human',
+                        'id' => $this->id,
+                        'x' => $this->x,
+                        'hp' => $this->hp
+                    ];
                 }
-                return (object) [
-                    'result' => true,
-                    'map' => $map
-                ];
+                return $result;
             case 'up':
                 if ($this->y > 0) {
-                    $X = $this->x;
-                    $Y = $this->y - 1;
-                    if (!($map[$X][$Y]->passability)) {
-                        if (!(get_class($map[$X][$Y]) === 'Water')) {
-                            if ($this->right_hand->damage) {
-                                $map[$X][$Y]->hit($this->right_hand->damage);
+                    $x = $this->x;
+                    $y = $this->y - 1;
+                    if (!($map[$x][$y]->passability)) {
+                        if (!(get_class($map[$x][$y]) === 'Water')) {
+                            if ($this->right_hand && $this->right_hand->type === 'weapon') {
+                                $map[$x][$y]->hit($this->right_hand->damage);
+                                $this->right_hand->hit(1);
+                                $result[] = (object) [
+                                    'type' => 'item',
+                                    'id' => $this->right_hand->id,
+                                    'hp' => $this->right_hand->hp
+                                ];
                             } else {
-                                $map[$X][$Y]->hit(1);
+                                $map[$x][$y]->hit(1);
+                                $this->hit(1);
                             }
+                            $result[] = (object) [
+                                'type' => 'tile',
+                                'id' => $map[$x][$y]->id,
+                                'hp' => $map[$x][$y]->hp
+                            ];
                         }
                     }
+                    $result[] = (object) [
+                        'type' => 'human',
+                        'id' => $this->id,
+                        'x' => $this->x,
+                        'hp' => $this->hp
+                    ];
                 }
-                return (object) [
-                    'result' => true,
-                    'map' => $map
-                ];
+                return $result;
             case 'down':
                 if ($this->y < count($map[0]) - 1) {
-                    $X = $this->x;
-                    $Y = $this->y + 1;
-                    if (!($map[$X][$Y]->passability)) {
-                        if (!(get_class($map[$X][$Y]) === 'Water')) {
-                            if ($this->right_hand->damage) {
-                                $map[$X][$Y]->hit($this->right_hand->damage);
+                    $x = $this->x;
+                    $y = $this->y + 1;
+                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
+                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
+                            if ($this->right_hand && $this->right_hand->type === 'weapon') {
+                                $map[$x][$y]->hit($this->right_hand->damage);
+                                $this->right_hand->hit(1);
+                                $result[] = (object) [
+                                    'type' => 'item',
+                                    'id' => $this->right_hand->id,
+                                    'hp' => $this->right_hand->hp
+                                ];
                             } else {
-                                $map[$X][$Y]->hit(1);
+                                $map[$x][$y]->hit(1);
+                                $this->hit(1);
                             }
+                            $result[] = (object) [
+                                'type' => 'tile',
+                                'id' => $map[$x][$y]->id,
+                                'hp' => $map[$x][$y]->hp
+                            ];
                         }
                     }
+                    $result[] = (object) [
+                        'type' => 'human',
+                        'id' => $this->id,
+                        'x' => $this->x,
+                        'hp' => $this->hp
+                    ];
                 }
-                return (object) [
-                    'result' => true,
-                    'map' => $map
-                ];
+                return $result;
         }
         return false;
     }
