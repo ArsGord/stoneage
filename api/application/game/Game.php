@@ -87,7 +87,9 @@ class Game {
     // бросить предмет
     public function dropItem($userId, $hand = 'right') {
         $human = new Human($this->db->getHumanByUserId($userId));
-        $itemId = $human->dropItem($hand);
+        if ($human) {
+            $itemId = $human->dropItem($hand);
+        }
         if ($itemId) {
             $this->db->dropItem($itemId); // выбрасываем предмет
             return true;
@@ -98,27 +100,50 @@ class Game {
     // надеть предмет
     public function putOn($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        return $human->putOn();
+        if ($human) {
+            return $human->putOn();
+        }
+        return false;
     }
     // положить предмет в карман
     public function putOnBackpack($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        return $human->putOnBackpack();
+        if ($human) {
+            return $human->putOnBackpack();
+        }
+        return false;
     }
 
     // выстрелить/бросить (копье или не копье)
     public function shot($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
+        if ($human) {
+            $human->shot();
+            return true;
+        }
+        return false;
     }
 
     // положить предмет в (?)
     // починить то, что в руках/надето/лежит в кармане
     public function repair($userId) {
-
+        $human = new Human($this->db->getHumanByUserId($userId));
+        if ($human) {
+            $ITEM = $human->repair();
+        }
+        if ($ITEM) {
+            $item = $this->db->getItemById($ITEM->id);
+            if ($item) {
+                $item->count += $ITEM->count;
+                // обновить в БД
+            }
+            return true;
+        }
+        return false;
     }
     // починить то, что лежит/стоит (строение)
     public  function fix($userId, $buildingId) {
-
+        $human = new Human($this->db->gerHumanByUserId($userId));
     }
     // поесть
     public function eat($userId) {
@@ -130,11 +155,18 @@ class Game {
     // сделать предмет
     public function makeItem($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-
+        if ($human) {
+            $human->makeItem();
+        }
+        return false;
     }
     // сделать строение
     public function makeBuilding($userId) {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        if ($human) {
 
+        }
+        return false;
     }
     // продолжить строить строение
     public function keepBuilding($userId, $buildingId) {

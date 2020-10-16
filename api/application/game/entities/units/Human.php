@@ -81,12 +81,13 @@ class Human extends Animal {
                     $result[] = (object) [
                         'type' => 'human',
                         'id' => $this->id,
-                        'x' => $this->x,
+                        'x' => $x,
                         'hp' => $this->hp
                     ];
                 }
                 return $result;
             case 'right':
+                $result = array();
                 if ($this->x < count($map) - 1) {
                     $x = $this->x + 1;
                     $y = $this->y;
@@ -95,7 +96,7 @@ class Human extends Animal {
                             if ($this->right_hand && $this->right_hand->type === 'weapon') {
                                 $map[$x][$y]->hit($this->right_hand->damage);
                                 $this->right_hand->hit(1);
-                                $result[] = (object)[
+                                $result[] = (object) [
                                     'type' => 'item',
                                     'id' => $this->right_hand->id,
                                     'hp' => $this->right_hand->hp
@@ -114,12 +115,13 @@ class Human extends Animal {
                     $result[] = (object)[
                         'type' => 'human',
                         'id' => $this->id,
-                        'x' => $this->x,
+                        'x' => $x,
                         'hp' => $this->hp
                     ];
                 }
                 return $result;
             case 'up':
+                $result = array();
                 if ($this->y > 0) {
                     $x = $this->x;
                     $y = $this->y - 1;
@@ -147,12 +149,13 @@ class Human extends Animal {
                     $result[] = (object) [
                         'type' => 'human',
                         'id' => $this->id,
-                        'x' => $this->x,
+                        'y' => $y,
                         'hp' => $this->hp
                     ];
                 }
                 return $result;
             case 'down':
+                $result = array();
                 if ($this->y < count($map[0]) - 1) {
                     $x = $this->x;
                     $y = $this->y + 1;
@@ -180,7 +183,7 @@ class Human extends Animal {
                     $result[] = (object) [
                         'type' => 'human',
                         'id' => $this->id,
-                        'x' => $this->x,
+                        'y' => $y,
                         'hp' => $this->hp
                     ];
                 }
@@ -216,11 +219,11 @@ class Human extends Animal {
     }
 
     public function putOn() {
-        if($this->right_hand->clothes) {    // переделать clothes
+        if($this->right_hand->type === 'clothes') {    // переделать clothes
             $this->body = $this->right_hand;
             $this->right_hand = null;
             return true;
-        } elseif ($this->left_hand->clothes) {
+        } elseif ($this->left_hand->type === 'clothes') {
             $this->body = $this->left_hand;
             $this->left_hand = null;
             return true;
@@ -241,13 +244,31 @@ class Human extends Animal {
         return false;
     }
 
+    public function shot() {
+        // ???
+    }
+
+    public function rapair() {
+        if ($this->right_hand->type === 'weapon' && $this->right_hand->type === 'resource') { // переделать resource
+            $resourceCount = $this->left_hand->count; // сохраняем количество ресурсов
+            $this->left_hand = null; // удаляем ресурс из левой руки
+            return ['id' => $this->right_hand,          // возвращаем id предмета и кол-во ресурсов
+                    'count' => $this->left_hand->count
+            ];
+        }
+    }
+
+    public function fix() {
+
+    }
+
     public function eat($eat) {
-        if($this->right_hand->eat) {    // переделать eat
-            $this->satiety += 10;
+        if($this->right_hand->type === 'food') {
+            $this->satiety += $this->left_hand->count;
             $this->right_hand = null;
             return true;
-        } elseif ($this->left_hand) {
-            $this->satiety += 10;
+        } elseif ($this->left_hand->type === 'food') {
+            $this->satiety += $this->left_hand->count;
             $this->left_hand = null;
             return true;
         }

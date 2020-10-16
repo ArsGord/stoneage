@@ -16,6 +16,14 @@ function router($params) {
             case 'move': return $app->move($params);
             case 'takeItem': return $app->takeItem($params);
             case 'dropItem': return $app->dropItem($params);
+            case 'putOn': return $app->putOn($params);
+            case 'putOnBackpack': return $app->putOnBackpack($params);
+            case 'repair': return $app->repair($params);
+            case 'fix': return $app->fix($params);
+            case 'eat': return $app->eat($params);
+            case 'makeItem': return $app->makeItem($params);
+            case 'makeBuilding': return $app->makeBuilding($params);
+            case 'keepBuilding': return $app->keepBuilding($params);
         }
     }
     return false;

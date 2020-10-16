@@ -45,14 +45,11 @@ class Application {
         }
     }
 
-    public function hit($params) {
-        $user = $this->user->getUserByToken($params['token']);
-
-    }
-
     public function repair($params) {
         $user = $this->user->getUserByToken($params['token']);
-
+        if ($user) {
+            return $this->game->repair($user->id);
+        }
     }
 
     public  function fix($params) {
@@ -69,7 +66,9 @@ class Application {
 
     public function makeItem($params) {
         $user = $this->user->getUserByToken($params['token']);
-
+        if ($user) {
+            return $this->game->makeItem($user->id);
+        }
     }
 
     public function makeBuilding($params) {
