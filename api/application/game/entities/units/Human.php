@@ -270,14 +270,20 @@ class Human extends Animal {
 
     public function eat() {
         // для проверки
-        //$this->right_hand = (object) ['type' => 'food'];
+        $this->right_hand = (object) ['type' => 'food'];
         if($this->right_hand->type === 'food') {
-            $this->satiety += $this->left_hand->count;
-            $this->right_hand = null;
+            $this->satiety += $this->right_hand->calories;
+            $this->right_hand->count--;
+            if($this->right_hand->count === 0) {
+                $this->right_hand = null;
+            }
             return true;
         } elseif ($this->left_hand->type === 'food') {
-            $this->satiety += $this->left_hand->count;
-            $this->left_hand = null;
+            $this->satiety += $this->left_hand->calories;
+            $this->left_hand->count--;
+            if($this->left_hand->count === 0) {
+                $this->left_hand = null;
+            }
             return true;
         }
         return false;

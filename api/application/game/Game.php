@@ -154,6 +154,7 @@ class Game {
     // поесть
     public function eat($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
+        print_r($human);
         if ($human) {
             return $human->eat();
         }
