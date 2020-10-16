@@ -147,7 +147,6 @@ class Game {
                 $resource = null;
             }
             // обновить в БД
-            print_r("");
             return true;
         }
         return false;
