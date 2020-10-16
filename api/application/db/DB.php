@@ -20,12 +20,16 @@ class DB {
         print_r("db->takeItem()</br>");
     }
 
+    public function dropItem($itemId) {
+        print_r("db->dropItem()</br>");
+    }
+
+    public function getItemById($itemId) {
+        return (object)['calories' => 10, 'count' => 2];
+    }
+
     public function updateInventory($humanId) {
         print_r("db->updateInevntory()</br>");
         //$this->getHumanByUserId($humanId);
-    }
-
-    public function dropItem($itemId) {
-        print_r("db->dropItem()</br>");
     }
 }

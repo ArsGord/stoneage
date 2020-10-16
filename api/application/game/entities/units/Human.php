@@ -59,8 +59,8 @@ class Human extends Animal {
                     $y = $this->y;
                     if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
                         if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
-                            if ($this->right_hand && $this->right_hand->type === 'weapon') {
-                                $map[$x][$y]->hit($this->right_hand->damage); // нужно ли менять, если в right_hand лежит id ???
+                            if ($this->right_hand && $this->right_hand->type === 'weapon') { // нужно поменять, т.к. в right_hand лежит id
+                                $map[$x][$y]->hit($this->right_hand->damage);
                                 $this->right_hand->hit(1);
                                 $result[] = (object) [
                                     'type' => 'item',
@@ -254,12 +254,13 @@ class Human extends Animal {
         // ???
     }
 
-    public function rapair() {
-        if ($this->right_hand->type === 'weapon' && $this->right_hand->type === 'resource') { // переделать resource
-            $resourceCount = $this->left_hand->count; // сохраняем количество ресурсов
-            $this->left_hand = null; // удаляем ресурс из левой руки
-            return ['id' => $this->right_hand,          // возвращаем id предмета и кол-во ресурсов
-                    'count' => $this->left_hand->count
+    public function repair() {
+        // для проверки
+        //$this->right_hand = (object) ['type' => 'weapon'];
+        //$this->left_hand = (object) ['type' => 'resource'];
+        if ($this->right_hand->type === 'weapon' && $this->left_hand->type === 'resource') {
+            return ['itemId' => $this->right_hand,  // возвращаем id предмета и ресурса
+                    'resourceId' => $this->left_hand
             ];
         }
     }
@@ -270,21 +271,11 @@ class Human extends Animal {
 
     public function eat() {
         // для проверки
-        $this->right_hand = (object) ['type' => 'food'];
+        //$this->right_hand = (object) ['type' => 'food'];
         if($this->right_hand->type === 'food') {
-            $this->satiety += $this->right_hand->calories;
-            $this->right_hand->count--;
-            if($this->right_hand->count === 0) {
-                $this->right_hand = null;
-            }
-            return true;
+            return $this->right_hand;
         } elseif ($this->left_hand->type === 'food') {
-            $this->satiety += $this->left_hand->calories;
-            $this->left_hand->count--;
-            if($this->left_hand->count === 0) {
-                $this->left_hand = null;
-            }
-            return true;
+            return $this->left_hand;
         }
         return false;
     }

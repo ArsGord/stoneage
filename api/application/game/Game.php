@@ -130,17 +130,24 @@ class Game {
 
     // положить предмет в (?)
     // починить то, что в руках/надето/лежит в кармане
+    // http://stoneage/api/?method=repair&token=123
     public function repair($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($human) {
-            $ITEM = $human->repair();
+            $arr = $human->repair();
         }
-        if ($ITEM) {
-            $item = $this->db->getItemById($ITEM->id);
-            if ($item) {
-                $item->count += $ITEM->count;
-                // обновить в БД
+        if ($arr) {
+            $weapon = $this->db->getItemById($arr->itemId);
+            $resource = $this->db->getItemById($arr->resourceId);
+        }
+        if ($weapon && $resource) {
+            $weapon->hp += $resource->value; // заменить value
+            $resource->count--;
+            if ($resource->count <= 0) {
+                $resource = null;
             }
+            // обновить в БД
+            print_r("");
             return true;
         }
         return false;
@@ -154,10 +161,20 @@ class Game {
     // поесть
     public function eat($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        print_r($human);
         if ($human) {
-            return $human->eat();
+            $itemId = $human->eat();
+            $item = $this->db->getItemById($itemId);
         }
+        if ($item) {
+            $human->satiety += $item->calories; // добавляем сытость
+            $item->count--; // уменьшаем кол-во еды
+            if ($item->count <= 0) {
+                $item = null;
+            }
+            // обновить в БД
+            return true;
+        }
+        return false;
     }
 
     // сделать предмет

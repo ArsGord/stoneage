@@ -5,5 +5,6 @@ class Wood extends Entity {
         parent::__construct($data);
         $this->type = 'resource';
         $this->count = $data->count; // количество дерева
+        $this->value = $data->value; // сколько прочности добавляет оружию
     }
 }
