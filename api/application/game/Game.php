@@ -35,19 +35,19 @@ class Game {
         $this->map = array(
             // массив 3 на 3 из объектов карты
             array(
-                new Tree(new stdClass()),
-                new Rock(new stdClass()),
-                new Grass(new stdClass())
+                new Tree((object)['id' => 1]),
+                new Rock((object)['id' => 2]),
+                new Grass((object)['id' => 3])
             ),
             array(
-                new Plant(new stdClass()),
-                new Grass(new stdClass()),
-                new Rock(new stdClass())
+                new Plant((object)['id' => 4]),
+                new Grass((object)['id' => 5]),
+                new Rock((object)['id' => 6])
             ),
             array(
-                new Tree(new stdClass()),
-                new Grass(new stdClass()),
-                new Grass(new stdClass())
+                new Tree((object)['id' => 7]),
+                new Grass((object)['id' => 8]),
+                new Grass((object)['id' => 9])
             )
         );
     }
@@ -70,13 +70,14 @@ class Game {
     }
 
     // поднять предмет
+    // http://stoneage/api/?method=takeItem&token=123
     public function takeItem($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
         foreach ($this->db->getFreeItems() as $item) {
             if ($item->x === $human->x && $item->y === $human->y) { //проверяем координаты предметов
                 if ($human->takeItem($item->id)) { //берём предмет с земли
                     $this->db->takeItem($human->id, $item->id); //удаляем с карты
-                    $this->db->updateInventory($human);
+                    $this->db->updateInventory($human->id);
                     return true;
                 }
             }
@@ -85,6 +86,7 @@ class Game {
     }
 
     // бросить предмет
+    // http://stoneage/api/?method=dropItem&token=123&hand=right
     public function dropItem($userId, $hand = 'right') {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($human) {
@@ -98,6 +100,7 @@ class Game {
     }
 
     // надеть предмет
+    // http://stoneage/api/?method=putOn&token=123
     public function putOn($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($human) {
@@ -106,6 +109,7 @@ class Game {
         return false;
     }
     // положить предмет в карман
+    // http://stoneage/api/?method=putOnBackpack&token=123
     public function putOnBackpack($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($human) {
@@ -141,10 +145,12 @@ class Game {
         }
         return false;
     }
+
     // починить то, что лежит/стоит (строение)
     public  function fix($userId, $buildingId) {
         $human = new Human($this->db->gerHumanByUserId($userId));
     }
+
     // поесть
     public function eat($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
@@ -152,6 +158,7 @@ class Game {
             return $human->eat();
         }
     }
+
     // сделать предмет
     public function makeItem($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
@@ -160,6 +167,7 @@ class Game {
         }
         return false;
     }
+
     // сделать строение
     public function makeBuilding($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
@@ -168,6 +176,7 @@ class Game {
         }
         return false;
     }
+
     // продолжить строить строение
     public function keepBuilding($userId, $buildingId) {
 

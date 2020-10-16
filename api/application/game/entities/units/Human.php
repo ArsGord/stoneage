@@ -210,6 +210,8 @@ class Human extends Animal {
     }
 
     public function dropItem($hand) {
+        // для проверки
+        //$this->right_hand = (object) ['id' => 1];
         if ($hand === 'right') {
             return $this->right_hand;
         } elseif ($hand === 'left') {
@@ -219,6 +221,8 @@ class Human extends Animal {
     }
 
     public function putOn() {
+        // для проверки
+        //$this->right_hand = (object) ['type' => 'clothes'];
         if($this->right_hand->type === 'clothes') {    // переделать clothes
             $this->body = $this->right_hand;
             $this->right_hand = null;
@@ -232,6 +236,8 @@ class Human extends Animal {
     }
 
     public function putOnBackpack() {
+        // для проверки
+        //$this->right_hand = new stdClass();
         if($this->right_hand) {
             $this->backpack = $this->right_hand;
             $this->right_hand = null;
@@ -262,7 +268,9 @@ class Human extends Animal {
 
     }
 
-    public function eat($eat) {
+    public function eat() {
+        // для проверки
+        //$this->right_hand = (object) ['type' => 'food'];
         if($this->right_hand->type === 'food') {
             $this->satiety += $this->left_hand->count;
             $this->right_hand = null;
