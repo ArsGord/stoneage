@@ -48,79 +48,186 @@ class Human extends Animal {
         }*/
     }
 
-    public function move($map, $direction)
-    {
+    public function move($map, $direction) {
         // взять непроходимые предметы на карте
         // выбираем непроходимые объекты на карте
         switch ($direction) {
             case 'left':
+                $result = array();
                 if ($this->x > 0) { // проверка на границу карты
-                    $X = $this->x - 1;
-                    $Y = $this->y;
-                    if ($map[$X][$Y]->passable) { // проверка на проходимость объекта на карте
-                        return true;
+                    $x = $this->x - 1;
+                    $y = $this->y;
+                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
+                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
+                            if ($this->right_hand && $this->right_hand->type === 'weapon') { // нужно поменять, т.к. в right_hand лежит id
+                                $map[$x][$y]->hit($this->right_hand->damage);
+                                $this->right_hand->hit(1);
+                                $result[] = (object) [
+                                    'type' => 'item',
+                                    'id' => $this->right_hand->id,
+                                    'hp' => $this->right_hand->hp
+                                ];
+                            } else {
+                                $map[$x][$y]->hit(1);
+                                $this->hit(1);
+                            }
+                            $result[] = (object) [
+                                'type' => 'tile',
+                                'id' => $map[$x][$y]->id,
+                                'hp' => $map[$x][$y]->hp
+                            ];
+                        }
                     }
+                    $result[] = (object) [
+                        'type' => 'human',
+                        'id' => $this->id,
+                        'x' => $x,
+                        'hp' => $this->hp
+                    ];
                 }
-                return false;
+                return $result;
             case 'right':
+                $result = array();
                 if ($this->x < count($map) - 1) {
-                    $X = $this->x + 1;
-                    $Y = $this->y;
-                    if ($map[$X][$Y]->passable) {
-                        return true;
+                    $x = $this->x + 1;
+                    $y = $this->y;
+                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
+                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
+                            if ($this->right_hand && $this->right_hand->type === 'weapon') {
+                                $map[$x][$y]->hit($this->right_hand->damage);
+                                $this->right_hand->hit(1);
+                                $result[] = (object) [
+                                    'type' => 'item',
+                                    'id' => $this->right_hand->id,
+                                    'hp' => $this->right_hand->hp
+                                ];
+                            } else {
+                                $map[$x][$y]->hit(1);
+                                $this->hit(1);
+                            }
+                            $result[] = (object)[
+                                'type' => 'tile',
+                                'id' => $map[$x][$y]->id,
+                                'hp' => $map[$x][$y]->hp
+                            ];
+                        }
                     }
+                    $result[] = (object)[
+                        'type' => 'human',
+                        'id' => $this->id,
+                        'x' => $x,
+                        'hp' => $this->hp
+                    ];
                 }
-                return false;
+                return $result;
             case 'up':
+                $result = array();
                 if ($this->y > 0) {
-                    $X = $this->x;
-                    $Y = $this->y - 1;
-                    if ($map[$X][$Y]->passable) {
-                        return true;
+                    $x = $this->x;
+                    $y = $this->y - 1;
+                    if (!($map[$x][$y]->passability)) {
+                        if (!(get_class($map[$x][$y]) === 'Water')) {
+                            if ($this->right_hand && $this->right_hand->type === 'weapon') {
+                                $map[$x][$y]->hit($this->right_hand->damage);
+                                $this->right_hand->hit(1);
+                                $result[] = (object) [
+                                    'type' => 'item',
+                                    'id' => $this->right_hand->id,
+                                    'hp' => $this->right_hand->hp
+                                ];
+                            } else {
+                                $map[$x][$y]->hit(1);
+                                $this->hit(1);
+                            }
+                            $result[] = (object) [
+                                'type' => 'tile',
+                                'id' => $map[$x][$y]->id,
+                                'hp' => $map[$x][$y]->hp
+                            ];
+                        }
                     }
+                    $result[] = (object) [
+                        'type' => 'human',
+                        'id' => $this->id,
+                        'y' => $y,
+                        'hp' => $this->hp
+                    ];
                 }
-                return false;
+                return $result;
             case 'down':
+                $result = array();
                 if ($this->y < count($map[0]) - 1) {
-                    $X = $this->x;
-                    $Y = $this->y + 1;
-                    if ($map[$X][$Y]->passable) {
-                        return true;
+                    $x = $this->x;
+                    $y = $this->y + 1;
+                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
+                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
+                            if ($this->right_hand && $this->right_hand->type === 'weapon') {
+                                $map[$x][$y]->hit($this->right_hand->damage);
+                                $this->right_hand->hit(1);
+                                $result[] = (object) [
+                                    'type' => 'item',
+                                    'id' => $this->right_hand->id,
+                                    'hp' => $this->right_hand->hp
+                                ];
+                            } else {
+                                $map[$x][$y]->hit(1);
+                                $this->hit(1);
+                            }
+                            $result[] = (object) [
+                                'type' => 'tile',
+                                'id' => $map[$x][$y]->id,
+                                'hp' => $map[$x][$y]->hp
+                            ];
+                        }
                     }
+                    $result[] = (object) [
+                        'type' => 'human',
+                        'id' => $this->id,
+                        'y' => $y,
+                        'hp' => $this->hp
+                    ];
                 }
-                return false;
+                return $result;
         }
+        return false;
     }
 
-    public function eat($itemId) {
-
-    }
-
-    public function takeItem($item) {
-        if ($this->right_hand || $this->left_hand) {
+    public function takeItem($itemId) {
+        if ($this->right_hand && $this->left_hand && $this->backpack) {
             return false;
-        } elseif ($this->right_hand) {
-            $this->left_hand = $item;
-        } else {
-            $this->right_hand = $item;
         }
+        if ($this->right_hand && $this->left_hand) {
+            $this->backpack = $this->right_hand;
+            $this->right_hand = $itemId;
+            return true;
+        }
+        if ($this->right_hand) {
+            $this->left_hand = $itemId;
+            return true;
+        }
+        $this->right_hand = $itemId;
+        return true;
     }
 
-    public function dropItem() {
-        if($this->right_hand) {
-            $item = $this->right_hand;
-            $this->right_hand = null;
-            return $item;
+    public function dropItem($hand) {
+        // для проверки
+        //$this->right_hand = (object) ['id' => 1];
+        if ($hand === 'right') {
+            return $this->right_hand;
+        } elseif ($hand === 'left') {
+            return $this->left_hand;
         }
         return false;
     }
 
     public function putOn() {
-        if($this->right_hand->clothes) {
+        // для проверки
+        //$this->right_hand = (object) ['type' => 'clothes'];
+        if($this->right_hand->type === 'clothes') {    // переделать clothes
             $this->body = $this->right_hand;
             $this->right_hand = null;
             return true;
-        } elseif ($this->left_hand->clothes) {
+        } elseif ($this->left_hand->type === 'clothes') {
             $this->body = $this->left_hand;
             $this->left_hand = null;
             return true;
@@ -129,6 +236,8 @@ class Human extends Animal {
     }
 
     public function putOnBackpack() {
+        // для проверки
+        //$this->right_hand = new stdClass();
         if($this->right_hand) {
             $this->backpack = $this->right_hand;
             $this->right_hand = null;
@@ -140,4 +249,35 @@ class Human extends Animal {
         }
         return false;
     }
+
+    public function shot() {
+        // ???
+    }
+
+    public function repair() {
+        // для проверки
+        //$this->right_hand = (object) ['type' => 'weapon'];
+        //$this->left_hand = (object) ['type' => 'resource'];
+        if ($this->right_hand->type === 'weapon' && $this->left_hand->type === 'resource') {
+            return ['itemId' => $this->right_hand,  // возвращаем id предмета и ресурса
+                    'resourceId' => $this->left_hand
+            ];
+        }
+    }
+
+    public function fix() {
+
+    }
+
+    public function eat() {
+        // для проверки
+        //$this->right_hand = (object) ['type' => 'food'];
+        if($this->right_hand->type === 'food') {
+            return $this->right_hand;
+        } elseif ($this->left_hand->type === 'food') {
+            return $this->left_hand;
+        }
+        return false;
+    }
+
 }

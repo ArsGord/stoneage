@@ -11,4 +11,16 @@ class User {
             return $obj;
         }
     }
+
+    public function login($login, $hash) {
+        $user = $this->db->getUserBylogin($login);
+        if ($user) {
+            $hash5 = md5($user->password.rand(1, 100000));
+            if($hash === $hash5) {
+                $token = md5($hash);
+                return $token;
+            }
+        }
+        return false;
+    }
 }

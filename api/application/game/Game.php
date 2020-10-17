@@ -35,28 +35,21 @@ class Game {
         $this->map = array(
             // массив 3 на 3 из объектов карты
             array(
-                new Tree(new stdClass()), new Rock(new stdClass()), new Grass(new stdClass())
+                new Tree((object)['id' => 1]),
+                new Rock((object)['id' => 2]),
+                new Grass((object)['id' => 3])
             ),
             array(
-                new Plant(new stdClass()), new Grass(new stdClass()), new Rock(new stdClass())
+                new Plant((object)['id' => 4]),
+                new Grass((object)['id' => 5]),
+                new Rock((object)['id' => 6])
             ),
             array(
-                new Tree(new stdClass()), new Grass(new stdClass()), new Grass(new stdClass())
+                new Tree((object)['id' => 7]),
+                new Grass((object)['id' => 8]),
+                new Grass((object)['id' => 9])
             )
         );
-    }
-
-    public function test($entity) {
-        // если сущность-класс с таким названием есть, то
-        // создать её экземпляр и вернуть его
-        // иначе вернуть false
-        foreach (get_declared_classes() as $value) {
-            if ($entity === $value) {
-                $ENTITY = new $entity(new stdClass());
-                return $ENTITY;
-            }
-        }
-        return false;
     }
 
     // войти в игру (создать персонажа, подгрузить персонажа)
@@ -67,141 +60,140 @@ class Game {
     // http://stoneage/api/?method=move&token=123&direction=left
     public function move($userId, $direction) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        if ($userId && $direction) {
-            // проверить, что direction нормальный
-            $canMove = $human->move($this->map, $direction);
-
-            switch ($direction) {
-                case 'left':
-                    $X = $human->x - 1;
-                    $Y = $human->y;
-                    $result = $this->checkMove($X, $Y, $canMove, $human);
-                    $human = $result->human;
-                    return $result->flag;
-                case 'right':
-                    $X = $human->x + 1;
-                    $Y = $human->y;
-                    $result = $this->checkMove($X, $Y, $canMove, $human);
-                    $human = $result->human;
-                    return $result->flag;
-                case 'up':
-                    $X = $human->x;
-                    $Y = $human->y - 1;
-                    $result = $this->checkMove($X, $Y, $canMove, $human);
-                    $human = $result->human;
-                    return $result->flag;
-                case 'down':
-                    $X = $human->x;
-                    $Y = $human->y + 1;
-                    $result = $this->checkMove($X, $Y, $canMove, $human);
-                    $human = $result->human;
-                    return $result->flag;
-            }
-        }
-    }
-    // для функции move
-    private function checkMove($X, $Y, $canMove, $human) {
-        if ($canMove) {
-            // ищем игрока в базе данных, если нашелся, то бьем его
-            foreach ($this->db->users as $user) {
-                if ($user->x === $X && $user->y === $Y) {
-                    if ($human->right_hand->damage) { // проверяем урон human
-                        $user->hit($human->right_hand->gamage);
-                    } else {
-                        $user->hit(1);
-                    }
-                    $userFinded = true;
-                    break;
-                } else {
-                    $userFinded = false;
-                }
-            }
-            // если игрок не найден, то передвигаемся
-            if (!$userFinded) {
-                $human->x = $X;
-            }
-            return (object) [
-                'human' => $human,
-                'flag' => true
-            ];
-        } else {
-            if (get_class($this->map[$X][$Y]) !== 'Water') { // если вода, то никуда не идем
-                // нанести урон объекту на карте
-                if ($human->right_hand->damage) {
-                    $this->map[$X][$Y]->hit($this->right_hand->damage);
-                } else {
-                    $this->map[$X][$Y]->hit(1);
-                }
-            }
-            return (object) [
-                'human' => $human,
-                'flag' => true
-            ];
-        }
-    }
-
-    // поднять предмет
-    public function takeItem($userId) {
-        $human = new Human($this->db->getHumanByUserId($userId));
-        foreach ($this->db->items as $item) {
-            if ($item->x === $human->x && $item->y === $human->y) { //проверяем координаты предметов
-                $human->takeItem($item);                            //берём предмет с земли
-                $this->db->item->delete($item->id);                 //удаляем с карты
-            }
-        }
-    }
-    // бросить предмет
-    public function dropItem($userId) {
-        $human = new Human($this->db->getHumanByUserId($userId));
-        $item = $human->dropItem();
-        if ($item) {
-            $this->db->items[] = $item;                             //выбрасываем предмет
+        //$humans = $this->db->getHumans();
+        $result = $human->move($this->map, /*$humans,*/ $direction);
+        if ($result) { // обновить данные в БД
+            //...
             return true;
         }
         return false;
     }
+
+    // поднять предмет
+    // http://stoneage/api/?method=takeItem&token=123
+    public function takeItem($userId) {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        foreach ($this->db->getFreeItems() as $item) {
+            if ($item->x === $human->x && $item->y === $human->y) { //проверяем координаты предметов
+                if ($human->takeItem($item->id)) { //берём предмет с земли
+                    $this->db->takeItem($human->id, $item->id); //удаляем с карты
+                    $this->db->updateInventory($human->id);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // бросить предмет
+    // http://stoneage/api/?method=dropItem&token=123&hand=right
+    public function dropItem($userId, $hand = 'right') {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        if ($human) {
+            $itemId = $human->dropItem($hand);
+        }
+        if ($itemId) {
+            $this->db->dropItem($itemId); // выбрасываем предмет
+            return true;
+        }
+        return false;
+    }
+
     // надеть предмет
+    // http://stoneage/api/?method=putOn&token=123
     public function putOn($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        return $human->putOn();
+        if ($human) {
+            return $human->putOn();
+        }
+        return false;
     }
     // положить предмет в карман
+    // http://stoneage/api/?method=putOnBackpack&token=123
     public function putOnBackpack($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        return $human->putOnBackpack();
-    }
-    // ударить
-    public function hit($userId, $direction) {
-        $human = new Human($this->db->getHumanByUserId($userId));
-        if ($userId && $direction) {
-
+        if ($human) {
+            return $human->putOnBackpack();
         }
+        return false;
     }
+
+    // выстрелить/бросить (копье или не копье)
+    public function shot($userId) {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        if ($human) {
+            $human->shot();
+            return true;
+        }
+        return false;
+    }
+
     // положить предмет в (?)
     // починить то, что в руках/надето/лежит в кармане
-    public function repair($userId, $itemId) {
-
+    // http://stoneage/api/?method=repair&token=123
+    public function repair($userId) {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        if ($human) {
+            $arr = $human->repair();
+        }
+        if ($arr) {
+            $weapon = $this->db->getItemById($arr->itemId);
+            $resource = $this->db->getItemById($arr->resourceId);
+        }
+        if ($weapon && $resource) {
+            $weapon->hp += $resource->value; // заменить value
+            $resource->count--;
+            if ($resource->count <= 0) {
+                $resource = null;
+            }
+            // обновить в БД
+            return true;
+        }
+        return false;
     }
+
     // починить то, что лежит/стоит (строение)
     public  function fix($userId, $buildingId) {
+        $human = new Human($this->db->gerHumanByUserId($userId));
+    }
 
-    }
     // поесть
-    public function eat($userId, $itemId) {
+    public function eat($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        if ($userId && $itemId) {
-            return $human->eat($itemId);
+        if ($human) {
+            $itemId = $human->eat();
+            $item = $this->db->getItemById($itemId);
         }
+        if ($item) {
+            $human->satiety += $item->calories; // добавляем сытость
+            $item->count--; // уменьшаем кол-во еды
+            if ($item->count <= 0) {
+                $item = null;
+            }
+            // обновить в БД
+            return true;
+        }
+        return false;
     }
+
     // сделать предмет
     public function makeItem($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-
+        if ($human) {
+            $human->makeItem();
+        }
+        return false;
     }
+
     // сделать строение
     public function makeBuilding($userId) {
+        $human = new Human($this->db->getHumanByUserId($userId));
+        if ($human) {
 
+        }
+        return false;
     }
+
     // продолжить строить строение
     public function keepBuilding($userId, $buildingId) {
 
