@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(1);
+error_reporting(-1);
 
 // ИМПОРТ ФАЙЛОВ
 require_once "application/Application.php";
