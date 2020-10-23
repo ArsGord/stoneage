@@ -27,12 +27,34 @@
             move(direction) {
                 return this.sendRequest('move', { direction });
             }
+
+            takeItem() {
+                return this.sendRequest('takeItem', {});
+            }
+
+            dropItem(hand) {
+                return this.sendRequest('dropItem', { hand });
+            }
+
+            putOn() {
+                return this.sendRequest('putOn', {});
+            }
+
+            putOnBackpack() {
+                return this.sendRequest('putOnBackpack', {});
+            }
+
+            eat() {
+                return this.sendRequest('eat', {});
+            }
+
+
         }
 
         (async function() {
             const server = new Server();
 
-            console.log(await server.move('right'));
+            console.log(await server.dropItem('right'));
         })();
 
     </script>
