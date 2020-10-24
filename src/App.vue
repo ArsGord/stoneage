@@ -1,6 +1,5 @@
 <template>
   <div class="container mt-5">
-    <div class="row">
       <div class="col-sm-4 mx-auto">
         <form @submit.prevent="userRegister" novalidate>
           <!-- Страница входа -->
@@ -22,11 +21,11 @@
                   class="form-control"
                   id="login"
                 />
-
+                <!-- сообщение о не прохождении валидации -->
                 <div v-if="!$v.formLog.login.$required" class="invalid-feedback">
                   {{reqText}}
                 </div>
-
+                <!-- сообщение о не прохождении валидации -->
                 <div v-if="!$v.formLog.login.$minLength" class="invalid-feedback">
                   {{minLengthText4}}
                 </div>
@@ -46,11 +45,11 @@
                   />
                   <a href="#" class="password-show" v-on:click="func"><img id="no-view-eye" src="../public/images/view.svg"></a>
                 </div>
-                <button type="button" class="btn btn-outline-info mt-2" @click="func">{{ show ? "Скрыть" : "показать" }}</button>
+                <!-- сообщение о не прохождении валидации -->
                 <div v-if="!$v.formLog.password.$required" class="invalid-feedback">
                   {{reqText}}
                 </div>
-
+                <!-- сообщение о не прохождении валидации -->
                 <div v-if="!$v.formLog.password.$minLength" class="invalid-feedback">
                   {{minLengthText6}}
                 </div>
@@ -75,11 +74,11 @@
                   class="form-control"
                   id="loginReg"
                 />
-
+                <!-- сообщение о не прохождении валидации -->
                 <div v-if="!$v.formReg.loginReg.$required" class="invalid-feedback">
                   {{reqText}}
                 </div>
-
+                <!-- сообщение о не прохождении валидации -->
                 <div v-if="!$v.formReg.loginReg.$minLength" class="invalid-feedback">
                   {{minLengthText4}}
                 </div>
@@ -96,6 +95,7 @@
                   class="form-control"
                   id="nicknameReg"
                 />
+                <!-- сообщение о не прохождении валидации -->
                 <div v-if="!$v.formReg.nicknameReg.$required" class="invalid-feedback">
                   {{reqText}}
                 </div>
@@ -115,11 +115,11 @@
                   />
                   <a href="#" class="password-show" v-on:click="func1"><img id="no-view-eye1" src="../public/images/view.svg"></a>
                   </div>
-                <button type="button" class="btn btn-outline-info mt-2" @click="func1">{{ show1 ? "Скрыть" : "показать" }}</button>
+                <!-- сообщение о не прохождении валидации -->
                 <div v-if="!$v.formReg.passwordReg.$required" class="invalid-feedback">
                   {{reqText}}
                 </div>
-
+                <!-- сообщение о не прохождении валидации -->
                 <div v-if="!$v.formReg.passwordReg.$minLength" class="invalid-feedback">
                   {{minLengthText6}}
                 </div>
@@ -139,11 +139,11 @@
                 />
                 <a href="#" class="password-show" v-on:click="func2"><img id="no-view-eye2" src="../public/images/view.svg"></a>
                 </div>
-                <button type="button" class="btn btn-outline-info mt-2" @click="func2">{{ show2 ? "Скрыть" : "показать" }}</button>
+                <!-- сообщение о не прохождении валидации -->                
                 <div class="invalid-feedback" v-if="!$v.formReg.passwordConfirm.$required">
                   {{reqText}}
                 </div>
-
+                <!-- сообщение о не прохождении валидации -->
                 <div v-if="!$v.formReg.passwordConfirm.$sameAs" class="invalid-feedback">
                   {{passwordConfirmText}}
                 </div>
@@ -157,7 +157,6 @@
           </transition>
         </form>
       </div>
-    </div>
   </div>
 </template>
 
@@ -200,6 +199,7 @@ export default {
     };
   },
   computed: {
+    // функция отключает кнопку регистрации, если не пройдена валидация
     disabledReg() {
       return (
         this.$v.formReg.nicknameReg.$invalid ||
@@ -208,6 +208,7 @@ export default {
         this.$v.formReg.passwordConfirm.$invalid
       );
     },
+    // функция отключает кнопку логина, если не пройдена валидация
     disabledLog() {
       return (
         this.$v.formLog.login.$invalid ||
@@ -216,9 +217,8 @@ export default {
     },
   },
   methods: {
-
     registerUser() {
-      for (let input in this.formReg) {
+      for (let input in this.formReg) {//перенос в отдельный объект
             this.inputReg[input] = this.formReg[input]
       }
       
@@ -354,6 +354,10 @@ form {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 15px 15px 45px -5px rgba(0, 0, 0, 0.75);
+}
+
+.form-control.is-invalid{
+    background-image: none;
 }
 
 .slide-fade-enter-active {
