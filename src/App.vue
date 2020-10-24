@@ -162,6 +162,7 @@
 
 <script>
 import { required, minLength, sameAs } from "vuelidate/lib/validators";
+import { Server } from "./modules/Server.js"
 
 export default {
   data() {
@@ -195,7 +196,8 @@ export default {
         passwordConfirm: "",
       },
       viewUrl: require('../public/images/view.svg'),
-      noViewUrl: require('../public/images/no-view.svg')
+      noViewUrl: require('../public/images/no-view.svg'),
+      Server: new Server()
     };
   },
   computed: {
@@ -234,7 +236,8 @@ export default {
       this.reset()
     },
     loginUser() {
-      console.log(this.formLog);
+      console.log(this.Server)
+      //console.log(this.formLog);
     },
     reset() {
         // сбросить шаг и показать сообщение о регистрации
