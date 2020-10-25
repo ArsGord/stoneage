@@ -63,7 +63,9 @@ class Application {
 
     public  function fix($params) {
         $user = $this->user->getUserByToken($params['token']);
-
+        if ($user) {
+            return $this->game->fix();
+        }
     }
 
     public function eat($params) {
@@ -82,11 +84,15 @@ class Application {
 
     public function makeBuilding($params) {
         $user = $this->user->getUserByToken($params['token']);
-
+        if ($user) {
+            return $this->game->makeBuilding();
+        }
     }
 
     public function keepBuilding($params) {
         $user = $this->user->getUserByToken($params['token']);
-
+        if ($user) {
+            return $this->game->keepBuilding();
+        }
     }
 }

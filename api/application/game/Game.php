@@ -141,12 +141,13 @@ class Game {
             $resource = $this->db->getItemById($arr->resourceId);
         }
         if ($weapon && $resource) {
-            $weapon->hp += $resource->value; // заменить value
+            $weapon->hp += $resource->value;
             $resource->count--;
             if ($resource->count <= 0) {
                 $resource = null;
             }
             // обновить в БД
+            $this->db->updateInventory();
             return true;
         }
         return false;

@@ -41,7 +41,6 @@ class DB {
     }
 
     public function updateInventory($humanId) {
-        print_r("db->updateInevntory()</br>");
         //$this->getHumanByUserId($humanId);
     }
 }
