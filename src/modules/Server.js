@@ -1,5 +1,5 @@
 export class Server {
-    token = 'werwersgf';
+    token = 'wersdsgf';
 
     async sendRequest(method, data = {}) {
         data.method = method;
@@ -14,6 +14,7 @@ export class Server {
         return false;
     }
 
+    
     move(direction) {
         return this.sendRequest('move', { direction });
     }

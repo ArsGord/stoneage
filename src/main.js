@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
-import App from './App.vue'
+import Auth from './Auth.vue'
 
 Vue.config.productionTip = false
-
 Vue.use(Vuelidate)
 
 new Vue({
-  render: h => h(App),
+  render: h => h(Auth),
 }).$mount('#app')
