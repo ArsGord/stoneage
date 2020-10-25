@@ -421,4 +421,15 @@ class Human extends Animal {
         return false;
     }
 
+    public function makeItem() {
+        return true;
+    }
+
+    public function makeBuilding($userId) {
+
+    }
+
+    public function keepBuilding($userId, $buildingId) {
+
+    }
 }

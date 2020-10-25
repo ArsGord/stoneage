@@ -10,14 +10,6 @@ class Grass extends Entity
         $this->passability = true;
     }
 
-    public function hit($damage = 0) {
-        // если нанесен урон, то нанести его
-        if ($damage > 0) {
-            return parent::hit($damage);
-        }
-        return parent::hit();
-    }
-
     // уничтожение
     protected function destroy() {
         return null;

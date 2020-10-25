@@ -190,14 +190,17 @@ class Game {
     public function makeBuilding($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($human) {
-
+            return $human->makeBuilding($userId);
         }
         return false;
     }
 
     // продолжить строить строение
     public function keepBuilding($userId, $buildingId) {
-
+        $human = new Human($this->db->getHumanByUserId($userId));
+        if ($human) {
+            return $human->keepBuilding($userId);
+        }
     }
     // обновить игровое окружение
         // (проголодать всех живых существ, умереть голодных,

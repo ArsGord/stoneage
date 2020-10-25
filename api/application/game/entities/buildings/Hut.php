@@ -5,14 +5,6 @@ class Hut extends Entity {
         parent::__construct($data);
         $this->armor = $data->armor; //броня
         $this->capacity = $data->capacity; //вместимость
-    }
-
-
-    function put_item($item) {
-        if($this->capacity < 10) {
-            $item->x = $this->x;
-            $item->y = $this->y;
-            $this->capacity++;
-        }
+        $this->stage = $data->stage;
     }
 }
