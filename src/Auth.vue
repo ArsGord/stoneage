@@ -1,8 +1,8 @@
 <template>
 <div>
   <div>
-    <div class="navbar bg-light my-lg-0">
-        <div>Stone Age</div>
+    <div class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <div class="h2">Stone Age</div>
         <div>
             <button @click="step = 1" type="button" class="btn btn-success my-2 my-sm-0">Вход</button>
             <button @click="step = 2" type="button" class="btn btn-primary ml-3 my-2 my-sm-0">Регистрация</button>
