@@ -98,6 +98,7 @@
 
 <script>
 import { required, minLength, sameAs } from "vuelidate/lib/validators";
+import { Server } from "../modules/Server.js"
 
 export default {
   data() {
@@ -124,7 +125,8 @@ export default {
         passwordConfirm: "",
       },
       viewUrl: require('../images/view.svg'),
-      noViewUrl: require('../images/no-view.svg')
+      noViewUrl: require('../images/no-view.svg'),
+      Server: new Server()
     };
   },
   computed: {
@@ -147,12 +149,15 @@ export default {
       console.group()
           console.log('Вы успешно зарегистрированны!')
           console.log('Ваше имя: ' + this.formReg.loginReg)
-          console.log('Ваш никнейи: ' + this.formReg.nicknameReg)
+          console.log('Ваш никнейм: ' + this.formReg.nicknameReg)
           console.log('Ваш пароль: ' + this.formReg.passwordReg)
       console.groupEnd()
 
       console.log(this.inputReg)
 
+      // не работает
+      //console.log(this.Server.registration(this.formReg.nicknameReg, this.formReg.loginReg, this.formReg.passwordReg));
+      
       this.reset()
     },
     reset() {
