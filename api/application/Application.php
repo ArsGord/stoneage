@@ -10,6 +10,15 @@ class Application {
         $this->game = new Game($db);
     }
 
+    public function login($data = []) {
+
+    }
+
+    // http://stoneage/api/?method=registration&nickname=name&login=login&password=password
+    public function registration($data = []) {
+        return $this->user->registration($data['nickname'], $data['login'], $data['password']);
+    }
+
     public function move($params) {
         $user = $this->user->getUserByToken($params['token']);
         if ($user) {

@@ -23,4 +23,16 @@ class User {
         }
         return false;
     }
+
+    public function registration($nickname, $login, $password) {
+        if ($nickname && $login && $password) {
+            $hash5 = md5($login . $password);
+            $token = md5($hash5.rand(1, 100000));
+            $result = $this->db->createUser($nickname, $login, $token);
+            if ($result) {
+                return $token;
+            }
+            return false;
+        }
+    }
 }

@@ -12,6 +12,7 @@ function router($params) {
         switch ($method) {
             // user
             case 'login': return $app->login($params);
+            case 'registration': return $app->registration($params);
             // game
             case 'move': return $app->move($params);
             case 'takeItem': return $app->takeItem($params);

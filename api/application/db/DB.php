@@ -5,6 +5,18 @@ class DB {
 
     }
 
+    public function createUser($nickname, $login, $token) {
+        if ($nickname && $login && $token) {
+            // создать пользователя
+            return true;
+        }
+        return false;
+    }
+
+    public function getUserByLogin($login) {
+
+    }
+
     public function getHumanByUserId($userId) {
         return (object) [
             'x' => 1,
