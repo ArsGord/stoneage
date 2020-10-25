@@ -68,12 +68,6 @@ export default {
         login: "",
         password: "",
       },
-      inputReg:{
-        loginReg: "",
-        nicknameReg: " ",
-        passwordReg: "",
-        passwordConfirm: "",
-      },
       viewUrl: require('../images/view.svg'),
       noViewUrl: require('../images/no-view.svg'),
       Server: new Server()

@@ -17,7 +17,7 @@ export class Server {
     registration(nickname, login, password) {
         return this.sendRequest('registration', { nickname, login, password });
     }
-    
+
     move(direction) {
         return this.sendRequest('move', { direction });
     }

@@ -154,9 +154,8 @@ export default {
       console.groupEnd()
 
       console.log(this.inputReg)
-
-      // не работает
-      //console.log(this.Server.registration(this.formReg.nicknameReg, this.formReg.loginReg, this.formReg.passwordReg));
+      // не работает (??)
+      console.log(this.Server.registration(this.inputReg.nicknameReg, this.inputReg.loginReg, this.inputReg.passwordReg));
       
       this.reset()
     },
