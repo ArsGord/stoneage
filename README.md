@@ -1,24 +1,12 @@
-# best
+# Heroes_of_VM-21_Stone_Age
+The BEST GAME of the WORLD!!!
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+В игре будут реализованы:
+1. Авторизация и регистрация (логин + пароль, никнейм);
+2. Карта, на которой будут деревья, камни, огород и живность;
+3. Ресурсы: дерево, камень, еда;
+4. Строения: хижина, забор;
+5. Предметы: одежда, инструмент, оружие (копьё, щит, лук и стрелы);
+6. Шкала прочности строений и предметов;
+7. Инвентарь игрока;
+8. PvP.
