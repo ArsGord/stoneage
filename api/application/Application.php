@@ -10,13 +10,19 @@ class Application {
         $this->game = new Game($db);
     }
 
-    public function login($data = []) {
-
+    public function login($params) {
+        if ($params) {
+            return $this->user->login($params['login'], $params['hash'], $params['num']);
+        }
+        return false;
     }
 
     // http://stoneage/api/?method=registration&nickname=name&login=login&password=password
-    public function registration($data = []) {
-        return $this->user->registration($data['nickname'], $data['login'], $data['password']);
+    public function registration($params) {
+        if ($params) {
+            return $this->user->registration($params['nickname'], $params['login'], $params['password']);
+        }
+        return false;
     }
 
     public function move($params) {

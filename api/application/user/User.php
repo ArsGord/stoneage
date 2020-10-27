@@ -12,12 +12,16 @@ class User {
         }
     }
 
-    public function login($login, $hash) {
-        $user = $this->db->getUserBylogin($login);
+    public function login($login, $hash, $num) {
+        $user = (object) [ // для проверки
+            'login' => $login,
+            'password' => '123456'
+        ];
+        //$user = $this->db->getUserBylogin($login);
         if ($user) {
-            $hash5 = md5($user->password.rand(1, 100000));
+            $hash5 = md5( $user->login . $user->password . (string)$num);
             if($hash === $hash5) {
-                $token = md5($hash);
+                $token = $hash5;
                 return $token;
             }
         }

@@ -1,6 +1,11 @@
 <?php
+//header('Content-Type: application/json; charset= UTF-8');
+header('Access-Control-Allow-Origin: *');
+//header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+//header('Access-Control-Allow-Headers: Content-Type');
+//header('Access-Control-Allow-Credentials: true');
 
-error_reporting(-1);
+error_reporting(1);
 
 // ИМПОРТ ФАЙЛОВ
 require_once "application/Application.php";
