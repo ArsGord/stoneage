@@ -4,24 +4,24 @@ class Auth extends React.Component {
     constructor(props) {
         super();
         this.setAuthState = props.setAuthState;
-
+        this.setHash = props.setHash;
         this.server = props.server;
     }
   
-    auth() {
-        this.server.login('vasya', '123456');
+    async auth() {
+        this.setHash(await this.server.login('vasya', '123456'));
         this.setAuthState(false);
     }
   
     render() {
       return (
         <div className="auth">
-            <div className="input__menu">
-                <input className='input__login' id="loginAuth" placeholder="Login" />
-                <input type="password" className='input__password' id="passwordAuth" placeholder="Password"  />
+            <div className="input-menu">
+                <input className='input-login' id="loginAuth" placeholder="Login" />
+                <input type="password" className='input-password' id="passwordAuth" placeholder="Password"/>
             </div>  
-            <div className="button__menu">
-                <button className='button__sign__in' id="userLogin" onClick={() => this.auth()}>Авторизоваться</button>
+            <div className="button-menu">
+                <button className='button-sign-in' id="userLogin" onClick={() => this.auth()}>Авторизоваться</button>
             </div>
         </div>
       );
