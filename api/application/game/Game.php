@@ -199,7 +199,7 @@ class Game {
     public function keepBuilding($userId, $buildingId) {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($human) {
-            return $human->keepBuilding($userId);
+            return $human->keepBuilding($userId, $buildingId);
         }
     }
     // обновить игровое окружение
