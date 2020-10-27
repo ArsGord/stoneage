@@ -19,7 +19,7 @@ class User {
         ];
         //$user = $this->db->getUserBylogin($login);
         if ($user) {
-            $hash5 = md5( $user->login . $user->password . (string)$num);
+            $hash5 = md5(md5( $user->login . $user->password) . (string)$num);
             if($hash === $hash5) {
                 $token = $hash5;
                 return $token;
