@@ -22,6 +22,7 @@ class App extends React.Component {
     this.setState({ hash });
   }
 
+
   render() {
     return (
       <div className="App">
