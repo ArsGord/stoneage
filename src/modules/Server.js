@@ -15,7 +15,13 @@ export default class Server {
     }
 
     login(login, password) {
-        return this.sendRequest('registration', { login, password });
+        if (login && password) {
+            var md5 = require('md5');
+            const num = Math.round(Math.random() * 100000);
+            const hash = md5(md5(login + password) + num);
+            return this.sendRequest('login', { login, hash, num });
+        }
+        return false;
     }
 
     registration(nickname, login, password) {
