@@ -5,8 +5,7 @@ import { Button } from 'react-bootstrap';
 
 class Sign extends React.Component {
     constructor(props) {
-        super();
-        this.setAuthState = props.setAuthState;
+        super(props);
         this.setHash = props.setHash;
         this.server = props.server;
     }
