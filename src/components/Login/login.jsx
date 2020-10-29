@@ -5,12 +5,9 @@ import { Button } from 'react-bootstrap';
 
 class Login extends React.Component {
     constructor(props) {
-        super(props);
+        super();
         this.setHash = props.setHash;
         this.server = props.server;
-        this.state = {
-            hash: props.hash
-        }
     }
 
     async auth() {
@@ -36,7 +33,7 @@ class Login extends React.Component {
                             </div>
 
                             <LinkContainer to='/game'>
-                                <Button type="button" className="btn btn-success btn-block mt-3" onClick={() => this.auth()} hash = {this.state.hash}>Вход</Button>
+                                <Button type="button" className="btn btn-success btn-block mt-3" onClick={() => this.auth()}>Вход</Button>
                             </LinkContainer>
                             
                         </div>

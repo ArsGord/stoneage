@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 
 class Sign extends React.Component {
     constructor(props) {
-        super(props);
+        super();
         this.setHash = props.setHash;
         this.server = props.server;
     }
