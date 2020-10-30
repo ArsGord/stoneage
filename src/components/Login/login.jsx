@@ -1,10 +1,10 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import './style.css'
-import { LinkContainer } from 'react-router-bootstrap'
+import './style.css';
+import { LinkContainer } from 'react-router-bootstrap';
 import { Button } from 'react-bootstrap';
-import ViewSvg from '../../images/view.svg'
-import noViewSvg from '../../images/no-view.svg'
+import ViewSvg from '../../images/view.svg';
+import noViewSvg from '../../images/no-view.svg';
 
 class Login extends React.Component {
     constructor(props) {
@@ -72,7 +72,7 @@ class Login extends React.Component {
                                            onChange={ this.handleChange }
                                         />
                                         {/* eslint-disable-next-line */}
-                                        <a to="#" className="password-show" onClick={() => this.changeView()}><img id="view-eye" src={this.state.image}/></a>
+                                        <a href="#" className="password-show" onClick={() => this.changeView()}><img id="view-eye" src={this.state.image}/></a>
                                 </div>
                             </div>
 

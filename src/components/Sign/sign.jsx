@@ -1,10 +1,10 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import './style.css'
-import { LinkContainer } from 'react-router-bootstrap'
+import './style.css';
+import { LinkContainer } from 'react-router-bootstrap';
 import { Button } from 'react-bootstrap';
-import ViewSvg from '../../images/view.svg'
-import noViewSvg from '../../images/no-view.svg'
+import ViewSvg from '../../images/view.svg';
+import noViewSvg from '../../images/no-view.svg';
 
 class Sign extends React.Component {
     constructor(props) {

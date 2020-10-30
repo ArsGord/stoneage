@@ -25,7 +25,13 @@ export default class Server {
     }
 
     registration(nickname, login, password) {
-        return this.sendRequest('registration', { nickname, login, password });
+        if (nickname && login && password) {
+            var md5 = require('md5');
+            const num = Math.round(Math.random() * 100000);
+            const hash = md5(md5(login + password) + num);
+            return this.sendRequest('registration', { nickname, login, hash, num });    
+        }
+        return false;
     }
 
     move(direction) {
@@ -48,7 +54,27 @@ export default class Server {
         return this.sendRequest('putOnBackpack', {});
     }
 
+    repair() {
+        return this.sendRequest('repair', {});
+    }
+
+    fix() {
+        return this.sendRequest('fix', {});
+    }
+
     eat() {
         return this.sendRequest('eat', {});
+    }
+
+    makeItem() {
+        return this.sendRequest('makeItem', {});
+    }
+
+    makeBuilding() {
+        return this.sendRequest('makeBuilding', {});
+    }
+
+    keepBuilding() {
+        return this.sendRequest('keepBuilding', {});
     }
 }

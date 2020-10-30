@@ -35,7 +35,7 @@ class App extends React.Component {
         <div>
           <Route path='/login' render={() => <Login server={this.server} setHash = {(hash) => this.setHash(hash)}/>}/>
           <Route path='/registration' render={() => <Sign server={this.server} setHash = {(hash) => this.setHash(hash)}/>}/>
-          <Route path='/game' render={() => <Game hash = {this.state.hash}/>}/>
+          <Route path='/game' render={() => <Game server={this.server} hash = {this.state.hash}/>}/>
         </div>
       </div>
     );  
