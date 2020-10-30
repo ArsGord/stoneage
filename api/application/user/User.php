@@ -15,26 +15,25 @@ class User {
     public function login($login, $hash, $num) {
         $user = (object) [ // для проверки
             'login' => $login,
-            'password' => '123456'
+            'password' => '123'
         ];
         //$user = $this->db->getUserBylogin($login);
-        if ($user) {
-            $hash5 = md5(md5( $user->login . $user->password) . (string)$num);
-            if($hash === $hash5) {
-                $token = $hash5;
+        if ($user) { // нужно ли в $hash5 заменить $user->password на $user->hash ???
+            $token = md5(md5( $user->login . $user->password) . (string)$num);
+            if($hash === $token) {
+                // обновить токен в DB
                 return $token;
             }
         }
         return false;
     }
 
-    public function registration($nickname, $login, $password) {
-        if ($nickname && $login && $password) {
-            $hash5 = md5($login . $password);
-            $token = md5($hash5.rand(1, 100000));
-            $result = $this->db->createUser($nickname, $login, $token);
+    public function registration($nickname, $login, $hash, $num) {
+        if ($nickname && $login && $hash && $num) {
+            // создаем нового user в DB
+            $result = $this->db->createUser($nickname, $login, $hash, $num);
             if ($result) {
-                return $token;
+                return $result;
             }
             return false;
         }

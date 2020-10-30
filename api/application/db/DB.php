@@ -5,10 +5,10 @@ class DB {
 
     }
 
-    public function createUser($nickname, $login, $token) {
-        if ($nickname && $login && $token) {
+    public function createUser($nickname, $login, $token, $num) {
+        if ($nickname && $login && $token && $num) {
             // создать пользователя
-            return true;
+            return $token;
         }
         return false;
     }
@@ -37,7 +37,7 @@ class DB {
     }
 
     public function getItemById($itemId) {
-        return (object)['calories' => 10, 'count' => 2];
+        return ['calories' => 10, 'count' => 2];
     }
 
     public function updateInventory($humanId) {

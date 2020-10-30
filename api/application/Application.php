@@ -20,7 +20,7 @@ class Application {
     // http://stoneage/api/?method=registration&nickname=name&login=login&password=password
     public function registration($params) {
         if ($params) {
-            return $this->user->registration($params['nickname'], $params['login'], $params['password']);
+            return $this->user->registration($params['nickname'], $params['login'], $params['hash'], $params['num']);
         }
         return false;
     }
