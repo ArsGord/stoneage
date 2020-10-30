@@ -1,17 +1,33 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import './style.css'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Button } from 'react-bootstrap';
+import ViewSvg from '../../images/view.svg'
+import noViewSvg from '../../images/no-view.svg'
 
 class Sign extends React.Component {
     constructor(props) {
         super();
         this.setHash = props.setHash;
         this.server = props.server;
+        this.state = {
+            image: ViewSvg
+        }
     }
 
     async reg() {
         this.setHash(await this.server.registration(this.nickname.value, this.login.value, this.password.value));
+    }
+
+    changeView() {
+        if (this.password.type === 'password') {
+            this.password.setAttribute('type', 'text');
+            this.setState({image: noViewSvg});
+        } else {
+            this.password.setAttribute('type', 'password');
+            this.setState({image: ViewSvg});
+        }
     }
   
     render() {
@@ -33,7 +49,10 @@ class Sign extends React.Component {
 
                         <div className="form-group">
                         <label htmlFor="password">Пароль</label>
-                        <input ref={ref => this.password = ref} className="form-control mb-2" id="password"/>
+                        <div className="passwordLog">
+                            <input ref={ref => this.password = ref} className="form-control mb-2" id="password" type="password"/>  
+                            <a href="#" className="password-show" onClick={() => this.changeView()}><img id="view-eye" src={this.state.image}/></a>  
+                        </div>
                         </div>
 
                         {/* <div className="form-group">
