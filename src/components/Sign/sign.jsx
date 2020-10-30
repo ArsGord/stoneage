@@ -12,7 +12,8 @@ class Sign extends React.Component {
         this.setHash = props.setHash;
         this.server = props.server;
         this.state = {
-            image: ViewSvg
+            image: ViewSvg,
+            disabled: true
         }
     }
 
@@ -29,6 +30,18 @@ class Sign extends React.Component {
             this.setState({image: ViewSvg});
         }
     }
+
+    handleChange = (e) => {
+        if(this.login.value && this.password.value && this.nickname.value) {
+            this.setState({
+                disabled: false,
+            });
+        } else {
+            this.setState({
+                disabled: true
+            })
+        }
+    }
   
     render() {
       return (
@@ -38,31 +51,41 @@ class Sign extends React.Component {
                     <div>
                     <h2>Регистрация</h2>
                         <div className="form-group">
-                        <label htmlFor="login">Логин</label>
-                        <input ref={ref => this.login = ref} type="text" className="form-control mb-2" id="login"/>
+                            <label htmlFor="login">Логин</label>
+                                <input ref={ref => this.login = ref}
+                                    type="text"
+                                    className="form-control mb-2" 
+                                    id="login"
+                                    onChange={ this.handleChange }
+                                />
                         </div>
     
                         <div className="form-group">
-                        <label htmlFor="password">Никнейм</label>
-                        <input ref={ref => this.nickname = ref} className="form-control mb-2" id="password"/>
+                            <label htmlFor="nickname">Никнейм</label>
+                                <input ref={ref => this.nickname = ref} 
+                                    className="form-control mb-2"
+                                    id="nickname"
+                                    onChange={ this.handleChange }
+                                />
                         </div>
 
                         <div className="form-group">
-                        <label htmlFor="password">Пароль</label>
-                        <div className="passwordLog">
-                            <input ref={ref => this.password = ref} className="form-control mb-2" id="password" type="password"/>  
-                            <a href="#" className="password-show" onClick={() => this.changeView()}><img id="view-eye" src={this.state.image}/></a>  
+                            <label htmlFor="password">Пароль</label>
+                                <div className="passwordLog">
+                                    <input ref={ref => this.password = ref} 
+                                            className="form-control mb-2" 
+                                            id="password" 
+                                            type="password"
+                                            onChange={ this.handleChange }
+                                            />  
+                                        {/* eslint-disable-next-line */}
+                                        <a href="#" className="password-show" onClick={() => this.changeView()}><img id="view-eye" src={this.state.image}/></a> 
+                                </div>
                         </div>
-                        </div>
-
-                        {/* <div className="form-group">
-                        <label htmlFor="password">Подтверждение пароля</label>
-                        <input ref={ref => this.password = ref} className="form-control mb-2" id="password"/>
-                        </div> */}
 
                         <div>
                           <LinkContainer to='/game'>
-                              <Button type="button" className="btn btn-success btn-block mt-3" onClick={() => this.reg()}>Вход</Button>
+                              <Button disabled={ this.state.disabled } type="button" className="btn btn-success btn-block mt-3" onClick={() => this.reg()}>Вход</Button>
                           </LinkContainer>
                         </div>
                     </div>

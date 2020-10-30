@@ -12,7 +12,8 @@ class Login extends React.Component {
         this.setHash = props.setHash;
         this.server = props.server;
         this.state = {
-            image: ViewSvg
+            image: ViewSvg,
+            disabled: true
         }
     }
 
@@ -29,6 +30,18 @@ class Login extends React.Component {
             this.setState({image: ViewSvg});
         }
     }
+
+    handleChange = (e) => {
+        if(this.login.value && this.password.value) {
+            this.setState({
+                disabled: false,
+            });
+        } else {
+            this.setState({
+                disabled: true
+            })
+        }
+    }
   
     render() {
       return (
@@ -38,20 +51,33 @@ class Login extends React.Component {
                     <form>
                         <div>
                         <h2>Вход</h2>
+
                             <div className="form-group">
                                 <label htmlFor="login">Логин</label>
-                                <input type="text" className="form-control mb-2" id="login" ref={ref => this.login = ref}/>
+                                <input type="text" 
+                                       className="form-control mb-2"
+                                       id="login" 
+                                       ref={ref => this.login = ref}
+                                       onChange={ this.handleChange }
+                                    />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="password">Пароль</label>
                                 <div className="passwordLog">
-                                    <input ref={ref => this.password = ref} className="form-control" id="password" type="password"/>
-                                    <a href="#" className="password-show" onClick={() => this.changeView()}><img id="view-eye" src={this.state.image}/></a>
+                                    <input ref={ref => this.password = ref}
+                                           className="form-control" 
+                                           id="password" 
+                                           type="password"
+                                           onChange={ this.handleChange }
+                                        />
+                                        {/* eslint-disable-next-line */}
+                                        <a to="#" className="password-show" onClick={() => this.changeView()}><img id="view-eye" src={this.state.image}/></a>
                                 </div>
                             </div>
 
                             <LinkContainer to='/game'>
-                                <Button type="button" className="btn btn-success btn-block mt-3" onClick={() => this.auth()}>Вход</Button>
+                                <Button disabled={ this.state.disabled } type="button" className="btn btn-success btn-block mt-3" onClick={() => this.auth()}>Вход</Button>
                             </LinkContainer>
                             
                         </div>
