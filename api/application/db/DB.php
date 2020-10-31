@@ -1,8 +1,33 @@
 <?php
 
 class DB {
-    public function __construct() {
+    function __construct() {
+        $host = "127.0.0.1:3308";
+        $user = "root";
+        $pass = "";
+        $name = "stoneage";
+        try {
+            $this->conn = new PDO("mysql:host=$host;dbname=$name", $user, $pass);
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            die();
+        }
+    }
 
+    function __destruct() {
+        $this->conn = null;
+    }
+
+    public function getUserByLogin($login) {
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE login='$login'");
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function updateToken($id, $token) {
+        $stmt = $this->conn->prepare("UPDATE users SET token='$token' WHERE id=$id");
+        $stmt->execute();
+        return true;
     }
 
     public function createUser($nickname, $login, $token, $num) {
@@ -11,10 +36,6 @@ class DB {
             return $token;
         }
         return false;
-    }
-
-    public function getUserByLogin($login) {
-
     }
 
     public function getHumanByUserId($userId) {

@@ -11,8 +11,15 @@ class Application {
     }
 
     public function login($params) {
-        if ($params) {
+        if ($params['login'] && $params['hash'] && $params['num']) {
             return $this->user->login($params['login'], $params['hash'], $params['num']);
+        }
+        return false;
+    }
+
+    public function logout($params) {
+        if ($params['token']) {
+            return $this->user->logout($params['token']);
         }
         return false;
     }

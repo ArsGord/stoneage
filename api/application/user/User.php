@@ -13,20 +13,26 @@ class User {
     }
 
     public function login($login, $hash, $num) {
-        $user = (object) [ // для проверки
-            'login' => $login,
-            'password' => '123'
-        ];
-        //$user = $this->db->getUserBylogin($login);
-        if ($user) { // нужно ли в $hash5 заменить $user->password на $user->hash ???
-            $token = md5(md5( $user->login . $user->password) . (string)$num);
+        $user = $this->db->getUserByLogin($login);
+        if ($user) {
+            $token = md5($user['password'] . (string)$num);
             if($hash === $token) {
-                // обновить токен в DB
+                $this->db->updateToken($user['id'], $token); // обновить токен в DB
                 return $token;
             }
         }
         return false;
     }
+
+    public function logout($token) {
+        $user = $this->db->getUserByToken($token);
+        if ($user) {
+            $this->db->updateToken($user['id'], null); // обновить токен в DB
+            return true;
+        }
+        return false;
+    }
+
 
     public function registration($nickname, $login, $hash, $num) {
         if ($nickname && $login && $hash && $num) {
