@@ -24,6 +24,12 @@ class DB {
         return $stmt->fetch();
     }
 
+    public function getUserByToken($token) {
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE token='$token'");
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
     public function updateToken($id, $token) {
         $stmt = $this->conn->prepare("UPDATE users SET token='$token' WHERE id=$id");
         $stmt->execute();
