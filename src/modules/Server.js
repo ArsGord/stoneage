@@ -35,8 +35,8 @@ export default class Server {
     }
 
     logout(token) {
-        this.token = token;
         if (token) {
+            this.token = token;
             return this.sendRequest('logout', {  });
         }
     }
