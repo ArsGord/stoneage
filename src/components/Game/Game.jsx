@@ -1,7 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
-import { NavLink } from "react-router-dom";
+import { Button } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 class Game extends React.Component {
     constructor(props) {
@@ -22,6 +23,12 @@ class Game extends React.Component {
     async sendRequest(method) {
       if (method && typeof method === 'string') {
           switch (method) {
+            case 'logout':
+              const result = await this.server.logout(localStorage.getItem('token'));
+              if (result) {
+                localStorage.setItem('token', '');
+              }
+              break;
             case 'move':
               await this.server.move('left');
               break;
@@ -65,8 +72,10 @@ class Game extends React.Component {
       return (
           <div>
             <div>Это игра!!!</div>
-            <p>Ваш хеш: {this.state.hash}</p>
-            <NavLink to='/login'>Логаут</NavLink>
+            <p>Ваш токен: {this.state.hash}</p>
+            <LinkContainer to='/login'>
+              <Button onClick={() => this.sendRequest('logout')}>Выход</Button>
+            </LinkContainer>
             <div className="buttons">
               <button className="interface-button" onClick={() => this.sendRequest('move')}>move</button>
               <button className="interface-button" onClick={() => this.sendRequest('takeItem')}>takeItem</button>

@@ -22,6 +22,7 @@ class App extends React.Component {
 
   setHash(hash) {
     this.setState({ hash });
+    localStorage.setItem('token', this.state.hash);
   }
 
   updateHash() {

@@ -1,5 +1,5 @@
 export default class Server {
-    token = 'wersdsgf';
+    token = '';
 
     async sendRequest(method, data = {}) {
         data.method = method;
@@ -32,6 +32,13 @@ export default class Server {
             return this.sendRequest('registration', { nickname, login, hash, num });    
         }
         return false;
+    }
+
+    logout(token) {
+        this.token = token;
+        if (token) {
+            return this.sendRequest('logout', {  });
+        }
     }
 
     move(direction) {
