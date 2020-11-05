@@ -7,17 +7,8 @@ import { LinkContainer } from 'react-router-bootstrap';
 class Game extends React.Component {
     constructor(props) {
         super();
-        this.updateHash = props.updateHash;
         this.server = props.server;
-        this.state = {
-          hash: props.hash
-        }
-    }
-
-    componentDidUpdate() {
-      if (this.state.hash === '') {
-        this.setState({hash: this.props.hash});
-      }
+        this.setHash = props.setHash;
     }
 
     async sendRequest(method) {
@@ -26,7 +17,7 @@ class Game extends React.Component {
             case 'logout':
               const result = await this.server.logout(localStorage.getItem('token'));
               if (result) {
-                localStorage.setItem('token', '');
+                this.setHash('');
               }
               break;
             case 'move':
@@ -72,7 +63,7 @@ class Game extends React.Component {
       return (
           <div>
             <div>Это игра!!!</div>
-            <p>Ваш токен: {this.state.hash}</p>
+            <p>Ваш токен: {localStorage.getItem('token')}</p>
             <LinkContainer to='/login'>
               <Button onClick={() => this.sendRequest('logout')}>Выход</Button>
             </LinkContainer>
