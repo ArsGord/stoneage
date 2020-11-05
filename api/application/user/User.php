@@ -17,8 +17,10 @@ class User {
         if ($user) {
             $token = md5($user['password'] . (string)$num);
             if($hash === $token) {
-                $this->db->updateToken($user['id'], $token); // обновить токен в DB
-                return $token;
+                $result = $this->db->updateToken($user['id'], $token); // обновить токен в DB
+                if ($result) {
+                    return $token;
+                }
             }
         }
         return false;
@@ -27,8 +29,10 @@ class User {
     public function logout($token) {
         $user = $this->db->getUserByToken($token);
         if ($user) {
-            $this->db->updateToken($user['id'], null); // обновить токен в DB
-            return true;
+            $result = $this->db->updateToken($user['id'], null); // обновить токен в DB
+            if ($result) {
+                return true;
+            }
         }
         return false;
     }
