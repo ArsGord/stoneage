@@ -36,10 +36,22 @@ class DB {
         return true;
     }
 
-    public function createUser($nickname, $login, $token, $num) {
-        if ($nickname && $login && $token && $num) {
+    public function createUser($nickname, $login, $hash, $token) {
+        if ($nickname && $login && $hash && $token) {
+            $stmt = $this->conn->prepare("SELECT COUNT(*) FROM users");
+            $stmt->execute();
+            $arr = $stmt->fetch();
+            if ($arr) {
+                $count = $arr[0] + 1;
+            }
             // создать пользователя
-            return $token;
+            $stmt = $this->conn->prepare("SELECT * FROM users WHERE login='$login'");
+            $stmt->execute();
+            if (!$stmt->fetch() && isset($count)) {
+                $stmt = $this->conn->prepare("INSERT INTO `users` (`id`, `name`, `login`, `password`, `token`) VALUES ($count, '$nickname', '$login', '$hash', '$token')");
+                $stmt->execute();
+                return $token;
+            }
         }
         return false;
     }

@@ -38,14 +38,16 @@ class User {
     }
 
 
-    public function registration($nickname, $login, $hash, $num) {
-        if ($nickname && $login && $hash && $num) {
-            // создаем нового user в DB
-            $result = $this->db->createUser($nickname, $login, $hash, $num);
-            if ($result) {
-                return $result;
+    public function registration($nickname, $login, $hash, $token, $num) {
+            if ($nickname && $login && $hash && $token && $num) {
+                $hash5 = md5($hash . (string)$num);
+                if ($hash5 === $token) {
+                    $result = $this->db->createUser($nickname, $login, $hash, $token);
+                    if ($result) {
+                        return $result;
+                    }
+                }
             }
-            return false;
-        }
+        return false;
     }
 }
