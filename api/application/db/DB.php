@@ -2,7 +2,7 @@
 
 class DB {
     function __construct() {
-        $host = "127.0.0.1:3308";
+        $host = "127.0.0.1:3306";
         $user = "root";
         $pass = "";
         $name = "stoneage";
@@ -38,17 +38,10 @@ class DB {
 
     public function createUser($nickname, $login, $hash, $token) {
         if ($nickname && $login && $hash && $token) {
-            $stmt = $this->conn->prepare("SELECT COUNT(*) FROM users");
-            $stmt->execute();
-            $arr = $stmt->fetch();
-            if ($arr) {
-                $count = $arr[0] + 1;
-            }
-            // создать пользователя
             $stmt = $this->conn->prepare("SELECT * FROM users WHERE login='$login'");
             $stmt->execute();
-            if (!$stmt->fetch() && isset($count)) {
-                $stmt = $this->conn->prepare("INSERT INTO `users` (`id`, `name`, `login`, `password`, `token`) VALUES ($count, '$nickname', '$login', '$hash', '$token')");
+            if (!$stmt->fetch()) {
+                $stmt = $this->conn->prepare("INSERT INTO `users` (`name`, `login`, `password`, `token`) VALUES ('$nickname', '$login', '$hash', '$token')");
                 $stmt->execute();
                 return $token;
             }
