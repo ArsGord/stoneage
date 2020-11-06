@@ -17,6 +17,7 @@ class Login extends React.Component {
             disabled: true,
             hash: ''
         }
+        this.setHash('');
     }
 
     async auth() {

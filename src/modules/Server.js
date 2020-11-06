@@ -28,7 +28,8 @@ export default class Server {
         if (nickname && login && password) {
             var md5 = require('md5');
             const num = Math.round(Math.random() * 100000);
-            const hash = md5(md5(login + password) + num);
+            const hash = md5(login + password);
+            this.token = md5(hash + num);
             return this.sendRequest('registration', { nickname, login, hash, num });    
         }
         return false;
