@@ -1,7 +1,7 @@
 import React from 'react';
-//import { LinkContainer } from 'react-router-bootstrap';
 import { Button } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
+import Header from '../Header/Header'
 import 'bootstrap/dist/css/bootstrap.css';
 import './style.css';
 import ViewSvg from '../../images/view.svg';
@@ -53,6 +53,7 @@ class Login extends React.Component {
         } else {
             return (
                 <div>
+                    <Header/>
                     <div className="container mt-5">
                         <div className="col-sm-4 mx-auto">
                             <form>
