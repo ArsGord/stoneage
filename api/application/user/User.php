@@ -50,4 +50,21 @@ class User {
             }
         return false;
     }
+
+    public function getMap() {
+        $map = $this->db->getMap();
+        $array = explode(',', $map['field']);
+        $tilesId = [];
+        for ($i = 1; $i <= count($array); $i++) {
+            $arr[] = (int)$array[$i - 1];
+            if ($i % (int)$map['width'] === 0) {
+                $tilesId[] = $arr;
+                $arr = [];
+            }
+        }
+        return array (
+            'tiles' => $this->db->getTiles(),
+            'map' => $tilesId
+        );
+    }
 }

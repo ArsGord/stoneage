@@ -56,6 +56,19 @@ class DB {
         ];
     }
 
+    public function getMap() {
+        $stmt = $this->conn->prepare("SELECT * FROM maps WHERE id = 1");
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function getTiles() {
+        //$stmt = $this->conn->prepare("SELECT * FROM maps");
+        //$stmt->execute();
+        //return $stmt->fetchAll();
+        return true;
+    }
+
     public function getFreeItems() {
         return [(object)['x' => 1, 'y' => 1]];
     }

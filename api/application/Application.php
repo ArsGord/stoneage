@@ -108,4 +108,11 @@ class Application {
             return $this->game->keepBuilding();
         }
     }
+
+    public function getMap($params) {
+        $user = $this->user->getUserByToken($params['token']);
+        if ($user) {
+            return $this->user->getMap();
+        }
+    }
 }
