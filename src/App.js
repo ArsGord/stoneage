@@ -10,21 +10,7 @@ import Server from './modules/Server.js';
 class App extends React.Component {
   constructor() {
     super();
-    this.state = {
-      hash: ''
-    }
     this.server = new Server();
-    this.setHash = this.setHash.bind(this);
-  }
-
-  setHash(hash) {
-    if (hash) {
-      this.setState({ hash });
-      localStorage.setItem('token', this.state.hash);
-    } else {
-      this.setState({ hash: '' });
-      localStorage.setItem('token', this.state.hash);
-    }
   }
 
   render() {
@@ -32,9 +18,9 @@ class App extends React.Component {
       <div className="App">
         <Header/>
         <div>
-          <Route path='/login' render={() => <Login server={this.server} setHash = {(hash) => this.setHash(hash)} hash = {this.state.hash}/>}/>
-          <Route path='/registration' render={() => <Sign server={this.server} setHash = {(hash) => this.setHash(hash)} hash = {this.state.hash}/>}/>
-          <Route path='/game' render={() => <Game server={this.server} setHash = {(hash) => this.setHash(hash)}/>}/>
+          <Route path='/login' render={() => <Login server={this.server}/>}/>
+          <Route path='/registration' render={() => <Sign server={this.server}/>}/>
+          <Route path='/game' render={() => <Game server={this.server}/>}/>
         </div>
       </div>
     );  

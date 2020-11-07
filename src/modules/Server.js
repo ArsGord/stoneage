@@ -14,31 +14,43 @@ export default class Server {
         return false;
     }
 
-    login(login, password) {
+    async login(login, password) {
         if (login && password) {
             var md5 = require('md5');
             const num = Math.round(Math.random() * 100000);
             const hash = md5(md5(login + password) + num);
-            return this.sendRequest('login', { login, hash, num });
+            this.token = await this.sendRequest('login', { login, hash, num });
+            if (this.token) {
+                localStorage.setItem('token', this.token);
+                return true;
+            }
         }
         return false;
     }
 
-    registration(nickname, login, password) {
+    async registration(nickname, login, password) {
         if (nickname && login && password) {
             var md5 = require('md5');
             const num = Math.round(Math.random() * 100000);
             const hash = md5(login + password);
             this.token = md5(hash + num);
-            return this.sendRequest('registration', { nickname, login, hash, num });    
+            this.token =  await this.sendRequest('registration', { nickname, login, hash, num });
+            if (this.token) {
+                localStorage.setItem('token', this.token);
+                return true;
+            }    
         }
         return false;
     }
 
-    logout(token) {
+    async logout(token) {
         if (token) {
             this.token = token;
-            return this.sendRequest('logout', {  });
+            const result = await this.sendRequest('logout');
+            if (result) {
+                this.token = '';
+                localStorage.setItem('token', '');
+            }
         }
     }
 

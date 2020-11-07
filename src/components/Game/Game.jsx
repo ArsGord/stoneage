@@ -8,17 +8,13 @@ class Game extends React.Component {
     constructor(props) {
         super();
         this.server = props.server;
-        this.setHash = props.setHash;
     }
 
     async sendRequest(method) {
       if (method && typeof method === 'string') {
           switch (method) {
             case 'logout':
-              const result = await this.server.logout(localStorage.getItem('token'));
-              if (result) {
-                this.setHash('');
-              }
+              await this.server.logout(localStorage.getItem('token'));
               break;
             case 'move':
               await this.server.move('left');

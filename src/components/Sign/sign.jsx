@@ -10,22 +10,18 @@ import noViewSvg from '../../images/no-view.svg';
 class Sign extends React.Component {
     constructor(props) {
         super();
-        this.setHash = props.setHash;
         this.server = props.server;
         this.state = {
             image: ViewSvg,
             disabled: true,
-            hash: ''
+            canRedirect: false
         }
-        this.setHash('');
     }
 
     async reg() {
-        this.setHash(await this.server.registration(this.nickname.value, this.login.value, this.password.value));
-        if (localStorage.getItem('token') === 'false') {
-            this.setState({hash: ''});
-        } else {
-            this.setState({hash: localStorage.getItem('token')});
+        const result = await this.server.registration(this.nickname.value, this.login.value, this.password.value);
+        if (result) {
+            this.setState({canRedirect: result});
         }
     }
 
@@ -52,7 +48,7 @@ class Sign extends React.Component {
     }
   
     render() {
-        if (this.state.hash) {
+        if (this.state.canRedirect) {
             return <Redirect to='/game'/>
         } else {
             return (
