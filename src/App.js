@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import Login from './components/Login/login'
 import Sign from './components/Sign/sign'
 import Game from './components/Game/Game';
@@ -15,6 +15,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
+        <Redirect to='/login'/>
         <div>
           <Route path='/login' render={() => <Login server={this.server}/>}/>
           <Route path='/registration' render={() => <Sign server={this.server}/>}/>
