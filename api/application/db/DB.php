@@ -2,7 +2,7 @@
 
 class DB {
     function __construct() {
-        $host = "127.0.0.1:3306";
+        $host = "127.0.0.1:3308";
         $user = "root";
         $pass = "";
         $name = "stoneage";
@@ -63,10 +63,9 @@ class DB {
     }
 
     public function getTiles() {
-        //$stmt = $this->conn->prepare("SELECT * FROM maps");
-        //$stmt->execute();
-        //return $stmt->fetchAll();
-        return true;
+        $stmt = $this->conn->prepare("SELECT * FROM tiles");
+        $stmt->execute();
+        return $stmt->fetch();
     }
 
     public function getFreeItems() {

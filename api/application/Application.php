@@ -112,7 +112,7 @@ class Application {
     public function getMap($params) {
         $user = $this->user->getUserByToken($params['token']);
         if ($user) {
-            return $this->user->getMap();
+            return $this->game->getMap();
         }
     }
 }

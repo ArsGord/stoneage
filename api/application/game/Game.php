@@ -202,6 +202,24 @@ class Game {
             return $human->keepBuilding($userId, $buildingId);
         }
     }
+
+    public function getMap() {
+        $map = $this->db->getMap();
+        $array = explode(',', $map['field']);
+        $arrMap = [];
+        for ($i = 1; $i <= count($array); $i++) {
+            $arr[] = (int)$array[$i - 1];
+            if ($i % (int)$map['width'] === 0) {
+                $arrMap[] = $arr;
+                $arr = [];
+            }
+        }
+        $map['field'] = $arrMap;
+        return array (
+            'tiles' => $this->db->getTiles(),
+            'map' => $map
+        );
+    }
     // обновить игровое окружение
         // (проголодать всех живых существ, умереть голодных,
         // сходить коровками, вырасти травку, сменить время суток, протухнуть еду)
