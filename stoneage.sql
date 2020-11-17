@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Ноя 09 2020 г., 21:28
+-- Время создания: Ноя 17 2020 г., 19:53
 -- Версия сервера: 10.3.22-MariaDB
 -- Версия PHP: 7.1.33
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `maps` (
   `id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
+  `hash` varchar(32) NOT NULL,
   `field` text NOT NULL,
   `width` int(11) NOT NULL,
   `height` int(11) NOT NULL
@@ -39,8 +40,8 @@ CREATE TABLE `maps` (
 -- Дамп данных таблицы `maps`
 --
 
-INSERT INTO `maps` (`id`, `name`, `field`, `width`, `height`) VALUES
-(1, 'первая карта', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
+INSERT INTO `maps` (`id`, `name`, `hash`, `field`, `width`, `height`) VALUES
+(1, 'первая карта', 'c4ca4238a0b923820dcc509a6f75849b', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
 
 -- --------------------------------------------------------
 
@@ -83,7 +84,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `login`, `password`, `token`) VALUES
-(1, 'Вася', 'vasya', '4a2d247d0c05a4f798b0b03839d94cf0', '27b9b2adcbb60220d8b4eea85d56ebcd'),
+(1, 'Вася', 'vasya', '4a2d247d0c05a4f798b0b03839d94cf0', 'c797fc5fd2d2c87f87f75839ac791152'),
 (2, 'Петя', 'petya', 'd7ba312b012b3374ef53eb2e3f9830a5', '51042d46b38281419aa777356eb5af8a'),
 (3, 'МарияИванна', 'masha', '68626ed9a3adbaf5bfd9148d42edd26b', 'b834f47eea96a26d61ba894a2a3e5964');
 

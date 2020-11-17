@@ -32,6 +32,7 @@ function router($params) {
             case 'makeBuilding': return $app->makeBuilding($params);
             case 'keepBuilding': return $app->keepBuilding($params);
             case 'getMap': return $app->getMap($params);
+            case 'updateMap': return $app->updateMap($params);
         }
     }
     return false;

@@ -220,6 +220,11 @@ class Game {
             'map' => $map
         );
     }
+
+    public function updateMap($hash, $map) {
+        $result = $this->db->updateMap($hash, $map);
+        return $result;
+    }
     // обновить игровое окружение
         // (проголодать всех живых существ, умереть голодных,
         // сходить коровками, вырасти травку, сменить время суток, протухнуть еду)

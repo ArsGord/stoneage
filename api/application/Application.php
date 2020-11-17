@@ -115,4 +115,11 @@ class Application {
             return $this->game->getMap();
         }
     }
+
+    public function updateMap($params) {
+        $user = $this->user->getUserByToken($params['token']);
+        if ($user) {
+            return $this->game->updateMap($params['hash'], $params['map']);
+        }
+    }
 }
