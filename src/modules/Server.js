@@ -1,5 +1,6 @@
 export default class Server {
     token = '';
+    map = []; 
 
     async sendRequest(method, data = {}) {
         data.method = method;
@@ -44,6 +45,9 @@ export default class Server {
     }
 
     async logout(token) {
+        if (localStorage.getItem('token')) {
+            console.log('is localSotrage');
+        }
         if (token) {
             this.token = token;
             const result = await this.sendRequest('logout');
@@ -54,12 +58,20 @@ export default class Server {
         }
     }
 
+    async getMap() {
+        this.map = await this.sendRequest('getMap');
+    }
+
+    updateMap() {
+        
+    }
+
     move(direction) {
         return this.sendRequest('move', { direction });
     }
 
     takeItem() {
-        return this.sendRequest('takeItem', {});
+        return this.sendRequest('takeItem');
     }
 
     dropItem(hand) {
@@ -67,34 +79,34 @@ export default class Server {
     }
 
     putOn() {
-        return this.sendRequest('putOn', {});
+        return this.sendRequest('putOn');
     }
 
     putOnBackpack() {
-        return this.sendRequest('putOnBackpack', {});
+        return this.sendRequest('putOnBackpack');
     }
 
     repair() {
-        return this.sendRequest('repair', {});
+        return this.sendRequest('repair');
     }
 
     fix() {
-        return this.sendRequest('fix', {});
+        return this.sendRequest('fix');
     }
 
     eat() {
-        return this.sendRequest('eat', {});
+        return this.sendRequest('eat');
     }
 
     makeItem() {
-        return this.sendRequest('makeItem', {});
+        return this.sendRequest('makeItem');
     }
 
     makeBuilding() {
-        return this.sendRequest('makeBuilding', {});
+        return this.sendRequest('makeBuilding');
     }
 
     keepBuilding() {
-        return this.sendRequest('keepBuilding', {});
+        return this.sendRequest('keepBuilding');
     }
 }

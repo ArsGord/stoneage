@@ -10,6 +10,10 @@ class Game extends React.Component {
         this.server = props.server;
     }
 
+    componentDidMount() {
+      this.server.getMap();
+    }
+
     async sendRequest(method) {
       if (method && typeof method === 'string') {
           switch (method) {
