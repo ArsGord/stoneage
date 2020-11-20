@@ -1,6 +1,18 @@
 export default class Server {
     token = '';
     map = []; 
+    hash = '';
+    async checkHash () {
+        const hash = this.hash;
+        const bdHash = await this.sendRequest ('updateMap', {hash});
+        if(bdHash !== this.hash && bdHash !== false) {
+            this.hash = bdHash;
+            this.getMap();
+        }
+        console.log(this.hash);
+    }
+    update = setInterval(this.checkHash(),
+                          300);
 
     async sendRequest(method, data = {}) {
         data.method = method;
@@ -59,7 +71,7 @@ export default class Server {
         this.map = await this.sendRequest('getMap');
     }
 
-    updateMap() {
+    update() {
         
     }
 

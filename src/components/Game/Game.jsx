@@ -45,7 +45,7 @@ class Game extends React.Component {
               await this.server.fix();
               break;
             case 'eat':
-              await this.server.eat();
+              await this.server.checkHash();
               break;
             case 'makeItem':
               await this.server.makeItem();
