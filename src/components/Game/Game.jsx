@@ -1,4 +1,5 @@
 import React from 'react';
+import Canvas from '../../modules/Canvas.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 import { Button } from 'react-bootstrap';
@@ -12,6 +13,8 @@ class Game extends React.Component {
 
     componentDidMount() {
       this.server.getMap();
+      this.canvas = new Canvas();
+      document.getElementById('canvas').addEventListener('click', (event) => {this.canvas.click(event)});
     }
 
     async sendRequest(method) {
@@ -58,15 +61,25 @@ class Game extends React.Component {
           }
       }
     }
+
+    click() {
+      console.log(document.getElementById('canvas'));
+    }
   
     render() {
       return (
           <div>
-            <div>Это игра!!!</div>
-            <p>Ваш токен: {localStorage.getItem('token')}</p>
-            <LinkContainer to='/login'>
-              <Button onClick={() => this.sendRequest('logout')}>Выход</Button>
-            </LinkContainer>
+            <div className="navbar" >
+                <div className="h2">Stone Age</div>
+                <div>
+                <LinkContainer to='/login'>
+                  <Button onClick={() => this.sendRequest('logout')} className="logout-button">Выход</Button>
+                </LinkContainer>
+                </div>
+            </div>
+            <div>
+              <canvas id="canvas"></canvas>
+            </div>
             <div className="buttons">
               <button className="interface-button" onClick={() => this.sendRequest('move')}>move</button>
               <button className="interface-button" onClick={() => this.sendRequest('takeItem')}>takeItem</button>

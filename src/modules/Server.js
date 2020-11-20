@@ -45,9 +45,6 @@ export default class Server {
     }
 
     async logout(token) {
-        if (localStorage.getItem('token')) {
-            console.log('is localSotrage');
-        }
         if (token) {
             this.token = token;
             const result = await this.sendRequest('logout');
