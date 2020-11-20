@@ -221,9 +221,8 @@ class Game {
         );
     }
 
-    public function updateMap($hash, $map) {
-        $result = $this->db->updateMap($hash, $map);
-        return $result;
+    public function updateMap($hash) {
+        return $this->db->updateMap($hash);
     }
     // обновить игровое окружение
         // (проголодать всех живых существ, умереть голодных,

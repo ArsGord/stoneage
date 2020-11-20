@@ -68,12 +68,12 @@ class DB {
         return $stmt->fetch();
     }
 
-    public function updateMap($hash, $map) {
-        $stmt = $this->conn->prepare("SELECT hash FROM maps WHERE hash = '$hash'");
+    public function updateMap($hash) {
+        $stmt = $this->conn->prepare("SELECT hash FROM maps");
         $stmt->execute();
-        $hash = $stmt->fetch();
-        if ($hash) {
-            return true;
+        $dbHash = $stmt->fetch();
+        if ($dbHash['hash'] != $hash){
+            return $dbHash['hash'];
         }
         return false;
     }
