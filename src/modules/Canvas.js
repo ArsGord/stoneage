@@ -1,5 +1,6 @@
 export default class Canvas {
-    constructor() {
+    constructor(server) {
+        this.server = server;
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
         this.canvas.width = 800;
@@ -7,34 +8,34 @@ export default class Canvas {
         this.drawSectors();
     }
 
-    click(event) {
+    async click(event) {
         const x = event.offsetX;
         const y = event.offsetY;
         const [sin, cos] = this.calcSinCos(x, y);
         let sinPiDiv = this.sinPiDiv;
         if (cos > 0) {
             if (sin > sinPiDiv(8/3)) {
-                console.log('right up');
+                await this.server.move('rightUp');
             } else if (sin > sinPiDiv(8)) {
-                console.log('right');
+                await this.server.move('right');
             } else if (sin > -sinPiDiv(8)) {
-                console.log('right down');
+                await this.server.move('rightDown');
             } else if (sin > -sinPiDiv(8/3)) {
-                console.log('down');
+                await this.server.move('down');
             } else {
-                console.log('left down');
+                await this.server.move('leftDown');
             }
         } else {
             if (sin > sinPiDiv(8/3)) {
-                console.log('right up');
+                await this.server.move('rightUp');
             } else if (sin > sinPiDiv(8)) {
-                console.log('up');
+                await this.server.move('up');
             } else if (sin > -sinPiDiv(8)) {
-                console.log('left up');
+                await this.server.move('leftUp');
             } else if (sin > -sinPiDiv(8/3)) {
-                console.log('left');
+                await this.server.move('left');
             } else {
-                console.log('left down');
+                await this.server.move('leftDown');
             }
         }
     }

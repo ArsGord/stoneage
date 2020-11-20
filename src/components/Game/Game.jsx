@@ -13,7 +13,7 @@ class Game extends React.Component {
 
     componentDidMount() {
       this.server.getMap();
-      this.canvas = new Canvas();
+      this.canvas = new Canvas(this.server);
       document.getElementById('canvas').addEventListener('click', (event) => {this.canvas.click(event)});
     }
 
@@ -60,10 +60,6 @@ class Game extends React.Component {
               break;
           }
       }
-    }
-
-    click() {
-      console.log(document.getElementById('canvas'));
     }
   
     render() {

@@ -2,17 +2,7 @@ export default class Server {
     token = '';
     map = []; 
     hash = '';
-    async checkHash () {
-        const hash = this.hash;
-        const bdHash = await this.sendRequest ('updateMap', {hash});
-        if(bdHash !== this.hash && bdHash !== false) {
-            this.hash = bdHash;
-            this.getMap();
-        }
-        console.log(this.hash);
-    }
-    update = setInterval(this.checkHash(),
-                          300);
+    update = null;
 
     async sendRequest(method, data = {}) {
         data.method = method;
@@ -35,6 +25,7 @@ export default class Server {
             this.token = await this.sendRequest('login', { login, hash, num });
             if (this.token) {
                 localStorage.setItem('token', this.token);
+                this.update = setInterval(() => {this.checkHash()}, 5000);
                 return true;
             }
         }
@@ -50,6 +41,7 @@ export default class Server {
             this.token =  await this.sendRequest('registration', { nickname, login, hash, num });
             if (this.token) {
                 localStorage.setItem('token', this.token);
+                this.update = setInterval(() => {this.checkHash()}, 5000);
                 return true;
             }    
         }
@@ -63,12 +55,24 @@ export default class Server {
             if (result) {
                 this.token = '';
                 localStorage.setItem('token', '');
+                clearInterval(this.update);
             }
         }
     }
 
     async getMap() {
         this.map = await this.sendRequest('getMap');
+    }
+
+    async checkHash () {
+        if (this.token) {
+            const hash = this.hash;
+            const bdHash = await this.sendRequest ('updateMap', {hash});
+            if(bdHash !== this.hash && bdHash !== false) {
+                this.hash = bdHash;
+                this.getMap();
+            }
+        }
     }
 
     update() {
