@@ -33,6 +33,9 @@ function router($params) {
             case 'keepBuilding': return $app->keepBuilding($params);
             case 'getMap': return $app->getMap($params);
             case 'updateMap': return $app->updateMap($params);
+            case 'changeHash': return $app->changeHash($params);
+            case 'getGamers': return $app->getGamers($params);
+            case 'getGamer': return $app->getGamer($params);
         }
     }
     return false;

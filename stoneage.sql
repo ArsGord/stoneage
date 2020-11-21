@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Ноя 17 2020 г., 19:53
--- Версия сервера: 10.3.22-MariaDB
--- Версия PHP: 7.1.33
+-- Время создания: Ноя 21 2020 г., 14:03
+-- Версия сервера: 10.3.13-MariaDB
+-- Версия PHP: 7.1.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -20,6 +21,90 @@ SET time_zone = "+00:00";
 --
 -- База данных: `stoneage`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `gamer`
+--
+
+CREATE TABLE `gamer` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `status` varchar(16) NOT NULL,
+  `x` int(11) NOT NULL,
+  `y` int(11) NOT NULL,
+  `hp` int(11) NOT NULL,
+  `satiety` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `gamer`
+--
+
+INSERT INTO `gamer` (`id`, `user_id`, `status`, `x`, `y`, `hp`, `satiety`) VALUES
+(1, 1, 'online', 1, 1, 100, 100),
+(2, 2, 'online', 2, 2, 100, 100),
+(3, 3, 'online', 2, 1, 100, 100),
+(4, 4, 'online', 1, 2, 100, 100);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `items`
+--
+
+CREATE TABLE `items` (
+  `id` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  `hp` int(11) NOT NULL,
+  `calories` int(11) DEFAULT NULL,
+  `armor` int(11) DEFAULT NULL,
+  `damage` int(11) DEFAULT NULL,
+  `gamer_id` int(11) DEFAULT NULL,
+  `inventory` varchar(12) DEFAULT NULL,
+  `x` int(11) DEFAULT NULL,
+  `y` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `items`
+--
+
+INSERT INTO `items` (`id`, `type_id`, `hp`, `calories`, `armor`, `damage`, `gamer_id`, `inventory`, `x`, `y`) VALUES
+(1, 1, 100, NULL, NULL, 15, 1, 'left_hand', NULL, NULL),
+(2, 2, 100, NULL, NULL, 15, 1, 'backpack', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `item_type`
+--
+
+CREATE TABLE `item_type` (
+  `id` int(11) NOT NULL,
+  `type` varchar(16) NOT NULL,
+  `default_hp` int(11) NOT NULL,
+  `calories` int(11) DEFAULT NULL,
+  `name` varchar(16) NOT NULL,
+  `armor` int(11) DEFAULT NULL,
+  `damage` int(11) DEFAULT NULL,
+  `sprite` varchar(32) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `item_type`
+--
+
+INSERT INTO `item_type` (`id`, `type`, `default_hp`, `calories`, `name`, `armor`, `damage`, `sprite`) VALUES
+(1, 'weapon', 100, NULL, 'Axe', NULL, 15, NULL),
+(2, 'weapon', 100, NULL, 'Bow', NULL, 15, NULL),
+(3, 'weapon', 100, NULL, 'Spear', NULL, 20, NULL),
+(4, 'weapon', 100, NULL, 'Shield', 5, 5, NULL),
+(5, 'building', 250, NULL, 'hut', 5, NULL, NULL),
+(6, 'building', 150, NULL, 'wall', 5, NULL, NULL),
+(7, 'animal', 100, 100, 'human', NULL, 5, NULL),
+(8, 'animal', 40, 10, 'cow', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -41,7 +126,7 @@ CREATE TABLE `maps` (
 --
 
 INSERT INTO `maps` (`id`, `name`, `hash`, `field`, `width`, `height`) VALUES
-(1, 'первая карта', 'c4ca4238a0b923820dcc509a6f75849b', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
+(1, 'первая карта', 'd5fbcce31f8baa507b1ce7c00c8d95dd', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
 
 -- --------------------------------------------------------
 
@@ -84,13 +169,32 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `login`, `password`, `token`) VALUES
-(1, 'Вася', 'vasya', '4a2d247d0c05a4f798b0b03839d94cf0', 'c797fc5fd2d2c87f87f75839ac791152'),
+(1, 'Вася', 'vasya', '4a2d247d0c05a4f798b0b03839d94cf0', '2fed3de0ef5a46a0859bfdc0a53894d8'),
 (2, 'Петя', 'petya', 'd7ba312b012b3374ef53eb2e3f9830a5', '51042d46b38281419aa777356eb5af8a'),
-(3, 'МарияИванна', 'masha', '68626ed9a3adbaf5bfd9148d42edd26b', 'b834f47eea96a26d61ba894a2a3e5964');
+(3, 'МарияИванна', 'masha', '68626ed9a3adbaf5bfd9148d42edd26b', 'b834f47eea96a26d61ba894a2a3e5964'),
+(4, 'Виталик228', 'Vitalek', 'be102ee3f322c437670ae29934756240', '');
 
 --
 -- Индексы сохранённых таблиц
 --
+
+--
+-- Индексы таблицы `gamer`
+--
+ALTER TABLE `gamer`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `items`
+--
+ALTER TABLE `items`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `item_type`
+--
+ALTER TABLE `item_type`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `maps`
@@ -116,6 +220,24 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `gamer`
+--
+ALTER TABLE `gamer`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+
+--
+-- AUTO_INCREMENT для таблицы `items`
+--
+ALTER TABLE `items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT для таблицы `item_type`
+--
+ALTER TABLE `item_type`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT для таблицы `maps`
 --
 ALTER TABLE `maps`
@@ -131,7 +253,7 @@ ALTER TABLE `tiles`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

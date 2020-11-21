@@ -30,28 +30,7 @@ require_once "entities/units/Cow.php";
 class Game {
     function __construct($db) {
         $this->db = $db;
-
-        // моки
-        $this->map = array(
-            // массив 3 на 3 из объектов карты
-            array(
-                new Tree((object)['id' => 1]),
-                new Rock((object)['id' => 2]),
-                new Grass((object)['id' => 3])
-            ),
-            array(
-                new Plant((object)['id' => 4]),
-                new Grass((object)['id' => 5]),
-                new Rock((object)['id' => 6])
-            ),
-            array(
-                new Tree((object)['id' => 7]),
-                new Grass((object)['id' => 8]),
-                new Grass((object)['id' => 9])
-            )
-        );
     }
-
     // войти в игру (создать персонажа, подгрузить персонажа)
     // выйти из игры
     // умерерть игорька (если он помер)
@@ -223,6 +202,24 @@ class Game {
 
     public function updateMap($hash) {
         return $this->db->updateMap($hash);
+    }
+
+    public function join($userId) {
+        //взять игрока
+        //если игрок не взялся, то создать его
+        //изменить хэш в maps
+    }
+
+    public function changeHash() {
+        return $this->db->changeHash();
+    }
+
+    public function getGamer ($gamerId) {
+        return $this->db->getGamer($gamerId);
+    }
+
+    public function getGamers () {
+        return $this->db->getGamers();
     }
     // обновить игровое окружение
         // (проголодать всех живых существ, умереть голодных,

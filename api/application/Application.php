@@ -122,4 +122,15 @@ class Application {
             return $this->game->updateMap($params['hash']);
         }
     }
+
+    public function changeHash() {
+        return $this->game->changeHash();
+    }
+
+    public function getGamers() {
+        return $this->game->getGamers();
+    }
+    public function getGamer($params) {
+        return $this->game->getGamer($params['gamerId']);
+    }
 }

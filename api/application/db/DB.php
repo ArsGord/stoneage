@@ -18,6 +18,47 @@ class DB {
         $this->conn = null;
     }
 
+    public function changeHash() {
+        $hash = md5(rand());
+        $stmt = $this->conn->prepare("UPDATE maps SET hash='$hash'");
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function getGamer($gamerId) {
+        $stmt = $this->conn->prepare("SELECT * FROM gamer WHERE id='$gamerId'");
+        $stmt->execute();
+        $gamer = $stmt->fetch();
+        $stmt = $this->conn->prepare("SELECT * FROM items WHERE gamer_id='$gamerId'");
+        $stmt->execute();
+        $items = $stmt->fetchAll();
+        for ($i = 0; $i < count($items); $i++) {
+            if($items[$i]['inventory'] === 'left_hand') {
+                $gamer['left_hand'] = $items[$i];
+            }
+            elseif($items[$i]['inventory'] === 'right_hand') {
+                $gamer['left_hand'] = $items[$i];
+            }
+            elseif ($items[$i]['inventory'] === 'backpack') {
+                $gamer['backpack'] = $items[$i];
+            }
+        }
+        return $gamer;
+    }
+
+    public function getGamers() {
+        $stmt = $this->conn->prepare("SELECT id FROM gamer WHERE status='online'");
+        $stmt->execute();
+        $gamers = $stmt->fetchAll();
+        foreach($gamers as $id) {
+            $gamersId[] = (integer)$id['id'];
+        }
+        foreach($gamersId as $id) {
+            $Gamers[] = $this->getGamer($id);
+        }
+        return $Gamers;
+    }
+
     public function getUserByLogin($login) {
         $stmt = $this->conn->prepare("SELECT * FROM users WHERE login='$login'");
         $stmt->execute();
