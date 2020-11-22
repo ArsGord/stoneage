@@ -6,9 +6,7 @@ class User {
 
     public function getUserByToken($token) {
         if ($token) {
-            $obj = new stdClass();
-            $obj->id = 4;
-            return $obj;
+            return $this->db->getUserByToken($token);
         }
     }
 

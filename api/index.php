@@ -7,7 +7,7 @@ header('Access-Control-Allow-Origin: *');
 
 error_reporting(1);
 
-// ИМПОРТ ФАЙЛОВ
+// импорт файлов
 require_once "application/Application.php";
 
 function router($params) {
@@ -36,6 +36,7 @@ function router($params) {
             case 'changeHash': return $app->changeHash($params);
             case 'getGamers': return $app->getGamers($params);
             case 'getGamer': return $app->getGamer($params);
+            case 'join': return $app->join($params);
         }
     }
     return false;

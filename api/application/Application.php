@@ -18,18 +18,43 @@ class Application {
     }
 
     public function logout($params) {
-        if ($params['token']) {
+        $user = $this->user->getUserByToken($params['token']);
+        if ($user) {
+            $this->leave($user['id']);
             return $this->user->logout($params['token']);
         }
         return false;
     }
 
-    // http://stoneage/api/?method=registration&nickname=name&login=login&password=password
     public function registration($params) {
         if ($params) {
             return $this->user->registration($params['nickname'], $params['login'], $params['hash'], $params['token'], $params['num']);
         }
         return false;
+    }
+
+    public function join($params) {
+        $user = $this->user->getUserByToken($params['token']);
+        if ($user) {
+            return $this->game->join($user['id']);
+        }
+    }
+
+    public function leave($userId) {
+        if ($userId) {
+            return $this->game->leave($userId);
+        }
+    }
+
+    public function changeHash() {
+        return $this->game->changeHash();
+    }
+
+    public function getGamers() {
+        return $this->game->getGamers();
+    }
+    public function getGamer($params) {
+        return $this->game->getGamer($params['gamerId']);
     }
 
     public function move($params) {
@@ -121,16 +146,5 @@ class Application {
         if ($user) {
             return $this->game->updateMap($params['hash']);
         }
-    }
-
-    public function changeHash() {
-        return $this->game->changeHash();
-    }
-
-    public function getGamers() {
-        return $this->game->getGamers();
-    }
-    public function getGamer($params) {
-        return $this->game->getGamer($params['gamerId']);
     }
 }

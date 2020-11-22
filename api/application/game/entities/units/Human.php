@@ -48,7 +48,7 @@ class Human extends Animal {
         }*/
     }
 
-    public function move($map, $direction) {
+    public function move($map, $direction, $userId) {
         // взять непроходимые предметы на карте
         // выбираем непроходимые объекты на карте
         switch ($direction) {

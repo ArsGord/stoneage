@@ -36,10 +36,9 @@ class Game {
     // умерерть игорька (если он помер)
 
     // сделать шаг
-    // http://stoneage/api/?method=move&token=123&direction=left
     public function move($userId, $direction) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        //$humans = $this->db->getHumans();
+        //$humans = $this->db->getGamer();
         $result = $human->move($this->map, /*$humans,*/ $direction);
         if ($result) { // обновить данные в БД
             //...
@@ -49,7 +48,6 @@ class Game {
     }
 
     // поднять предмет
-    // http://stoneage/api/?method=takeItem&token=123
     public function takeItem($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
         foreach ($this->db->getFreeItems() as $item) {
@@ -65,7 +63,6 @@ class Game {
     }
 
     // бросить предмет
-    // http://stoneage/api/?method=dropItem&token=123&hand=right
     public function dropItem($userId, $hand = 'right') {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($human) {
@@ -79,7 +76,6 @@ class Game {
     }
 
     // надеть предмет
-    // http://stoneage/api/?method=putOn&token=123
     public function putOn($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($human) {
@@ -88,7 +84,6 @@ class Game {
         return false;
     }
     // положить предмет в карман
-    // http://stoneage/api/?method=putOnBackpack&token=123
     public function putOnBackpack($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($human) {
@@ -109,7 +104,6 @@ class Game {
 
     // положить предмет в (?)
     // починить то, что в руках/надето/лежит в кармане
-    // http://stoneage/api/?method=repair&token=123
     public function repair($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
         if ($human) {
@@ -208,6 +202,22 @@ class Game {
         //взять игрока
         //если игрок не взялся, то создать его
         //изменить хэш в maps
+        $gamer = $this->db->getGamer($userId);
+        if ($gamer) {
+            $this->db->setStatusOnline($userId);
+            $this->changeHash();
+            return $gamer;
+        } else {
+            $this->db->setStatusOnline($userId);
+            $this->changeHash();
+            $gamer = $this->db->createGamer($userId);
+            return $gamer;
+        }
+    }
+
+    public function leave($userId) {
+        $this->changeHash();
+        return $this->db->leave($userId);
     }
 
     public function changeHash() {

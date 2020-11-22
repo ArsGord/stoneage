@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Ноя 21 2020 г., 14:03
--- Версия сервера: 10.3.13-MariaDB
--- Версия PHP: 7.1.22
+-- Время создания: Ноя 22 2020 г., 20:19
+-- Версия сервера: 10.3.22-MariaDB
+-- Версия PHP: 7.1.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -43,10 +42,11 @@ CREATE TABLE `gamer` (
 --
 
 INSERT INTO `gamer` (`id`, `user_id`, `status`, `x`, `y`, `hp`, `satiety`) VALUES
-(1, 1, 'online', 1, 1, 100, 100),
-(2, 2, 'online', 2, 2, 100, 100),
+(1, 1, 'offline', 1, 1, 100, 100),
+(2, 2, 'offline', 2, 2, 100, 100),
 (3, 3, 'online', 2, 1, 100, 100),
-(4, 4, 'online', 1, 2, 100, 100);
+(4, 4, 'online', 1, 2, 100, 100),
+(5, 5, 'online', 1, 1, 100, 100);
 
 -- --------------------------------------------------------
 
@@ -73,7 +73,9 @@ CREATE TABLE `items` (
 
 INSERT INTO `items` (`id`, `type_id`, `hp`, `calories`, `armor`, `damage`, `gamer_id`, `inventory`, `x`, `y`) VALUES
 (1, 1, 100, NULL, NULL, 15, 1, 'left_hand', NULL, NULL),
-(2, 2, 100, NULL, NULL, 15, 1, 'backpack', NULL, NULL);
+(2, 2, 100, NULL, NULL, 15, 1, 'backpack', NULL, NULL),
+(3, 1, 100, NULL, NULL, NULL, 2, 'right_hand', NULL, NULL),
+(4, 1, 100, NULL, NULL, NULL, 2, 'left_hand', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -126,7 +128,7 @@ CREATE TABLE `maps` (
 --
 
 INSERT INTO `maps` (`id`, `name`, `hash`, `field`, `width`, `height`) VALUES
-(1, 'первая карта', 'd5fbcce31f8baa507b1ce7c00c8d95dd', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
+(1, 'первая карта', '4d99bc27216288c66c7859d6c3c7019d', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
 
 -- --------------------------------------------------------
 
@@ -169,10 +171,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `login`, `password`, `token`) VALUES
-(1, 'Вася', 'vasya', '4a2d247d0c05a4f798b0b03839d94cf0', '2fed3de0ef5a46a0859bfdc0a53894d8'),
-(2, 'Петя', 'petya', 'd7ba312b012b3374ef53eb2e3f9830a5', '51042d46b38281419aa777356eb5af8a'),
+(1, 'Вася', 'vasya', '4a2d247d0c05a4f798b0b03839d94cf0', ''),
+(2, 'Петя', 'petya', 'd7ba312b012b3374ef53eb2e3f9830a5', ''),
 (3, 'МарияИванна', 'masha', '68626ed9a3adbaf5bfd9148d42edd26b', 'b834f47eea96a26d61ba894a2a3e5964'),
-(4, 'Виталик228', 'Vitalek', 'be102ee3f322c437670ae29934756240', '');
+(4, 'Виталик228', 'Vitalek', 'be102ee3f322c437670ae29934756240', ''),
+(5, 'Дима', 'dima', '70c9dc2d09299d9d21583266acc7681c', '');
 
 --
 -- Индексы сохранённых таблиц
@@ -223,13 +226,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `gamer`
 --
 ALTER TABLE `gamer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT для таблицы `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `item_type`
@@ -253,7 +256,7 @@ ALTER TABLE `tiles`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

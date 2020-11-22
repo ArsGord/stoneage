@@ -22,11 +22,11 @@ class DB {
         $hash = md5(rand());
         $stmt = $this->conn->prepare("UPDATE maps SET hash='$hash'");
         $stmt->execute();
-        return $stmt->fetch();
+        return true;
     }
 
     public function getGamer($gamerId) {
-        $stmt = $this->conn->prepare("SELECT * FROM gamer WHERE id='$gamerId'");
+        $stmt = $this->conn->prepare("SELECT * FROM gamer WHERE user_id='$gamerId'");
         $stmt->execute();
         $gamer = $stmt->fetch();
         $stmt = $this->conn->prepare("SELECT * FROM items WHERE gamer_id='$gamerId'");
@@ -37,7 +37,7 @@ class DB {
                 $gamer['left_hand'] = $items[$i];
             }
             elseif($items[$i]['inventory'] === 'right_hand') {
-                $gamer['left_hand'] = $items[$i];
+                $gamer['right_hand'] = $items[$i];
             }
             elseif ($items[$i]['inventory'] === 'backpack') {
                 $gamer['backpack'] = $items[$i];
@@ -57,6 +57,30 @@ class DB {
             $Gamers[] = $this->getGamer($id);
         }
         return $Gamers;
+    }
+
+    public function createGamer($userId) {
+        $stmt = $this->conn->prepare("INSERT INTO `gamer` (`id`, `user_id`, `status`, `x`, `y`, `hp`, `satiety`) VALUES ('$userId', '$userId', 'online', 1, 1, 100, 100)");
+        $stmt->execute();
+        return $this->getGamer($userId);
+    }
+
+    public function join($userId) {
+        $stmt = $this->conn->prepare("SELECT * FROM gamer WHERE user_id='$userId'");
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function setStatusOnline($userId) {
+        $stmt = $this->conn->prepare("UPDATE gamer SET status='online' WHERE user_id='$userId'");
+        $stmt->execute();
+        return true;
+    }
+
+    public function leave($userId) {
+        $stmt = $this->conn->prepare("UPDATE gamer SET status='offline' WHERE user_id='$userId'");
+        $stmt->execute();
+        return true;
     }
 
     public function getUserByLogin($login) {
