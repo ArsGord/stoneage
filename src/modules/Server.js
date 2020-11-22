@@ -3,6 +3,7 @@ export default class Server {
     map = []; 
     hash = '';
     update = null;
+    gamer = {};
 
     async sendRequest(method, data = {}) {
         data.method = method;
@@ -24,6 +25,7 @@ export default class Server {
             const hash = md5(md5(login + password) + num);
             this.token = await this.sendRequest('login', { login, hash, num });
             if (this.token) {
+                this.gamer = await this.sendRequest('join');
                 localStorage.setItem('token', this.token);
                 this.update = setInterval(() => {this.checkHash()}, 5000);
                 return true;
@@ -40,6 +42,7 @@ export default class Server {
             this.token = md5(hash + num);
             this.token =  await this.sendRequest('registration', { nickname, login, hash, num });
             if (this.token) {
+                this.gamer = await this.sendRequest('join');
                 localStorage.setItem('token', this.token);
                 this.update = setInterval(() => {this.checkHash()}, 5000);
                 return true;
