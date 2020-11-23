@@ -60,7 +60,7 @@ class Application {
     public function move($params) {
         $user = $this->user->getUserByToken($params['token']);
         if ($user) {
-            return $this->game->move($user->id, $params['direction']);
+            return $this->game->move($user['id'], $params['direction']);
         }
     }
 

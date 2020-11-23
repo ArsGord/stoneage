@@ -37,12 +37,22 @@ class Game {
 
     // сделать шаг
     public function move($userId, $direction) {
-        $human = new Human($this->db->getHumanByUserId($userId));
-        //$humans = $this->db->getGamer();
-        $result = $human->move($this->map, /*$humans,*/ $direction);
-        if ($result) { // обновить данные в БД
-            //...
-            return true;
+        $gamers = $this->db->getGamers();
+        $humans = array();
+        $human = null;
+        foreach ($gamers as $key => $gamer) {
+            $humans[] = new Human($gamer);
+            if (intval($gamer->user_id) === intval($userId)) {
+                $human = $humans[$key];
+            }
+        }
+        if ($human) {
+            $result = $human->move($this->db->getMap(), $humans, $direction);
+            if ($result) { // обновить данные в БД
+                //... поменять даные в БД
+                $this->db->changeHash();
+                return true;
+            }
         }
         return false;
     }
@@ -190,7 +200,8 @@ class Game {
         $map['field'] = $arrMap;
         return array (
             'tiles' => $this->db->getTiles(),
-            'map' => $map
+            'map' => $map,
+            'gamers' => $this->db->getGamers()
         );
     }
 

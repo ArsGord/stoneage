@@ -2,7 +2,7 @@
 
 class DB {
     function __construct() {
-        $host = "127.0.0.1:3306";
+        $host = "127.0.0.1:3308";
         $user = "root";
         $pass = "";
         $name = "stoneage";
@@ -25,23 +25,24 @@ class DB {
         return true;
     }
 
-    public function getGamer($gamerId) {
-        $stmt = $this->conn->prepare("SELECT * FROM gamer WHERE user_id='$gamerId'");
+    public function getGamer($id) {
+        $stmt = $this->conn->prepare("SELECT * FROM gamer WHERE id=$id");
         $stmt->execute();
-        $gamer = $stmt->fetch();
-        $stmt = $this->conn->prepare("SELECT * FROM items WHERE gamer_id='$gamerId'");
+        $gamer = $stmt->fetchObject();
+        $stmt = $this->conn->prepare("SELECT * FROM items WHERE gamer_id=$id");
         $stmt->execute();
         $items = $stmt->fetchAll();
         for ($i = 0; $i < count($items); $i++) {
             if($items[$i]['inventory'] === 'left_hand') {
-                $gamer['left_hand'] = $items[$i];
+                $gamer->left_hand = $items[$i];
             }
             elseif($items[$i]['inventory'] === 'right_hand') {
-                $gamer['right_hand'] = $items[$i];
+                $gamer->right_hand = $items[$i];
             }
             elseif ($items[$i]['inventory'] === 'backpack') {
-                $gamer['backpack'] = $items[$i];
+                $gamer->backpack = $items[$i];
             }
+            // TODO body!!!
         }
         return $gamer;
     }
@@ -49,14 +50,12 @@ class DB {
     public function getGamers() {
         $stmt = $this->conn->prepare("SELECT id FROM gamer WHERE status='online'");
         $stmt->execute();
-        $gamers = $stmt->fetchAll();
-        foreach($gamers as $id) {
-            $gamersId[] = (integer)$id['id'];
+        $ids = $stmt->fetchAll();
+        $gamers = array();
+        foreach($ids as $id) {
+            $gamers[] = $this->getGamer((integer)$id['id']);
         }
-        foreach($gamersId as $id) {
-            $Gamers[] = $this->getGamer($id);
-        }
-        return $Gamers;
+        return $gamers;
     }
 
     public function createGamer($userId) {

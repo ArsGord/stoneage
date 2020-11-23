@@ -8,6 +8,7 @@ class Human extends Animal {
         $this->right_hand = $data->right_hand;
         $this->backpack = $data->backpack;
         $this->protection = $data->protection;
+        $this->user_id = $data->user_id;
     }
 
     public function hit($damage = 0) {
