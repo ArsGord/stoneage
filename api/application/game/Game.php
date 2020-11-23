@@ -188,20 +188,21 @@ class Game {
 
     public function getMap() {
         $map = $this->db->getMap();
-        $array = explode(',', $map['field']);
+        $array = explode(',', $map->field);
         $arrMap = [];
         for ($i = 1; $i <= count($array); $i++) {
             $arr[] = (int)$array[$i - 1];
-            if ($i % (int)$map['width'] === 0) {
+            if ($i % (int)$map->width === 0) {
                 $arrMap[] = $arr;
                 $arr = [];
             }
         }
-        $map['field'] = $arrMap;
+        $map->field = $arrMap;
         return array (
             'tiles' => $this->db->getTiles(),
             'map' => $map,
-            'gamers' => $this->db->getGamers()
+            'gamers' => $this->db->getGamers(),
+            'items' => $this->db->getItems()
         );
     }
 

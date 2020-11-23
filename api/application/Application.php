@@ -46,6 +46,20 @@ class Application {
         }
     }
 
+    public function getMap($params) {
+        $user = $this->user->getUserByToken($params['token']);
+        if ($user) {
+            return $this->game->getMap();
+        }
+    }
+
+    public function updateMap($params) {
+        $user = $this->user->getUserByToken($params['token']);
+        if ($user) {
+            return $this->game->updateMap($params['hash']);
+        }
+    }
+
     public function changeHash() {
         return $this->game->changeHash();
     }
@@ -131,20 +145,6 @@ class Application {
         $user = $this->user->getUserByToken($params['token']);
         if ($user) {
             return $this->game->keepBuilding();
-        }
-    }
-
-    public function getMap($params) {
-        $user = $this->user->getUserByToken($params['token']);
-        if ($user) {
-            return $this->game->getMap();
-        }
-    }
-
-    public function updateMap($params) {
-        $user = $this->user->getUserByToken($params['token']);
-        if ($user) {
-            return $this->game->updateMap($params['hash']);
         }
     }
 }

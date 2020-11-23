@@ -2,7 +2,7 @@
 
 class DB {
     function __construct() {
-        $host = "127.0.0.1:3308";
+        $host = "127.0.0.1:3306";
         $user = "root";
         $pass = "";
         $name = "stoneage";
@@ -35,14 +35,13 @@ class DB {
         for ($i = 0; $i < count($items); $i++) {
             if($items[$i]['inventory'] === 'left_hand') {
                 $gamer->left_hand = $items[$i];
-            }
-            elseif($items[$i]['inventory'] === 'right_hand') {
+            } elseif($items[$i]['inventory'] === 'right_hand') {
                 $gamer->right_hand = $items[$i];
-            }
-            elseif ($items[$i]['inventory'] === 'backpack') {
+            } elseif ($items[$i]['inventory'] === 'backpack') {
                 $gamer->backpack = $items[$i];
+            } elseif($items[$i]['inventory'] === 'body') {
+                $gamer->body = $items[$i];
             }
-            // TODO body!!!
         }
         return $gamer;
     }
@@ -123,13 +122,13 @@ class DB {
     public function getMap() {
         $stmt = $this->conn->prepare("SELECT * FROM maps WHERE id = 1");
         $stmt->execute();
-        return $stmt->fetch();
+        return $stmt->fetchObject();
     }
 
     public function getTiles() {
         $stmt = $this->conn->prepare("SELECT * FROM tiles");
         $stmt->execute();
-        return $stmt->fetch();
+        return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
 
     public function updateMap($hash) {
@@ -142,8 +141,10 @@ class DB {
         return false;
     }
 
-    public function getFreeItems() {
-        return [(object)['x' => 1, 'y' => 1]];
+    public function getItems() {
+        $stmt = $this->conn->prepare("SELECT * FROM items");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
 
     public function takeItem($humanId, $itemId) {
