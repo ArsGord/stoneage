@@ -37,7 +37,8 @@ class Game {
 
     // сделать шаг
     public function move($userId, $direction) {
-        $gamers = $this->db->getGamers();
+        $map = $this->getMap();
+        $gamers = $map['gamers'];
         $humans = array();
         $human = null;
         foreach ($gamers as $key => $gamer) {
@@ -47,11 +48,11 @@ class Game {
             }
         }
         if ($human) {
-            $result = $human->move($this->db->getMap(), $humans, $direction);
+            $result = $human->move($map, $direction);
             if ($result) { // обновить данные в БД
                 //... поменять даные в БД
-                $this->db->changeHash();
-                return true;
+                //$this->db->changeHash();
+                return $result;
             }
         }
         return false;
@@ -199,9 +200,9 @@ class Game {
         }
         $map->field = $arrMap;
         return array (
-            'tiles' => $this->db->getTiles(),
+            'tiles' => $this->getTiles(),
             'map' => $map,
-            'gamers' => $this->db->getGamers(),
+            'gamers' => $this->getGamers(),
             'items' => $this->db->getItems()
         );
     }
@@ -214,7 +215,7 @@ class Game {
         //взять игрока
         //если игрок не взялся, то создать его
         //изменить хэш в maps
-        $gamer = $this->db->getGamer($userId);
+        $gamer = $this->getGamer($userId);
         if ($gamer) {
             $this->db->setStatusOnline($userId);
             $this->changeHash();
@@ -237,11 +238,30 @@ class Game {
     }
 
     public function getGamer ($gamerId) {
-        return $this->db->getGamer($gamerId);
+        $human = $this->db->getGamer($gamerId);
+        if ($human) {
+            return new Human($human);
+        } else {
+            return false;
+        }
     }
 
     public function getGamers () {
-        return $this->db->getGamers();
+        $gamers = $this->db->getGamers();
+        $Gamers = [];
+        foreach ($gamers as $key => $val) {
+            $Gamers[] = new Human($gamers[$key]);
+        }
+        return $Gamers;
+    }
+
+    public function getTiles () {
+        $tiles = $this->db->getTiles();
+        $Tiles = [];
+        foreach ($tiles as $key => $val) {
+            $Tiles[] = new Entity($tiles[$key]);
+        }
+        return $Tiles;
     }
     // обновить игровое окружение
         // (проголодать всех живых существ, умереть голодных,

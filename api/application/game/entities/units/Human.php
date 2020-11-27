@@ -49,43 +49,51 @@ class Human extends Animal {
         }*/
     }
 
-    public function move($map, $direction, $userId) {
+    public function move($map, $direction) {
         // взять непроходимые предметы на карте
         // выбираем непроходимые объекты на карте
+        $tiles = $map['tiles'];
         switch ($direction) {
             case 'left':
-                $result = array();
                 if ($this->x > 0) { // проверка на границу карты
                     $x = $this->x - 1;
                     $y = $this->y;
-                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
-                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
-                            if ($this->right_hand && $this->right_hand->type === 'weapon') { // нужно поменять, т.к. в right_hand лежит id
-                                $map[$x][$y]->hit($this->right_hand->damage);
-                                $this->right_hand->hit(1);
-                                $result[] = (object) [
+                    for ($i = 0; $i < count($tiles); $i++) {
+                        if ($tiles[$i]->x == $x && $tiles[$i]->y == $y) {
+                            $tile = $tiles[$i];
+                            break;
+                        }
+                    }
+                    if ((int)$tile->type === 0) {     // проверяем можно ли пройти
+                        if ($tile->name !== 'water') {
+                            if ($this->right_hand->damage) {
+                                $tile->hit($this->right_hand->damage);
+                                $this->right_hand->hit(1); // уменьшение прочности оружия
+                                $result[] = [
                                     'type' => 'item',
                                     'id' => $this->right_hand->id,
                                     'hp' => $this->right_hand->hp
                                 ];
                             } else {
-                                $map[$x][$y]->hit(1);
+                                $tile->hit(1);
                                 $this->hit(1);
                             }
-                            $result[] = (object) [
+                            $result[] = [
                                 'type' => 'tile',
-                                'id' => $map[$x][$y]->id,
-                                'hp' => $map[$x][$y]->hp
+                                'id' => $tile->id,
+                                'hp' => $tile->hp
                             ];
+                        } else {
+                            $x = $this->x;
                         }
                     }
-                    $result[] = (object) [
-                        'type' => 'human',
-                        'id' => $this->id,
-                        'x' => $x,
-                        'hp' => $this->hp
-                    ];
                 }
+                $result[] = [
+                    'type' => 'human',
+                    'id' => $this->id,
+                    'x' => $x,
+                    'hp' => $this->hp
+                ];
                 return $result;
             case 'right':
                 $result = array();

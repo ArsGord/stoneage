@@ -31,15 +31,15 @@ class DB {
         $gamer = $stmt->fetchObject();
         $stmt = $this->conn->prepare("SELECT * FROM items WHERE gamer_id=$id");
         $stmt->execute();
-        $items = $stmt->fetchAll();
+        $items = $stmt->fetchAll(PDO::FETCH_CLASS);
         for ($i = 0; $i < count($items); $i++) {
-            if($items[$i]['inventory'] === 'left_hand') {
+            if($items[$i]->inventory === 'left_hand') {
                 $gamer->left_hand = $items[$i];
-            } elseif($items[$i]['inventory'] === 'right_hand') {
+            } elseif($items[$i]->inventory === 'right_hand') {
                 $gamer->right_hand = $items[$i];
-            } elseif ($items[$i]['inventory'] === 'backpack') {
+            } elseif ($items[$i]->inventory === 'backpack') {
                 $gamer->backpack = $items[$i];
-            } elseif($items[$i]['inventory'] === 'body') {
+            } elseif($items[$i]->inventory === 'body') {
                 $gamer->body = $items[$i];
             }
         }
@@ -142,7 +142,7 @@ class DB {
     }
 
     public function getItems() {
-        $stmt = $this->conn->prepare("SELECT * FROM items");
+        $stmt = $this->conn->prepare("SELECT * FROM items WHERE inventory = 'map'");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
