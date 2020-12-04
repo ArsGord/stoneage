@@ -66,8 +66,7 @@ export default class Server {
     }
 
     async getMap() {
-        this.map = await this.sendRequest('getMap');
-        return this.map;
+        return await this.sendRequest('getMap');
     }
 
     async checkHash () {
@@ -77,8 +76,9 @@ export default class Server {
             if(bdHash !== this.hash && bdHash !== false) {
                 this.mapHash = bdHash;
                 console.log('mapHash: ' + this.mapHash);
-                this.getMap();
+                this.map = await this.getMap();
             }
+            return this.map;
         }
     }
 

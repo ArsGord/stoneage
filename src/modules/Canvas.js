@@ -23,7 +23,7 @@ export default class Canvas {
     }
 
     async getAll() {
-        this.map = await this.server.getMap();
+        this.map = await this.server.checkHash();
         this.gamer = this.map.gamers[0];
         this.drawMap();
         this.drawGamer();
