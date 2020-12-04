@@ -59,7 +59,6 @@ class Login extends React.Component {
                             <form>
                                 <div>
                                 <h2>Вход</h2>
-
                                     <div className="form-group">
                                         <label htmlFor="login">Логин</label>
                                         <input type="text" 
@@ -69,7 +68,6 @@ class Login extends React.Component {
                                             onChange={ this.handleChange }
                                             />
                                     </div>
-
                                     <div className="form-group">
                                         <label htmlFor="password">Пароль</label>
                                         <div className="passwordLog">

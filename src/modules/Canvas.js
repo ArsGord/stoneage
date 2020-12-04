@@ -1,3 +1,5 @@
+import img from '../Sprites/SpritesMap.png'
+
 export default class Canvas {
     constructor(server) {
         this.server = server;
@@ -5,7 +7,51 @@ export default class Canvas {
         this.ctx = this.canvas.getContext('2d');
         this.canvas.width = 800;
         this.canvas.height = 800;
-        this.drawSectors();
+        this.img = new Image();
+        this.img.src = img;
+        this.img.onload = () => { this.getAll(); };
+    }
+
+    update = setInterval(() => {this.updateScene()}, 300);
+
+    clInterval() {
+        clearInterval(this.update); 
+    }
+
+    updateScene() {
+        this.getAll();
+    }
+
+    async getAll() {
+        this.map = await this.server.getMap();
+        this.gamer = this.map.gamers[0];
+        this.drawMap();
+        this.drawGamer();
+    }
+
+    drawMap() {
+        if (this.map) {
+            let shiftY = this.canvas.height / 2; // убрать
+            let dx = 32;
+            let dy = 16;
+            let tiles = this.map.tiles;
+            let count = 0;
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            //this.drawSectors();
+            for (let i = 0; i < this.map.map.height; i++) {
+                for (let j = 0; j < this.map.map.width; j++) {
+                    this.drawImage(tiles[count].name, j * dx + i * dx, -(j * dy) + (i * dy) + shiftY);
+                    count++;
+                }
+            }
+        }
+    }
+
+    drawGamer() {
+        let dx = 32;
+        let dy = 16;
+        let shiftY = this.canvas.width / 2;
+        this.drawImage('gamerDown', this.gamer.x * dx + this.gamer.y * dx, -this.gamer.x * dy + this.gamer.y * dy + shiftY);
     }
 
     async click(event) {
@@ -67,6 +113,58 @@ export default class Canvas {
 
     yS(y) {
         return this.canvas.height / 2 - y;
+    }
+
+    drawImage(name, x, y) {
+        switch(name) {
+            case 'dirt':
+                this.ctx.drawImage(this.img, 0, 0, 64, 48, x, y, 64, 48);
+                break;
+            case 'grass':
+                this.ctx.drawImage(this.img, 64, 0, 64, 48, x, y, 64, 48);
+                break;
+            case 'snow':
+                this.ctx.drawImage(this.img, 128, 0, 64, 48, x, y, 64, 48);
+                break;
+            case 'sand':
+                this.ctx.drawImage(this.img, 192, 0, 64, 48, x, y, 64, 48);
+                break;
+            case 'water':
+                this.ctx.drawImage(this.img, 256, 0, 64, 48, x, y, 64, 48);
+                break;
+            case 'fenceLeft':
+                this.ctx.drawImage(this.img, 320, 0, 32, 48, x, y, 32, 48);
+                break;
+            case 'fenceDown':
+                this.ctx.drawImage(this.img, 352, 0, 64, 48, x, y, 64, 48);
+                break;
+            case 'fenceRight':
+                this.ctx.drawImage(this.img, 416, 0, 64, 48, x, y, 64, 48);
+                break;
+            case 'fenceUp':
+                this.ctx.drawImage(this.img, 480, 0, 32, 48, x, y, 32, 48);
+                break;
+            case 'poppy':
+                this.ctx.drawImage(this.img, 0, 48, 64, 48, x, y, 64, 48);
+                break;
+            case 'tree':
+                this.ctx.drawImage(this.img, 64, 48, 64, 64, x, y - 24, 64, 64);
+                break;
+            case 'wood':
+                this.ctx.drawImage(this.img, 128, 48, 32, 48, x + 16, y - 6, 32, 48);
+                break;
+            case 'rock':
+                this.ctx.drawImage(this.img, 192, 48, 34, 48, x + 16, y - 6, 34, 48);
+                break;
+            case 'hut':
+                this.ctx.drawImage(this.img, 0, 114, 148, 161, x, y-94, 148, 161);
+                break;
+            case 'gamerDown':
+                this.ctx.drawImage(this.img, 64, 582, 64, 42, x, y-8, 64, 42);
+                break;
+            default:
+                break;
+        } 
     }
 
     drawSectors() {

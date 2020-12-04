@@ -9,9 +9,12 @@ class Game extends React.Component {
     constructor(props) {
         super();
         this.server = props.server;
+        this.state = {
+          canvas: null
+        }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
       this.server.getMap();
       this.canvas = new Canvas(this.server);
       document.getElementById('canvas').addEventListener('click', (event) => {this.canvas.click(event)});
@@ -69,7 +72,7 @@ class Game extends React.Component {
                 <div className="h2">Stone Age</div>
                 <div>
                 <LinkContainer to='/login'>
-                  <Button onClick={() => this.sendRequest('logout')} className="logout-button">Выход</Button>
+                  <Button onClick={() => { this.sendRequest('logout'); this.canvas.clInterval(); }} className="logout-button">Выход</Button>
                 </LinkContainer>
                 </div>
             </div>

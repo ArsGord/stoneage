@@ -4,6 +4,7 @@ export default class Server {
     hash = '';
     update = null;
     gamer = {};
+    mapHash = '';
 
     async sendRequest(method, data = {}) {
         data.method = method;
@@ -27,7 +28,7 @@ export default class Server {
             if (this.token) {
                 this.gamer = await this.sendRequest('join');
                 localStorage.setItem('token', this.token);
-                this.update = setInterval(() => {this.checkHash()}, 5000);
+                //this.update = setInterval(() => {this.checkHash()}, 5000);
                 return true;
             }
         }
@@ -43,8 +44,9 @@ export default class Server {
             this.token =  await this.sendRequest('registration', { nickname, login, hash, num });
             if (this.token) {
                 this.gamer = await this.sendRequest('join');
+                console.log(this.gamer);
                 localStorage.setItem('token', this.token);
-                this.update = setInterval(() => {this.checkHash()}, 5000);
+                //this.update = setInterval(() => {this.checkHash()}, 5000);
                 return true;
             }    
         }
@@ -58,21 +60,23 @@ export default class Server {
             if (result) {
                 this.token = '';
                 localStorage.setItem('token', '');
-                clearInterval(this.update);
+                //clearInterval(this.update);
             }
         }
     }
 
     async getMap() {
         this.map = await this.sendRequest('getMap');
+        return this.map;
     }
 
     async checkHash () {
         if (this.token) {
-            const hash = this.hash;
+            let hash = this.mapHash;
             const bdHash = await this.sendRequest ('updateMap', {hash});
             if(bdHash !== this.hash && bdHash !== false) {
-                this.hash = bdHash;
+                this.mapHash = bdHash;
+                console.log('mapHash: ' + this.mapHash);
                 this.getMap();
             }
         }
