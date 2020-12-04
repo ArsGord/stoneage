@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Ноя 22 2020 г., 20:19
+-- Время создания: Дек 04 2020 г., 19:32
 -- Версия сервера: 10.3.22-MariaDB
 -- Версия PHP: 7.1.33
 
@@ -42,7 +42,7 @@ CREATE TABLE `gamer` (
 --
 
 INSERT INTO `gamer` (`id`, `user_id`, `status`, `x`, `y`, `hp`, `satiety`) VALUES
-(1, 1, 'offline', 1, 1, 100, 100),
+(1, 1, 'offline', 3, 2, 100, 100),
 (2, 2, 'offline', 2, 2, 100, 100),
 (3, 3, 'online', 2, 1, 100, 100),
 (4, 4, 'online', 1, 2, 100, 100),
@@ -75,7 +75,8 @@ INSERT INTO `items` (`id`, `type_id`, `hp`, `calories`, `armor`, `damage`, `game
 (1, 1, 100, NULL, NULL, 15, 1, 'left_hand', NULL, NULL),
 (2, 2, 100, NULL, NULL, 15, 1, 'backpack', NULL, NULL),
 (3, 1, 100, NULL, NULL, NULL, 2, 'right_hand', NULL, NULL),
-(4, 1, 100, NULL, NULL, NULL, 2, 'left_hand', NULL, NULL);
+(4, 1, 100, NULL, NULL, NULL, 2, 'left_hand', NULL, NULL),
+(5, 1, 100, NULL, NULL, NULL, NULL, 'map', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -128,7 +129,7 @@ CREATE TABLE `maps` (
 --
 
 INSERT INTO `maps` (`id`, `name`, `hash`, `field`, `width`, `height`) VALUES
-(1, 'первая карта', '4d99bc27216288c66c7859d6c3c7019d', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
+(1, 'первая карта', 'fd34f95fc21d1713a0b10716f8daffe5', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
 
 -- --------------------------------------------------------
 
@@ -149,8 +150,36 @@ CREATE TABLE `tiles` (
 --
 
 INSERT INTO `tiles` (`id`, `type`, `name`, `x`, `y`) VALUES
-(1, 1, 'grass', 1, 1),
-(2, 0, 'water', 1, 2);
+(1, 1, 'grass', 0, 0),
+(2, 0, 'water', 1, 0),
+(3, 0, 'water', 2, 0),
+(4, 1, 'grass', 3, 0),
+(5, 1, 'grass', 4, 0),
+(6, 1, 'grass', 5, 0),
+(7, 1, 'sand', 0, 1),
+(8, 0, 'water', 1, 1),
+(9, 0, 'water', 2, 1),
+(10, 1, 'sand', 3, 1),
+(11, 1, 'sand', 4, 1),
+(12, 1, 'sand', 5, 1),
+(13, 1, 'snow', 0, 2),
+(14, 1, 'snow', 1, 2),
+(15, 1, 'snow', 2, 2),
+(16, 1, 'snow', 3, 2),
+(17, 1, 'snow', 4, 2),
+(18, 1, 'snow', 5, 2),
+(19, 1, 'dirt', 0, 3),
+(20, 1, 'dirt', 1, 3),
+(21, 1, 'dirt', 2, 3),
+(22, 1, 'dirt', 3, 3),
+(23, 1, 'dirt', 4, 3),
+(24, 1, 'dirt', 5, 3),
+(25, 1, 'grass', 0, 4),
+(26, 1, 'grass', 1, 4),
+(27, 1, 'grass', 2, 4),
+(28, 0, 'water', 3, 4),
+(29, 0, 'water', 4, 4),
+(30, 1, 'grass', 5, 4);
 
 -- --------------------------------------------------------
 
@@ -232,7 +261,7 @@ ALTER TABLE `gamer`
 -- AUTO_INCREMENT для таблицы `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `item_type`
@@ -250,7 +279,7 @@ ALTER TABLE `maps`
 -- AUTO_INCREMENT для таблицы `tiles`
 --
 ALTER TABLE `tiles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT для таблицы `users`

@@ -141,6 +141,14 @@ class DB {
         return false;
     }
 
+    public function updateGamer($params, $id) {
+        foreach ($params as $key => $val) {
+            $stmt = $this->conn->prepare("UPDATE gamer SET `$key`=$val WHERE id=$id");
+            $stmt->execute();
+        }
+        return null;
+    }
+
     public function getItems() {
         $stmt = $this->conn->prepare("SELECT * FROM items WHERE inventory = 'map'");
         $stmt->execute();

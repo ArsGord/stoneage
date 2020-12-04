@@ -51,8 +51,28 @@ class Game {
             $result = $human->move($map, $direction);
             if ($result) { // обновить данные в БД
                 //... поменять даные в БД
-                //$this->db->changeHash();
-                return $result;
+                $res = [];
+                foreach ($result as $key => $val) {
+                    switch ($result[$key]['type']) {
+                        case 'human':
+                            $result = $result[0];
+                            foreach ($result as $key => $val) {
+                                if ((int)$result[$key] !== (int)$human->$key && $key !== 'type') {
+                                    $res[$key] = $result[$key];
+                                }
+                            }
+                            if (count($res) > 0) {
+                                $this->db->updateGamer($res, $human->id);
+                            }
+                            break;
+                        case 'tile':
+                            break;
+                        case 'item':
+                            break;
+                    }
+                }
+                $this->db->changeHash();
+                return $res;
             }
         }
         return false;

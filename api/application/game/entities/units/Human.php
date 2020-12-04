@@ -49,294 +49,100 @@ class Human extends Animal {
         }*/
     }
 
+    private function canMove($x, $y, $tiles, $width, $height) {
+        $result = [];
+        if ($x >= 0 && $y >= 0 && $x <= $width - 1 && $y <= $height - 1) { // проверка на границу карты
+            for ($i = 0; $i < count($tiles); $i++) {
+                if ($tiles[$i]->x == $x && $tiles[$i]->y == $y) {
+                    $tile = $tiles[$i];
+                    break;
+                }
+            }
+            if ((int)$tile->type === 0) {     // проверяем можно ли пройти
+                if ($tile->name !== 'water') {
+                    if ($this->right_hand->damage) {
+                        $tile->hit($this->right_hand->damage);
+                        $this->right_hand->hit(1); // уменьшение прочности оружия
+                        $result[] = [
+                            'type' => 'item',
+                            'id' => $this->right_hand->id,
+                            'hp' => $this->right_hand->hp
+                        ];
+                    } else {
+                        $tile->hit(1);
+                        $this->hit(1);
+                    }
+                    $result[] = [
+                        'type' => 'tile',
+                        'id' => $tile->id,
+                        'hp' => $tile->hp
+                    ];
+                } else {
+                    $x = $this->x;
+                    $y = $this->y;
+                }
+            }
+        } else {
+            $x = $this->x;
+            $y = $this->y;
+        }
+        $result[] = [
+            'type' => 'human',
+            'id' => $this->id,
+            'x' => $x,
+            'y' => $y,
+            'hp' => $this->hp
+        ];
+        return $result;
+    }
+
     public function move($map, $direction) {
         // взять непроходимые предметы на карте
         // выбираем непроходимые объекты на карте
         $tiles = $map['tiles'];
+        $width = $map['map']->width;
+        $height = $map['map']->height;
         switch ($direction) {
             case 'left':
-                if ($this->x > 0) { // проверка на границу карты
-                    $x = $this->x - 1;
-                    $y = $this->y;
-                    for ($i = 0; $i < count($tiles); $i++) {
-                        if ($tiles[$i]->x == $x && $tiles[$i]->y == $y) {
-                            $tile = $tiles[$i];
-                            break;
-                        }
-                    }
-                    if ((int)$tile->type === 0) {     // проверяем можно ли пройти
-                        if ($tile->name !== 'water') {
-                            if ($this->right_hand->damage) {
-                                $tile->hit($this->right_hand->damage);
-                                $this->right_hand->hit(1); // уменьшение прочности оружия
-                                $result[] = [
-                                    'type' => 'item',
-                                    'id' => $this->right_hand->id,
-                                    'hp' => $this->right_hand->hp
-                                ];
-                            } else {
-                                $tile->hit(1);
-                                $this->hit(1);
-                            }
-                            $result[] = [
-                                'type' => 'tile',
-                                'id' => $tile->id,
-                                'hp' => $tile->hp
-                            ];
-                        } else {
-                            $x = $this->x;
-                        }
-                    }
-                }
-                $result[] = [
-                    'type' => 'human',
-                    'id' => $this->id,
-                    'x' => $x,
-                    'hp' => $this->hp
-                ];
-                return $result;
+                $x = $this->x - 1;
+                $y = $this->y;
+                return $this->canMove($x, $y, $tiles, $width, $height);
+                break;
             case 'right':
-                $result = array();
-                if ($this->x < count($map) - 1) {
-                    $x = $this->x + 1;
-                    $y = $this->y;
-                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
-                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
-                            if ($this->right_hand && $this->right_hand->type === 'weapon') {
-                                $map[$x][$y]->hit($this->right_hand->damage);
-                                $this->right_hand->hit(1);
-                                $result[] = (object) [
-                                    'type' => 'item',
-                                    'id' => $this->right_hand->id,
-                                    'hp' => $this->right_hand->hp
-                                ];
-                            } else {
-                                $map[$x][$y]->hit(1);
-                                $this->hit(1);
-                            }
-                            $result[] = (object)[
-                                'type' => 'tile',
-                                'id' => $map[$x][$y]->id,
-                                'hp' => $map[$x][$y]->hp
-                            ];
-                        }
-                    }
-                    $result[] = (object)[
-                        'type' => 'human',
-                        'id' => $this->id,
-                        'x' => $x,
-                        'hp' => $this->hp
-                    ];
-                }
-                return $result;
+                $x = $this->x + 1;
+                $y = $this->y;
+                return $this->canMove($x, $y, $tiles, $width, $height);
+                break;
             case 'up':
-                $result = array();
-                if ($this->y > 0) {
-                    $x = $this->x;
-                    $y = $this->y - 1;
-                    if (!($map[$x][$y]->passability)) {
-                        if (!(get_class($map[$x][$y]) === 'Water')) {
-                            if ($this->right_hand && $this->right_hand->type === 'weapon') {
-                                $map[$x][$y]->hit($this->right_hand->damage);
-                                $this->right_hand->hit(1);
-                                $result[] = (object) [
-                                    'type' => 'item',
-                                    'id' => $this->right_hand->id,
-                                    'hp' => $this->right_hand->hp
-                                ];
-                            } else {
-                                $map[$x][$y]->hit(1);
-                                $this->hit(1);
-                            }
-                            $result[] = (object) [
-                                'type' => 'tile',
-                                'id' => $map[$x][$y]->id,
-                                'hp' => $map[$x][$y]->hp
-                            ];
-                        }
-                    }
-                    $result[] = (object) [
-                        'type' => 'human',
-                        'id' => $this->id,
-                        'y' => $y,
-                        'hp' => $this->hp
-                    ];
-                }
-                return $result;
+                $x = $this->x;
+                $y = $this->y - 1;
+                return $this->canMove($x, $y, $tiles, $width, $height);
+                break;
             case 'down':
-                $result = array();
-                if ($this->y < count($map[0]) - 1) {
-                    $x = $this->x;
-                    $y = $this->y + 1;
-                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
-                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
-                            if ($this->right_hand && $this->right_hand->type === 'weapon') {
-                                $map[$x][$y]->hit($this->right_hand->damage);
-                                $this->right_hand->hit(1);
-                                $result[] = (object) [
-                                    'type' => 'item',
-                                    'id' => $this->right_hand->id,
-                                    'hp' => $this->right_hand->hp
-                                ];
-                            } else {
-                                $map[$x][$y]->hit(1);
-                                $this->hit(1);
-                            }
-                            $result[] = (object) [
-                                'type' => 'tile',
-                                'id' => $map[$x][$y]->id,
-                                'hp' => $map[$x][$y]->hp
-                            ];
-                        }
-                    }
-                    $result[] = (object) [
-                        'type' => 'human',
-                        'id' => $this->id,
-                        'y' => $y,
-                        'hp' => $this->hp
-                    ];
-                }
-                return $result;
+                $x = $this->x;
+                $y = $this->y + 1;
+                return $this->canMove($x, $y, $tiles, $width, $height);
+                break;
             case 'leftUp':
-                $result = array();
-                if ($this->x > 0 && $this->y > 0) { // проверка на границу карты
-                    $x = $this->x - 1;
-                    $y = $this->y - 1;
-                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
-                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
-                            if ($this->right_hand && $this->right_hand->type === 'weapon') { // нужно поменять, т.к. в right_hand лежит id
-                                $map[$x][$y]->hit($this->right_hand->damage);
-                                $this->right_hand->hit(1);
-                                $result[] = (object) [
-                                    'type' => 'item',
-                                    'id' => $this->right_hand->id,
-                                    'hp' => $this->right_hand->hp
-                                ];
-                            } else {
-                                $map[$x][$y]->hit(1);
-                                $this->hit(1);
-                            }
-                            $result[] = (object) [
-                                'type' => 'tile',
-                                'id' => $map[$x][$y]->id,
-                                'hp' => $map[$x][$y]->hp
-                            ];
-                        }
-                    }
-                    $result[] = (object) [
-                        'type' => 'human',
-                        'id' => $this->id,
-                        'x' => $x,
-                        'y' => $y,
-                        'hp' => $this->hp
-                    ];
-                }
-                return $result;
+                $x = $this->x - 1;
+                $y = $this->y - 1;
+                return $this->canMove($x, $y, $tiles, $width, $height);
+                break;
             case 'rightUp':
-                $result = array();
-                if ($this->x < count($map) - 1 && $this->y > 0) { // проверка на границу карты
-                    $x = $this->x + 1;
-                    $y = $this->y - 1;
-                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
-                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
-                            if ($this->right_hand && $this->right_hand->type === 'weapon') { // нужно поменять, т.к. в right_hand лежит id
-                                $map[$x][$y]->hit($this->right_hand->damage);
-                                $this->right_hand->hit(1);
-                                $result[] = (object) [
-                                    'type' => 'item',
-                                    'id' => $this->right_hand->id,
-                                    'hp' => $this->right_hand->hp
-                                ];
-                            } else {
-                                $map[$x][$y]->hit(1);
-                                $this->hit(1);
-                            }
-                            $result[] = (object) [
-                                'type' => 'tile',
-                                'id' => $map[$x][$y]->id,
-                                'hp' => $map[$x][$y]->hp
-                            ];
-                        }
-                    }
-                    $result[] = (object) [
-                        'type' => 'human',
-                        'id' => $this->id,
-                        'x' => $x,
-                        'y' => $y,
-                        'hp' => $this->hp
-                    ];
-                }
-                return $result;
+                $x = $this->x + 1;
+                $y = $this->y - 1;
+                return $this->canMove($x, $y, $tiles, $width, $height);
+                break;
             case 'leftDown':
-                $result = array();
-                if ($this->x > 0 && $this->y < count($map[0]) - 1) { // проверка на границу карты
-                    $x = $this->x - 1;
-                    $y = $this->y + 1;
-                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
-                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
-                            if ($this->right_hand && $this->right_hand->type === 'weapon') { // нужно поменять, т.к. в right_hand лежит id
-                                $map[$x][$y]->hit($this->right_hand->damage);
-                                $this->right_hand->hit(1);
-                                $result[] = (object) [
-                                    'type' => 'item',
-                                    'id' => $this->right_hand->id,
-                                    'hp' => $this->right_hand->hp
-                                ];
-                            } else {
-                                $map[$x][$y]->hit(1);
-                                $this->hit(1);
-                            }
-                            $result[] = (object) [
-                                'type' => 'tile',
-                                'id' => $map[$x][$y]->id,
-                                'hp' => $map[$x][$y]->hp
-                            ];
-                        }
-                    }
-                    $result[] = (object) [
-                        'type' => 'human',
-                        'id' => $this->id,
-                        'x' => $x,
-                        'y' => $y,
-                        'hp' => $this->hp
-                    ];
-                }
-                return $result;
+                $x = $this->x - 1;
+                $y = $this->y + 1;
+                return $this->canMove($x, $y, $tiles, $width, $height);
+                break;
             case 'rightDown':
-                $result = array();
-                if ($this->x < count($map) - 1 && $this->y < count($map[0]) - 1) { // проверка на границу карты
-                    $x = $this->x + 1;
-                    $y = $this->y + 1;
-                    if (!($map[$x][$y]->passability)) {     // проверяем можно ли пройти
-                        if (!(get_class($map[$x][$y]) === 'Water')) {   // если не вода, то бьем объект на карте
-                            if ($this->right_hand && $this->right_hand->type === 'weapon') { // нужно поменять, т.к. в right_hand лежит id
-                                $map[$x][$y]->hit($this->right_hand->damage);
-                                $this->right_hand->hit(1);
-                                $result[] = (object) [
-                                    'type' => 'item',
-                                    'id' => $this->right_hand->id,
-                                    'hp' => $this->right_hand->hp
-                                ];
-                            } else {
-                                $map[$x][$y]->hit(1);
-                                $this->hit(1);
-                            }
-                            $result[] = (object) [
-                                'type' => 'tile',
-                                'id' => $map[$x][$y]->id,
-                                'hp' => $map[$x][$y]->hp
-                            ];
-                        }
-                    }
-                    $result[] = (object) [
-                        'type' => 'human',
-                        'id' => $this->id,
-                        'x' => $x,
-                        'y' => $y,
-                        'hp' => $this->hp
-                    ];
-                }
-                return $result;
+                $x = $this->x + 1;
+                $y = $this->y + 1;
+                return $this->canMove($x, $y, $tiles, $width, $height);
+                break;
         }
         return false;
     }
