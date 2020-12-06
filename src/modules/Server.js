@@ -1,6 +1,6 @@
 export default class Server {
     token = '';
-    map = []; 
+    map = {}; 
     hash = '';
     update = null;
     gamer = {};
@@ -59,6 +59,7 @@ export default class Server {
             const result = await this.sendRequest('logout');
             if (result) {
                 this.token = '';
+                this.gamer = {};
                 localStorage.setItem('token', '');
                 //clearInterval(this.update);
             }
@@ -77,13 +78,16 @@ export default class Server {
                 this.mapHash = bdHash;
                 console.log('mapHash: ' + this.mapHash);
                 this.map = await this.getMap();
+                for (let i = 0; i < this.map.gamers.length; i++) {
+                    if (this.map.gamers[i].id === this.gamer.id) {
+                        this.gamer = this.map.gamers[i];
+                        this.map.gamer = (this.gamer);
+                        break;
+                    }
+                }
             }
             return this.map;
         }
-    }
-
-    update() {
-        
     }
 
     move(direction) {

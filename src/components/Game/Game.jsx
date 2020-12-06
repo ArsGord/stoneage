@@ -17,7 +17,12 @@ class Game extends React.Component {
     async componentDidMount() {
       this.server.getMap();
       this.canvas = new Canvas(this.server);
-      document.getElementById('canvas').addEventListener('click', (event) => {this.canvas.click(event)});
+      document.getElementById('canvas').addEventListener('click', (event) => { this.canvas.click(event) });
+    }
+
+    componentWillUnmount() {
+      this.server.logout(localStorage.getItem('token'));
+      this.canvas.clInterval();
     }
 
     async sendRequest(method) {

@@ -9,24 +9,24 @@ export default class Canvas {
         this.canvas.height = 800;
         this.img = new Image();
         this.img.src = img;
-        this.img.onload = () => { this.getAll(); };
+        this.img.onload = () => { this.updateScene(); };
     }
 
-    update = setInterval(() => {this.updateScene()}, 300);
+    map = {};
+    update = setInterval(() => { this.updateScene() }, 300);
+    gamerDirection = 'down';
 
     clInterval() {
-        clearInterval(this.update); 
+        clearInterval(this.update);
     }
 
-    updateScene() {
-        this.getAll();
-    }
-
-    async getAll() {
+    async updateScene() {
         this.map = await this.server.checkHash();
-        this.gamer = this.map.gamers[0];
-        this.drawMap();
-        this.drawGamer();
+        if (this.map) {
+            this.gamer = this.map.gamer;
+            this.drawMap();
+            this.drawGamer();
+        }
     }
 
     drawMap() {
@@ -51,7 +51,7 @@ export default class Canvas {
         let dx = 32;
         let dy = 16;
         let shiftY = this.canvas.width / 2;
-        this.drawImage('gamerDown', this.gamer.x * dx + this.gamer.y * dx, -this.gamer.x * dy + this.gamer.y * dy + shiftY);
+        this.drawImage(this.gamerDirection, this.gamer.x * dx + this.gamer.y * dx, -this.gamer.x * dy + this.gamer.y * dy + shiftY);
     }
 
     async click(event) {
@@ -60,27 +60,37 @@ export default class Canvas {
         const [sin, cos] = this.calcSinCos(x, y);
         let sinPiDiv = this.sinPiDiv;
         if (cos > 0) {
-            if (sin > sinPiDiv(8/3)) {
+            if (sin > sinPiDiv(8 / 3)) {
+                this.gamerDirection = 'up';
                 await this.server.move('rightUp');
             } else if (sin > sinPiDiv(8)) {
+                this.gamerDirection = 'rightUp';
                 await this.server.move('right');
             } else if (sin > -sinPiDiv(8)) {
+                this.gamerDirection = 'right';
                 await this.server.move('rightDown');
-            } else if (sin > -sinPiDiv(8/3)) {
+            } else if (sin > -sinPiDiv(8 / 3)) {
+                this.gamerDirection = 'rightDown';
                 await this.server.move('down');
             } else {
+                this.gamerDirection = 'down';
                 await this.server.move('leftDown');
             }
         } else {
-            if (sin > sinPiDiv(8/3)) {
+            if (sin > sinPiDiv(8 / 3)) {
+                this.gamerDirection = 'up';
                 await this.server.move('rightUp');
             } else if (sin > sinPiDiv(8)) {
+                this.gamerDirection = 'leftUp';
                 await this.server.move('up');
             } else if (sin > -sinPiDiv(8)) {
+                this.gamerDirection = 'left';
                 await this.server.move('leftUp');
-            } else if (sin > -sinPiDiv(8/3)) {
+            } else if (sin > -sinPiDiv(8 / 3)) {
+                this.gamerDirection = 'leftDown';
                 await this.server.move('left');
             } else {
+                this.gamerDirection = 'down';
                 await this.server.move('leftDown');
             }
         }
@@ -116,7 +126,7 @@ export default class Canvas {
     }
 
     drawImage(name, x, y) {
-        switch(name) {
+        switch (name) {
             case 'dirt':
                 this.ctx.drawImage(this.img, 0, 0, 64, 48, x, y, 64, 48);
                 break;
@@ -157,14 +167,35 @@ export default class Canvas {
                 this.ctx.drawImage(this.img, 192, 48, 34, 48, x + 16, y - 6, 34, 48);
                 break;
             case 'hut':
-                this.ctx.drawImage(this.img, 0, 114, 148, 161, x, y-94, 148, 161);
+                this.ctx.drawImage(this.img, 0, 114, 148, 161, x, y - 94, 148, 161);
                 break;
-            case 'gamerDown':
-                this.ctx.drawImage(this.img, 64, 582, 64, 42, x, y-8, 64, 42);
+            case 'up':
+                this.ctx.drawImage(this.img, 0, 582, 64, 42, x, y - 8, 64, 42);
+                break;
+            case 'down':
+                this.ctx.drawImage(this.img, 64, 582, 64, 42, x, y - 8, 64, 42);
+                break;
+            case 'left':
+                this.ctx.drawImage(this.img, 128, 582, 64, 42, x, y - 8, 64, 42);
+                break;
+            case 'right':
+                this.ctx.drawImage(this.img, 192, 582, 64, 42, x, y - 8, 64, 42);
+                break;
+            case 'rightUp':
+                this.ctx.drawImage(this.img, 256, 582, 64, 42, x, y - 8, 64, 42);
+                break;
+            case 'leftUp':
+                this.ctx.drawImage(this.img, 320, 582, 64, 42, x, y - 8, 64, 42);
+                break;
+            case 'leftDown':
+                this.ctx.drawImage(this.img, 384, 582, 64, 42, x, y - 8, 64, 42);
+                break;
+            case 'rightDown':
+                this.ctx.drawImage(this.img, 448, 582, 64, 42, x, y - 8, 64, 42);
                 break;
             default:
                 break;
-        } 
+        }
     }
 
     drawSectors() {
@@ -173,14 +204,14 @@ export default class Canvas {
         ctx.lineWidth = 1;
         ctx.strokeStyle = 'black';
         ctx.beginPath();
-            ctx.moveTo(0, height / 2 * (1 - this.sinPiDiv(8)));
-            ctx.lineTo(width, height / 2 * (1 + this.sinPiDiv(8)));
-            ctx.moveTo(0, height / 2 * (1 + this.sinPiDiv(8)));
-            ctx.lineTo(width, height / 2 * (1 - this.sinPiDiv(8)));
-            ctx.moveTo(width / 2 * (1 - this.sinPiDiv(8)), 0);
-            ctx.lineTo(width / 2 * (1 + this.sinPiDiv(8)), height);
-            ctx.moveTo(width / 2 * (1 + this.sinPiDiv(8)), 0);
-            ctx.lineTo(width / 2 * (1 - this.sinPiDiv(8)), height);
+        ctx.moveTo(0, height / 2 * (1 - this.sinPiDiv(8)));
+        ctx.lineTo(width, height / 2 * (1 + this.sinPiDiv(8)));
+        ctx.moveTo(0, height / 2 * (1 + this.sinPiDiv(8)));
+        ctx.lineTo(width, height / 2 * (1 - this.sinPiDiv(8)));
+        ctx.moveTo(width / 2 * (1 - this.sinPiDiv(8)), 0);
+        ctx.lineTo(width / 2 * (1 + this.sinPiDiv(8)), height);
+        ctx.moveTo(width / 2 * (1 + this.sinPiDiv(8)), 0);
+        ctx.lineTo(width / 2 * (1 - this.sinPiDiv(8)), height);
         ctx.stroke();
     }
 }
