@@ -81,11 +81,12 @@ class Game {
     // поднять предмет
     public function takeItem($userId) {
         $human = new Human($this->db->getHumanByUserId($userId));
-        foreach ($this->db->getFreeItems() as $item) {
+        $items = $human->takeItem();
+        foreach ($this->db->getItems() as $item) {
             if ($item->x === $human->x && $item->y === $human->y) { //проверяем координаты предметов
-                if ($human->takeItem($item->id)) { //берём предмет с земли
-                    $this->db->takeItem($human->id, $item->id); //удаляем с карты
-                    $this->db->updateInventory($human->id);
+                if ($items) { //берём предмет с земли
+                    $this->db->takeItem($human->id, $item->id, $items); //удаляем с карты
+                    $this->db->changeHash();
                     return true;
                 }
             }

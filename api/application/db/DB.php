@@ -154,8 +154,11 @@ class DB {
         return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
 
-    public function takeItem($humanId, $itemId) {
-
+    public function takeItem($humanId, $itemId, $items) {
+        foreach ($items as $key => $values) {
+            $stmt = $this->conn->prepare("UPDATE items SET `users` (`gamer_id`, `inventory`) VALUES ($humanId, $key) WHERE `id`=$itemId");
+            $stmt->execute();
+        }
     }
 
     public function dropItem($itemId) {

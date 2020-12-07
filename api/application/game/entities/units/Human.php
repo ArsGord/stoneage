@@ -147,21 +147,27 @@ class Human extends Animal {
         return false;
     }
 
-    public function takeItem($itemId) {
-        if ($this->right_hand && $this->left_hand && $this->backpack) {
+    public function takeItem($item) {
+        if ($this->right_hand && $this->left_hand && $this->backpack && $this->body) {
             return false;
         }
         if ($this->right_hand && $this->left_hand) {
             $this->backpack = $this->right_hand;
-            $this->right_hand = $itemId;
+            $this->right_hand = $item;
             return true;
         }
         if ($this->right_hand) {
-            $this->left_hand = $itemId;
+            $this->left_hand = $item;
             return true;
         }
-        $this->right_hand = $itemId;
-        return true;
+        $this->right_hand = $item;
+        $items = [
+            'right_hand' => $this->right_hand,
+            'left_hand' => $this->left_hand,
+            'backpack' => $this->backpack,
+            'body' => $this->body
+            ];
+        return $items;
     }
 
     public function dropItem($hand) {
