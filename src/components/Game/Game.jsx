@@ -31,9 +31,6 @@ class Game extends React.Component {
             case 'logout':
               await this.server.logout(localStorage.getItem('token'));
               break;
-            case 'move':
-              await this.server.move('left');
-              break;
             case 'takeItem':
               await this.server.takeItem();
               break;
@@ -85,7 +82,6 @@ class Game extends React.Component {
               <canvas id="canvas"></canvas>
             </div>
             <div className="buttons">
-              <button className="interface-button" onClick={() => this.sendRequest('move')}>move</button>
               <button className="interface-button" onClick={() => this.sendRequest('takeItem')}>takeItem</button>
               <button className="interface-button" onClick={() => this.sendRequest('dropItem')}>dropItem</button>
               <button className="interface-button" onClick={() => this.sendRequest('putOn')}>putOn</button>

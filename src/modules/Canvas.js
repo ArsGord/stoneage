@@ -13,18 +13,20 @@ export default class Canvas {
     }
 
     map = {};
-    update = setInterval(() => { this.updateScene() }, 300);
+    update = setInterval(() => { this.updateScene() }, 3000);
     gamerDirection = 'down';
 
     clInterval() {
+        this.map = null;
         clearInterval(this.update);
     }
 
     async updateScene() {
         this.map = await this.server.checkHash();
-        if (this.map) {
+        if (this.map && this.map.gamer) {
             this.gamer = this.map.gamer;
             this.drawMap();
+            this.drawItem();
             this.drawGamer();
         }
     }
@@ -43,6 +45,18 @@ export default class Canvas {
                     this.drawImage(tiles[count].name, j * dx + i * dx, -(j * dy) + (i * dy) + shiftY);
                     count++;
                 }
+            }
+        }
+    }
+
+    drawItem() {
+        if(this.map) {
+            let shiftY = this.canvas.height / 2;
+            let dx = 32;
+            let dy = 16;
+            let items = this.map.items;
+            for (let i = 0; i < items.length; i++) {
+                this.drawImage('wood', items[i].x * dx + items[i].y * dx, -items[i].x * dy + items[i].y * dy + shiftY);
             }
         }
     }
