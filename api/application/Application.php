@@ -81,14 +81,14 @@ class Application {
     public function takeItem($params) {
         $user = $this->user->getUserByToken($params['token']);
         if ($user) {
-            return $this->game->takeItem($user->id);
+            return $this->game->takeItem($user['id']);
         }
     }
 
     public function dropItem($params) {
         $user = $this->user->getUserByToken($params['token']);
         if ($user) {
-            return $this->game->dropItem($user->id, $params['hand']);
+            return $this->game->dropItem($user['id']/*, $params['hand']*/);
         }
     }
 

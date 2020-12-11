@@ -80,29 +80,36 @@ class Game {
 
     // поднять предмет
     public function takeItem($userId) {
-        $human = new Human($this->db->getHumanByUserId($userId));
-        $items = $human->takeItem();
-        foreach ($this->db->getItems() as $item) {
-            if ($item->x === $human->x && $item->y === $human->y) { //проверяем координаты предметов
-                if ($items) { //берём предмет с земли
-                    $this->db->takeItem($human->id, $item->id, $items); //удаляем с карты
+        $human = new Human($this->db->getGamer($userId));
+        if (!$human->right_hand || !$human->left_hand || !$human->backpack) {
+            foreach ($this->db->getItems() as $item) {
+                if ($item->x === $human->x && $item->y === $human->y) { //проверяем координаты предметов
+                    $items = $human->takeItem($item);
+                    $this->db->takeItem($human->id, $items); //удаляем с карты
                     $this->db->changeHash();
                     return true;
+                    }
                 }
             }
-        }
         return false;
     }
 
     // бросить предмет
-    public function dropItem($userId, $hand = 'right') {
-        $human = new Human($this->db->getHumanByUserId($userId));
-        if ($human) {
-            $itemId = $human->dropItem($hand);
-        }
-        if ($itemId) {
-            $this->db->dropItem($itemId); // выбрасываем предмет
-            return true;
+    public function dropItem($userId/*, $hand = 'right'*/) {
+        $human = new Human($this->db->getGamer($userId));
+        if ($human->right_hand) {
+            $canDrop = true;
+            foreach ($this->db->getItems() as $item) { // проверяем, лежит ли под нами другой предмет
+                if ($human->x === $item->x && $human->y === $item->y) {
+                    $canDrop = false;
+                    break;
+                }
+            }
+            if ($canDrop) {
+                $this->db->dropItem($human->right_hand, $human->x, $human->y);
+                $this->db->changeHash();
+                return true;
+            }
         }
         return false;
     }

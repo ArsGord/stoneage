@@ -112,13 +112,6 @@ class DB {
         return false;
     }
 
-    public function getHumanByUserId($userId) {
-        return (object) [
-            'x' => 1,
-            'y' => 1
-        ];
-    }
-
     public function getMap() {
         $stmt = $this->conn->prepare("SELECT * FROM maps WHERE id = 1");
         $stmt->execute();
@@ -154,15 +147,16 @@ class DB {
         return $stmt->fetchAll(PDO::FETCH_CLASS);
     }
 
-    public function takeItem($humanId, $itemId, $items) {
-        foreach ($items as $key => $values) {
-            $stmt = $this->conn->prepare("UPDATE items SET `users` (`gamer_id`, `inventory`) VALUES ($humanId, $key) WHERE `id`=$itemId");
+    public function takeItem($humanId, $items) {
+        foreach ($items as $key => $value) {
+            $stmt = $this->conn->prepare("UPDATE items SET gamer_id = '$humanId', inventory = '$key' WHERE id = '$value->id'");
             $stmt->execute();
         }
     }
 
-    public function dropItem($itemId) {
-
+    public function dropItem($item, $x, $y) {
+        $stmt = $this->conn->prepare("UPDATE items SET gamer_id = null, inventory = 'map', x = '$x', y = '$y' WHERE id = '$item->id'");
+        $stmt->execute();
     }
 
     public function getItemById($itemId) {

@@ -161,23 +161,16 @@ class Human extends Animal {
             return true;
         }
         $this->right_hand = $item;
-        $items = [
+        return [
             'right_hand' => $this->right_hand,
             'left_hand' => $this->left_hand,
-            'backpack' => $this->backpack,
-            'body' => $this->body
-            ];
-        return $items;
+            'backpack' => $this->backpack
+            //'body' => $this->body
+        ];
     }
 
-    public function dropItem($hand) {
-        // для проверки
-        //$this->right_hand = (object) ['id' => 1];
-        if ($hand === 'right') {
-            return $this->right_hand;
-        } elseif ($hand === 'left') {
-            return $this->left_hand;
-        }
+    public function dropItem() {
+        return $this->right_hand;
         return false;
     }
 

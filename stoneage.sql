@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Дек 04 2020 г., 19:32
+-- Время создания: Дек 11 2020 г., 14:15
 -- Версия сервера: 10.3.22-MariaDB
 -- Версия PHP: 7.1.33
 
@@ -42,11 +42,11 @@ CREATE TABLE `gamer` (
 --
 
 INSERT INTO `gamer` (`id`, `user_id`, `status`, `x`, `y`, `hp`, `satiety`) VALUES
-(1, 1, 'offline', 3, 2, 100, 100),
-(2, 2, 'offline', 2, 2, 100, 100),
+(1, 1, 'offline', 5, 0, 100, 100),
+(2, 2, 'offline', 1, 2, 100, 100),
 (3, 3, 'online', 2, 1, 100, 100),
 (4, 4, 'online', 1, 2, 100, 100),
-(5, 5, 'online', 1, 1, 100, 100);
+(5, 5, 'offline', 4, 2, 100, 100);
 
 -- --------------------------------------------------------
 
@@ -76,7 +76,8 @@ INSERT INTO `items` (`id`, `type_id`, `hp`, `calories`, `armor`, `damage`, `game
 (2, 2, 100, NULL, NULL, 15, 1, 'backpack', NULL, NULL),
 (3, 1, 100, NULL, NULL, NULL, 2, 'right_hand', NULL, NULL),
 (4, 1, 100, NULL, NULL, NULL, 2, 'left_hand', NULL, NULL),
-(5, 1, 100, NULL, NULL, NULL, NULL, 'map', NULL, NULL);
+(5, 1, 100, NULL, NULL, NULL, NULL, 'map', 1, 3),
+(6, 1, 100, NULL, NULL, NULL, NULL, 'map', 2, 3);
 
 -- --------------------------------------------------------
 
@@ -129,7 +130,7 @@ CREATE TABLE `maps` (
 --
 
 INSERT INTO `maps` (`id`, `name`, `hash`, `field`, `width`, `height`) VALUES
-(1, 'первая карта', 'fd34f95fc21d1713a0b10716f8daffe5', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
+(1, 'первая карта', 'fc96b01b4aa785c6ab5f6a618b5fd027', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
 
 -- --------------------------------------------------------
 
@@ -261,7 +262,7 @@ ALTER TABLE `gamer`
 -- AUTO_INCREMENT для таблицы `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `item_type`
