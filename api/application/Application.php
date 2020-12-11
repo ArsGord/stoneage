@@ -102,7 +102,7 @@ class Application {
     public function putOnBackpack($params) {
         $user = $this->user->getUserByToken($params['token']);
         if ($user) {
-            return $this->game->putOnBackpack($user->id);
+            return $this->game->putOnBackpack($user['id']);
         }
     }
 

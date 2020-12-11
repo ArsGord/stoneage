@@ -124,9 +124,11 @@ class Game {
     }
     // положить предмет в карман
     public function putOnBackpack($userId) {
-        $human = new Human($this->db->getHumanByUserId($userId));
-        if ($human) {
-            return $human->putOnBackpack();
+        $human = new Human($this->db->getGamer($userId));
+        $items = $human->putOnBackpack();
+        if ($human && $items) {
+            $this->db->putOnBackpack($items);
+            return true;
         }
         return false;
     }

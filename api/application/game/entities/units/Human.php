@@ -191,15 +191,18 @@ class Human extends Animal {
 
     public function putOnBackpack() {
         // для проверки
-        //$this->right_hand = new stdClass();
         if($this->right_hand) {
-            $this->backpack = $this->right_hand;
-            $this->right_hand = null;
-            return true;
+            return [
+                'right_hand' => $this->backpack,
+                'left_hand' => $this->left_hand,
+                'backpack' =>  $this->right_hand
+            ];
         } elseif ($this->left_hand) {
-            $this->backpack = $this->left_hand;
-            $this->left_hand = null;
-            return true;
+            return [
+                'right_hand' => $this->right_hand,
+                'left_hand' => $this->backpack,
+                'backpack' => $this->left_hand
+            ];
         }
         return false;
     }
