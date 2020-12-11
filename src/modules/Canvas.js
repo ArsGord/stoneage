@@ -13,7 +13,7 @@ export default class Canvas {
     }
 
     map = {};
-    update = setInterval(() => { this.updateScene() }, 3000);
+    update = setInterval(() => { this.updateScene() }, 300);
     gamerDirection = 'down';
 
     clInterval() {
