@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Дек 11 2020 г., 14:15
--- Версия сервера: 10.3.22-MariaDB
--- Версия PHP: 7.1.33
+-- Время создания: Дек 11 2020 г., 19:10
+-- Версия сервера: 10.3.13-MariaDB
+-- Версия PHP: 7.1.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -42,7 +43,7 @@ CREATE TABLE `gamer` (
 --
 
 INSERT INTO `gamer` (`id`, `user_id`, `status`, `x`, `y`, `hp`, `satiety`) VALUES
-(1, 1, 'offline', 5, 0, 100, 100),
+(1, 1, 'offline', 1, 2, 100, 100),
 (2, 2, 'offline', 1, 2, 100, 100),
 (3, 3, 'online', 2, 1, 100, 100),
 (4, 4, 'online', 1, 2, 100, 100),
@@ -57,12 +58,13 @@ INSERT INTO `gamer` (`id`, `user_id`, `status`, `x`, `y`, `hp`, `satiety`) VALUE
 CREATE TABLE `items` (
   `id` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
+  `name` varchar(16) NOT NULL,
   `hp` int(11) NOT NULL,
   `calories` int(11) DEFAULT NULL,
   `armor` int(11) DEFAULT NULL,
   `damage` int(11) DEFAULT NULL,
   `gamer_id` int(11) DEFAULT NULL,
-  `inventory` varchar(12) DEFAULT NULL,
+  `inventory` varchar(12) NOT NULL,
   `x` int(11) DEFAULT NULL,
   `y` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -71,13 +73,9 @@ CREATE TABLE `items` (
 -- Дамп данных таблицы `items`
 --
 
-INSERT INTO `items` (`id`, `type_id`, `hp`, `calories`, `armor`, `damage`, `gamer_id`, `inventory`, `x`, `y`) VALUES
-(1, 1, 100, NULL, NULL, 15, 1, 'left_hand', NULL, NULL),
-(2, 2, 100, NULL, NULL, 15, 1, 'backpack', NULL, NULL),
-(3, 1, 100, NULL, NULL, NULL, 2, 'right_hand', NULL, NULL),
-(4, 1, 100, NULL, NULL, NULL, 2, 'left_hand', NULL, NULL),
-(5, 1, 100, NULL, NULL, NULL, NULL, 'map', 1, 3),
-(6, 1, 100, NULL, NULL, NULL, NULL, 'map', 2, 3);
+INSERT INTO `items` (`id`, `type_id`, `name`, `hp`, `calories`, `armor`, `damage`, `gamer_id`, `inventory`, `x`, `y`) VALUES
+(1, 9, 'wood', 100, NULL, NULL, NULL, NULL, 'map', 1, 2),
+(2, 9, 'wood', 100, NULL, NULL, NULL, 1, 'backpack', 3, 2);
 
 -- --------------------------------------------------------
 
@@ -108,7 +106,8 @@ INSERT INTO `item_type` (`id`, `type`, `default_hp`, `calories`, `name`, `armor`
 (5, 'building', 250, NULL, 'hut', 5, NULL, NULL),
 (6, 'building', 150, NULL, 'wall', 5, NULL, NULL),
 (7, 'animal', 100, 100, 'human', NULL, 5, NULL),
-(8, 'animal', 40, 10, 'cow', NULL, NULL, NULL);
+(8, 'animal', 40, 10, 'cow', NULL, NULL, NULL),
+(9, 'resource', 100, NULL, 'Wood', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -130,7 +129,7 @@ CREATE TABLE `maps` (
 --
 
 INSERT INTO `maps` (`id`, `name`, `hash`, `field`, `width`, `height`) VALUES
-(1, 'первая карта', 'fc96b01b4aa785c6ab5f6a618b5fd027', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
+(1, 'первая карта', '78635104aab3965516f92f14857e4ae8', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
 
 -- --------------------------------------------------------
 
@@ -262,13 +261,13 @@ ALTER TABLE `gamer`
 -- AUTO_INCREMENT для таблицы `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT для таблицы `item_type`
 --
 ALTER TABLE `item_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT для таблицы `maps`
