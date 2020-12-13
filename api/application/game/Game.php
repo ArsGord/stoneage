@@ -48,22 +48,14 @@ class Game {
             }
         }
         if ($human) {
-            $result = $human->move($map, $direction);
+            $result = $human->move($map, $direction, $humans);
             if ($result) { // обновить данные в БД
                 //... поменять даные в БД
-                $res = [];
                 foreach ($result as $key => $val) {
                     switch ($result[$key]['type']) {
                         case 'human':
-                            $result = $result[0];
-                            foreach ($result as $key => $val) {
-                                if ((int)$result[$key] !== (int)$human->$key && $key !== 'type') {
-                                    $res[$key] = $result[$key];
-                                }
-                            }
-                            if (count($res) > 0) {
-                                $this->db->updateGamer($res, $human->id);
-                            }
+                            unset($val['type']); // убираем свойство type из объекта
+                            $this->db->updateGamer($val, $val['id']);
                             break;
                         case 'tile':
                             break;
@@ -72,7 +64,7 @@ class Game {
                     }
                 }
                 $this->db->changeHash();
-                return $res;
+                return true;
             }
         }
         return false;

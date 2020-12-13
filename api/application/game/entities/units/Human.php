@@ -49,9 +49,10 @@ class Human extends Animal {
         }*/
     }
 
-    private function canMove($x, $y, $tiles, $width, $height) {
+    private function canMove($x, $y, $tiles, $width, $height, $humans) {
         $result = [];
         if ($x >= 0 && $y >= 0 && $x <= $width - 1 && $y <= $height - 1) { // проверка на границу карты
+            // берем tile, на который хотим пойти
             for ($i = 0; $i < count($tiles); $i++) {
                 if ($tiles[$i]->x == $x && $tiles[$i]->y == $y) {
                     $tile = $tiles[$i];
@@ -81,6 +82,33 @@ class Human extends Animal {
                     $x = $this->x;
                     $y = $this->y;
                 }
+            } else { // проверяем, нет ли перед нами человека
+                foreach ($humans as $val) { // берем этого человека
+                    if ((int)$val->x === (int)$x && (int)$val->y === (int)$y) {
+                        $human = $val;
+                        break;
+                    }
+                }
+                if ($human) {
+                    if ($this->right_hand->damage) { // проверяем, есть ли у нас оружие
+                        $human->hit($this->right_hand->damage);
+                        $this->right_hand->hit(1);
+                        $result[] = [
+                            'type' => 'item',
+                            'id' => $this->right_hand->id,
+                            'hp' => $this->right_hand->hp
+                        ];
+                    } else {
+                        $human->hit(5);
+                    }
+                    $result[] = [
+                        'type' => 'human',
+                        'id' => $human->id,
+                        'hp' => $human->hp
+                    ];
+                    $x = $this->x;
+                    $y = $this->y;
+                }
             }
         } else {
             $x = $this->x;
@@ -96,7 +124,7 @@ class Human extends Animal {
         return $result;
     }
 
-    public function move($map, $direction) {
+    public function move($map, $direction, $humans) {
         // взять непроходимые предметы на карте
         // выбираем непроходимые объекты на карте
         $tiles = $map['tiles'];
@@ -106,42 +134,42 @@ class Human extends Animal {
             case 'left':
                 $x = $this->x - 1;
                 $y = $this->y;
-                return $this->canMove($x, $y, $tiles, $width, $height);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
                 break;
             case 'right':
                 $x = $this->x + 1;
                 $y = $this->y;
-                return $this->canMove($x, $y, $tiles, $width, $height);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
                 break;
             case 'up':
                 $x = $this->x;
                 $y = $this->y - 1;
-                return $this->canMove($x, $y, $tiles, $width, $height);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
                 break;
             case 'down':
                 $x = $this->x;
                 $y = $this->y + 1;
-                return $this->canMove($x, $y, $tiles, $width, $height);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
                 break;
             case 'leftUp':
                 $x = $this->x - 1;
                 $y = $this->y - 1;
-                return $this->canMove($x, $y, $tiles, $width, $height);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
                 break;
             case 'rightUp':
                 $x = $this->x + 1;
                 $y = $this->y - 1;
-                return $this->canMove($x, $y, $tiles, $width, $height);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
                 break;
             case 'leftDown':
                 $x = $this->x - 1;
                 $y = $this->y + 1;
-                return $this->canMove($x, $y, $tiles, $width, $height);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
                 break;
             case 'rightDown':
                 $x = $this->x + 1;
                 $y = $this->y + 1;
-                return $this->canMove($x, $y, $tiles, $width, $height);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
                 break;
         }
         return false;
@@ -194,14 +222,17 @@ class Human extends Animal {
         if($this->right_hand) {
             return [
                 'right_hand' => $this->backpack,
-                'left_hand' => $this->left_hand,
                 'backpack' =>  $this->right_hand
             ];
         } elseif ($this->left_hand) {
             return [
-                'right_hand' => $this->right_hand,
                 'left_hand' => $this->backpack,
                 'backpack' => $this->left_hand
+            ];
+        } elseif ($this->backpack) {
+            return [
+                'right_hand' => $this->backpack,
+                'backpack' => $this->right_hand
             ];
         }
         return false;
