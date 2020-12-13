@@ -13,7 +13,7 @@ export default class Canvas {
     }
 
     map = {};
-    update = setInterval(() => { this.updateScene() }, 300);
+    update = setInterval(() => { this.updateScene() }, 3000);
     gamerDirection = 'down';
 
     clInterval() {
@@ -27,6 +27,7 @@ export default class Canvas {
             this.gamer = this.map.gamer;
             this.drawMap();
             this.drawItem();
+            this.drawGamers();
             this.drawGamer();
         }
     }
@@ -39,7 +40,6 @@ export default class Canvas {
             let tiles = this.map.tiles;
             let count = 0;
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            //this.drawSectors();
             for (let i = 0; i < this.map.map.height; i++) {
                 for (let j = 0; j < this.map.map.width; j++) {
                     this.drawImage(tiles[count].name, j * dx + i * dx, -(j * dy) + (i * dy) + shiftY);
@@ -56,7 +56,7 @@ export default class Canvas {
             let dy = 16;
             let items = this.map.items;
             for (let i = 0; i < items.length; i++) {
-                this.drawImage('wood', items[i].x * dx + items[i].y * dx, -items[i].x * dy + items[i].y * dy + shiftY);
+                this.drawImage(items[i].name, items[i].x * dx + items[i].y * dx, -items[i].x * dy + items[i].y * dy + shiftY);
             }
         }
     }
@@ -66,6 +66,17 @@ export default class Canvas {
         let dy = 16;
         let shiftY = this.canvas.width / 2;
         this.drawImage(this.gamerDirection, this.gamer.x * dx + this.gamer.y * dx, -this.gamer.x * dy + this.gamer.y * dy + shiftY);
+    }
+
+    drawGamers() {
+        let dx = 32;
+        let dy = 16;
+        let shiftY = this.canvas.width / 2;
+        for (let i = 0; i < this.map.gamers.length; i++) {
+            if (this.map.gamers[i].id !== this.gamer.id) {
+                this.drawImage('down', this.map.gamers[i].x * dx + this.map.gamers[i].y * dx, -this.map.gamers[i].x * dy + this.map.gamers[i].y * dy + shiftY);
+            }
+        }
     }
 
     async click(event) {
@@ -210,22 +221,5 @@ export default class Canvas {
             default:
                 break;
         }
-    }
-
-    drawSectors() {
-        let ctx = this.ctx;
-        let [width, height] = [this.canvas.width, this.canvas.height];
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = 'black';
-        ctx.beginPath();
-        ctx.moveTo(0, height / 2 * (1 - this.sinPiDiv(8)));
-        ctx.lineTo(width, height / 2 * (1 + this.sinPiDiv(8)));
-        ctx.moveTo(0, height / 2 * (1 + this.sinPiDiv(8)));
-        ctx.lineTo(width, height / 2 * (1 - this.sinPiDiv(8)));
-        ctx.moveTo(width / 2 * (1 - this.sinPiDiv(8)), 0);
-        ctx.lineTo(width / 2 * (1 + this.sinPiDiv(8)), height);
-        ctx.moveTo(width / 2 * (1 + this.sinPiDiv(8)), 0);
-        ctx.lineTo(width / 2 * (1 - this.sinPiDiv(8)), height);
-        ctx.stroke();
     }
 }
