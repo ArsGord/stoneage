@@ -1,5 +1,5 @@
 import React from 'react';
-import Canvas from '../../modules/Canvas.js'
+import Scene from '../../modules/Scene.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 import { Button } from 'react-bootstrap';
@@ -9,20 +9,19 @@ class Game extends React.Component {
     constructor(props) {
         super();
         this.server = props.server;
-        this.state = {
-          canvas: null
-        }
+        this.scene = null;
     }
 
     async componentDidMount() {
       this.server.getMap();
-      this.canvas = new Canvas(this.server);
-      document.getElementById('canvas').addEventListener('click', (event) => { this.canvas.click(event) });
+      this.scene = new Scene(this.server);
+      document.getElementById('canvas').addEventListener('click', (event) => { this.scene.click(event) });
     }
 
     componentWillUnmount() {
       this.server.logout(localStorage.getItem('token'));
-      this.canvas.clInterval();
+      this.scene.clInterval();
+      delete this.scene;
     }
 
     async sendRequest(method) {

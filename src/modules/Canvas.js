@@ -1,47 +1,27 @@
-import img from '../Sprites/SpritesMap.png'
-
 export default class Canvas {
-    constructor(server) {
+    constructor(img, server) {
         this.server = server;
+        this.img = img;
         this.canvas = document.getElementById('canvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.canvas.width = 800;
-        this.canvas.height = 800;
-        this.img = new Image();
-        this.img.src = img;
-        this.img.onload = () => { this.updateScene(); };
-    }
-
-    map = {};
-    update = setInterval(() => { this.updateScene() }, 3000);
-    gamerDirection = 'down';
-
-    clInterval() {
-        this.map = null;
-        clearInterval(this.update);
-    }
-
-    async updateScene() {
-        this.map = await this.server.checkHash();
-        if (this.map && this.map.gamer) {
-            this.gamer = this.map.gamer;
-            this.drawMap();
-            this.drawItem();
-            this.drawGamers();
-            this.drawGamer();
+        if (this.canvas) {
+            this.ctx = this.canvas.getContext('2d');
+            this.canvas.width = 800;
+            this.canvas.height = 800;
         }
     }
 
-    drawMap() {
-        if (this.map) {
+    gamerDirection = 'down';
+
+    drawMap(map) {
+        if (map) {
             let shiftY = this.canvas.height / 2; // убрать
             let dx = 32;
             let dy = 16;
-            let tiles = this.map.tiles;
+            let tiles = map.tiles;
             let count = 0;
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            for (let i = 0; i < this.map.map.height; i++) {
-                for (let j = 0; j < this.map.map.width; j++) {
+            for (let i = 0; i < map.map.height; i++) {
+                for (let j = 0; j < map.map.width; j++) {
                     this.drawImage(tiles[count].name, j * dx + i * dx, -(j * dy) + (i * dy) + shiftY);
                     count++;
                 }
@@ -49,32 +29,34 @@ export default class Canvas {
         }
     }
 
-    drawItem() {
-        if(this.map) {
+    drawItem(map) {
+        if(map) {
             let shiftY = this.canvas.height / 2;
             let dx = 32;
             let dy = 16;
-            let items = this.map.items;
+            let items = map.items;
             for (let i = 0; i < items.length; i++) {
                 this.drawImage(items[i].name, items[i].x * dx + items[i].y * dx, -items[i].x * dy + items[i].y * dy + shiftY);
             }
         }
     }
 
-    drawGamer() {
+    drawGamer(gamer) {
         let dx = 32;
         let dy = 16;
         let shiftY = this.canvas.width / 2;
-        this.drawImage(this.gamerDirection, this.gamer.x * dx + this.gamer.y * dx, -this.gamer.x * dy + this.gamer.y * dy + shiftY);
+        this.drawImage(this.gamerDirection, gamer.x * dx + gamer.y * dx, -gamer.x * dy + gamer.y * dy + shiftY);
     }
 
-    drawGamers() {
-        let dx = 32;
-        let dy = 16;
-        let shiftY = this.canvas.width / 2;
-        for (let i = 0; i < this.map.gamers.length; i++) {
-            if (this.map.gamers[i].id !== this.gamer.id) {
-                this.drawImage('down', this.map.gamers[i].x * dx + this.map.gamers[i].y * dx, -this.map.gamers[i].x * dy + this.map.gamers[i].y * dy + shiftY);
+    drawGamers(map, gamer) {
+        if (map && gamer) {
+            let dx = 32;
+            let dy = 16;
+            let shiftY = this.canvas.width / 2;
+            for (let i = 0; i < map.gamers.length; i++) {
+                if (map.gamers[i].id !== gamer.id) {
+                    this.drawImage('down', map.gamers[i].x * dx + map.gamers[i].y * dx, -map.gamers[i].x * dy + map.gamers[i].y * dy + shiftY);
+                }
             }
         }
     }
