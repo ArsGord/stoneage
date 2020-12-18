@@ -51,6 +51,11 @@ class Human extends Animal {
 
     private function canMove($x, $y, $tiles, $width, $height, $humans) {
         $result = [];
+        if ($this->satiety > 0) {
+            $this->satiety -= 1;
+        } else {
+            $this->hp -= 1;
+        };
         if ($x >= 0 && $y >= 0 && $x <= $width - 1 && $y <= $height - 1) { // проверка на границу карты
             // берем tile, на который хотим пойти
             for ($i = 0; $i < count($tiles); $i++) {
@@ -119,7 +124,8 @@ class Human extends Animal {
             'id' => $this->id,
             'x' => $x,
             'y' => $y,
-            'hp' => $this->hp
+            'hp' => $this->hp,
+            'satiety' => $this->satiety
         ];
         return $result;
     }
