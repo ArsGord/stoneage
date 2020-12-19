@@ -12,9 +12,16 @@ export default class Canvas {
 
     gamerDirection = 'down';
 
-    drawMap(map) {
-        if (map) {
-            let shiftY = this.canvas.height / 2; // убрать
+    getShifts(gamer) {
+        return {
+            x: this.canvas.width / 2 - Number(gamer.x) * 32 - Number(gamer.y) * 32 - 32,
+            y: this.canvas.height / 2 + Number(gamer.x) * 16 - Number(gamer.y) * 16 - 16
+        }
+    }
+
+    drawMap(map, gamer) {
+        if (map && gamer) {
+            let shifts = this.getShifts(gamer);
             let dx = 32;
             let dy = 16;
             let tiles = map.tiles;
@@ -22,40 +29,37 @@ export default class Canvas {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             for (let i = 0; i < map.map.height; i++) {
                 for (let j = 0; j < map.map.width; j++) {
-                    this.drawImage(tiles[count].name, j * dx + i * dx, -(j * dy) + (i * dy) + shiftY);
+                    this.drawImage(tiles[count].name, j * dx + i * dx + shifts.x, -(j * dy) + (i * dy) + shifts.y);
                     count++;
                 }
             }
         }
     }
 
-    drawItem(map) {
-        if(map) {
-            let shiftY = this.canvas.height / 2;
+    drawItem(map, gamer) {
+        if(map && gamer) {
+            let shifts = this.getShifts(gamer);
             let dx = 32;
             let dy = 16;
             let items = map.items;
             for (let i = 0; i < items.length; i++) {
-                this.drawImage(items[i].name, items[i].x * dx + items[i].y * dx, -items[i].x * dy + items[i].y * dy + shiftY);
+                this.drawImage(items[i].name, items[i].x * dx + items[i].y * dx + shifts.x, -items[i].x * dy + items[i].y * dy + shifts.y);
             }
         }
     }
 
-    drawGamer(gamer) {
-        let dx = 32;
-        let dy = 16;
-        let shiftY = this.canvas.width / 2;
-        this.drawImage(this.gamerDirection, gamer.x * dx + gamer.y * dx, -gamer.x * dy + gamer.y * dy + shiftY);
+    drawGamer() {
+        this.drawImage(this.gamerDirection, this.canvas.width / 2 - 32, this.canvas.height / 2 - 16);
     }
 
     drawGamers(map, gamer) {
         if (map && gamer) {
+            let shifts = this.getShifts(gamer);
             let dx = 32;
             let dy = 16;
-            let shiftY = this.canvas.width / 2;
             for (let i = 0; i < map.gamers.length; i++) {
                 if (map.gamers[i].id !== gamer.id) {
-                    this.drawImage('down', map.gamers[i].x * dx + map.gamers[i].y * dx, -map.gamers[i].x * dy + map.gamers[i].y * dy + shiftY);
+                    this.drawImage('down', map.gamers[i].x * dx + map.gamers[i].y * dx + shifts.x, -map.gamers[i].x * dy + map.gamers[i].y * dy + shifts.y);
                 }
             }
         }
@@ -168,10 +172,10 @@ export default class Canvas {
                 this.ctx.drawImage(this.img, 64, 48, 64, 64, x, y - 24, 64, 64);
                 break;
             case 'wood':
-                this.ctx.drawImage(this.img, 128, 48, 32, 48, x + 16, y - 6, 32, 48);
+                this.ctx.drawImage(this.img, 256, 48, 64, 64, x, y - 16, 64, 64);
                 break;
             case 'rock':
-                this.ctx.drawImage(this.img, 192, 48, 34, 48, x + 16, y - 6, 34, 48);
+                this.ctx.drawImage(this.img, 192, 64, 64, 64, x, y - 16, 34, 48);
                 break;
             case 'hut':
                 this.ctx.drawImage(this.img, 0, 114, 148, 161, x, y - 94, 148, 161);
