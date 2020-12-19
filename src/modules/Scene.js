@@ -28,7 +28,7 @@ export default class Scene {
             this.canvas.drawMap(this.map, this.gamer);
             this.canvas.drawItem(this.map, this.gamer);
             this.canvas.drawGamers(this.map, this.gamer);
-            this.canvas.drawGamer();
+            this.canvas.drawGamer(this.gamer);
         }
     }
 

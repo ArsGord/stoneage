@@ -10,8 +10,6 @@ export default class Canvas {
         }
     }
 
-    gamerDirection = 'down';
-
     getShifts(gamer) {
         return {
             x: this.canvas.width / 2 - Number(gamer.x) * 32 - Number(gamer.y) * 32 - 32,
@@ -48,8 +46,8 @@ export default class Canvas {
         }
     }
 
-    drawGamer() {
-        this.drawImage(this.gamerDirection, this.canvas.width / 2 - 32, this.canvas.height / 2 - 16);
+    drawGamer(gamer) {
+        this.drawImage(this.changeDiretction(gamer.direction), this.canvas.width / 2 - 32, this.canvas.height / 2 - 16);
     }
 
     drawGamers(map, gamer) {
@@ -59,9 +57,32 @@ export default class Canvas {
             let dy = 16;
             for (let i = 0; i < map.gamers.length; i++) {
                 if (map.gamers[i].id !== gamer.id) {
-                    this.drawImage('down', map.gamers[i].x * dx + map.gamers[i].y * dx + shifts.x, -map.gamers[i].x * dy + map.gamers[i].y * dy + shifts.y);
+                    this.drawImage(this.changeDiretction(map.gamers[i].direction), map.gamers[i].x * dx + map.gamers[i].y * dx + shifts.x, -map.gamers[i].x * dy + map.gamers[i].y * dy + shifts.y);
                 }
             }
+        }
+    }
+
+    changeDiretction(direction) {
+        switch (direction) {
+            case 'left':
+                return 'leftDown';
+            case 'right':
+                return 'rightUp';
+            case 'up':
+                return 'leftUp';
+            case 'down':
+                return 'rightDown';
+            case 'rightDown':
+                return 'right';
+            case 'leftDown':
+                return 'down';
+            case 'rightUp':
+                return 'up';
+            case 'leftUp':
+                return 'left';
+            default:
+                return '';
         }
     }
 
@@ -72,36 +93,26 @@ export default class Canvas {
         let sinPiDiv = this.sinPiDiv;
         if (cos > 0) {
             if (sin > sinPiDiv(8 / 3)) {
-                this.gamerDirection = 'up';
                 await this.server.move('rightUp');
             } else if (sin > sinPiDiv(8)) {
-                this.gamerDirection = 'rightUp';
                 await this.server.move('right');
             } else if (sin > -sinPiDiv(8)) {
-                this.gamerDirection = 'right';
                 await this.server.move('rightDown');
             } else if (sin > -sinPiDiv(8 / 3)) {
-                this.gamerDirection = 'rightDown';
                 await this.server.move('down');
             } else {
-                this.gamerDirection = 'down';
                 await this.server.move('leftDown');
             }
         } else {
             if (sin > sinPiDiv(8 / 3)) {
-                this.gamerDirection = 'up';
                 await this.server.move('rightUp');
             } else if (sin > sinPiDiv(8)) {
-                this.gamerDirection = 'leftUp';
                 await this.server.move('up');
             } else if (sin > -sinPiDiv(8)) {
-                this.gamerDirection = 'left';
                 await this.server.move('leftUp');
             } else if (sin > -sinPiDiv(8 / 3)) {
-                this.gamerDirection = 'leftDown';
                 await this.server.move('left');
             } else {
-                this.gamerDirection = 'down';
                 await this.server.move('leftDown');
             }
         }
