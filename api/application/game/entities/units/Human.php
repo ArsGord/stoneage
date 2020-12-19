@@ -9,6 +9,7 @@ class Human extends Animal {
         $this->backpack = $data->backpack;
         $this->protection = $data->protection;
         $this->user_id = $data->user_id;
+        $this->direction = $data->direction;
     }
 
     public function hit($damage = 0) {
@@ -49,7 +50,7 @@ class Human extends Animal {
         }*/
     }
 
-    private function canMove($x, $y, $tiles, $width, $height, $humans) {
+    private function canMove($x, $y, $tiles, $width, $height, $humans, $direction) {
         $result = [];
         if ($this->satiety > 0) {
             $this->satiety -= 1;
@@ -125,7 +126,8 @@ class Human extends Animal {
             'x' => $x,
             'y' => $y,
             'hp' => $this->hp,
-            'satiety' => $this->satiety
+            'satiety' => $this->satiety,
+            'direction' => $direction
         ];
         return $result;
     }
@@ -140,42 +142,42 @@ class Human extends Animal {
             case 'left':
                 $x = $this->x - 1;
                 $y = $this->y;
-                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans, 'left');
                 break;
             case 'right':
                 $x = $this->x + 1;
                 $y = $this->y;
-                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans, 'right');
                 break;
             case 'up':
                 $x = $this->x;
                 $y = $this->y - 1;
-                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans, 'up');
                 break;
             case 'down':
                 $x = $this->x;
                 $y = $this->y + 1;
-                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans, 'down');
                 break;
             case 'leftUp':
                 $x = $this->x - 1;
                 $y = $this->y - 1;
-                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans, 'leftUp');
                 break;
             case 'rightUp':
                 $x = $this->x + 1;
                 $y = $this->y - 1;
-                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans, 'rightUp');
                 break;
             case 'leftDown':
                 $x = $this->x - 1;
                 $y = $this->y + 1;
-                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans, 'leftDown');
                 break;
             case 'rightDown':
                 $x = $this->x + 1;
                 $y = $this->y + 1;
-                return $this->canMove($x, $y, $tiles, $width, $height, $humans);
+                return $this->canMove($x, $y, $tiles, $width, $height, $humans, 'rightDown');
                 break;
         }
         return false;

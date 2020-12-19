@@ -136,7 +136,7 @@ class DB {
 
     public function updateGamer($params, $id) {
         foreach ($params as $key => $val) {
-            $stmt = $this->conn->prepare("UPDATE gamer SET `$key`=$val WHERE `id`=$id");
+            $stmt = $this->conn->prepare("UPDATE gamer SET `$key`='$val' WHERE `id`=$id");
             $stmt->execute();
         }
     }

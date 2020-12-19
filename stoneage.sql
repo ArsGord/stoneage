@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Дек 11 2020 г., 19:10
--- Версия сервера: 10.3.13-MariaDB
--- Версия PHP: 7.1.22
+-- Время создания: Дек 19 2020 г., 19:17
+-- Версия сервера: 10.3.22-MariaDB
+-- Версия PHP: 7.1.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -32,6 +31,7 @@ CREATE TABLE `gamer` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `status` varchar(16) NOT NULL,
+  `direction` varchar(10) NOT NULL,
   `x` int(11) NOT NULL,
   `y` int(11) NOT NULL,
   `hp` int(11) NOT NULL,
@@ -42,12 +42,12 @@ CREATE TABLE `gamer` (
 -- Дамп данных таблицы `gamer`
 --
 
-INSERT INTO `gamer` (`id`, `user_id`, `status`, `x`, `y`, `hp`, `satiety`) VALUES
-(1, 1, 'offline', 1, 2, 100, 100),
-(2, 2, 'offline', 1, 2, 100, 100),
-(3, 3, 'online', 2, 1, 100, 100),
-(4, 4, 'online', 1, 2, 100, 100),
-(5, 5, 'offline', 4, 2, 100, 100);
+INSERT INTO `gamer` (`id`, `user_id`, `status`, `direction`, `x`, `y`, `hp`, `satiety`) VALUES
+(1, 1, 'online', 'left', 0, 4, 100, 68),
+(2, 2, 'offline', 'down', 4, 2, 90, 91),
+(3, 3, 'offline', 'down', 2, 1, 100, 100),
+(4, 4, 'offline', 'down', 1, 2, 100, 100),
+(5, 5, 'offline', 'down', 5, 0, 100, 100);
 
 -- --------------------------------------------------------
 
@@ -129,7 +129,7 @@ CREATE TABLE `maps` (
 --
 
 INSERT INTO `maps` (`id`, `name`, `hash`, `field`, `width`, `height`) VALUES
-(1, 'первая карта', '78635104aab3965516f92f14857e4ae8', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
+(1, 'первая карта', '868ae45eb7c6d40748ebca733d6c3ffa', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
 
 -- --------------------------------------------------------
 
@@ -200,7 +200,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `login`, `password`, `token`) VALUES
-(1, 'Вася', 'vasya', '4a2d247d0c05a4f798b0b03839d94cf0', ''),
+(1, 'Вася', 'vasya', '4a2d247d0c05a4f798b0b03839d94cf0', 'e0eec26f4b8afd34b59eb3256fb9a671'),
 (2, 'Петя', 'petya', 'd7ba312b012b3374ef53eb2e3f9830a5', ''),
 (3, 'МарияИванна', 'masha', '68626ed9a3adbaf5bfd9148d42edd26b', 'b834f47eea96a26d61ba894a2a3e5964'),
 (4, 'Виталик228', 'Vitalek', 'be102ee3f322c437670ae29934756240', ''),
