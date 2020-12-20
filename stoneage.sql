@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Дек 20 2020 г., 14:40
+-- Время создания: Дек 20 2020 г., 22:42
 -- Версия сервера: 10.3.22-MariaDB
 -- Версия PHP: 7.1.33
 
@@ -43,7 +43,7 @@ CREATE TABLE `gamer` (
 --
 
 INSERT INTO `gamer` (`id`, `user_id`, `status`, `direction`, `x`, `y`, `hp`, `satiety`) VALUES
-(1, 1, 'offline', 'rightUp', 16, 31, 37, 0),
+(1, 1, 'offline', 'left', 3, 2, 100, 100),
 (2, 2, 'offline', 'down', 4, 2, 90, 91),
 (3, 3, 'offline', 'down', 2, 1, 100, 100),
 (4, 4, 'offline', 'down', 1, 2, 100, 100),
@@ -66,16 +66,17 @@ CREATE TABLE `items` (
   `gamer_id` int(11) DEFAULT NULL,
   `inventory` varchar(12) NOT NULL,
   `x` int(11) DEFAULT NULL,
-  `y` int(11) DEFAULT NULL
+  `y` int(11) DEFAULT NULL,
+  `count` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `items`
 --
 
-INSERT INTO `items` (`id`, `type_id`, `name`, `hp`, `calories`, `armor`, `damage`, `gamer_id`, `inventory`, `x`, `y`) VALUES
-(1, 9, 'wood', 100, NULL, NULL, NULL, NULL, 'map', 1, 2),
-(28, 1, 'axe', 100, NULL, NULL, 15, 1, 'right_hand', NULL, NULL);
+INSERT INTO `items` (`id`, `type_id`, `name`, `hp`, `calories`, `armor`, `damage`, `gamer_id`, `inventory`, `x`, `y`, `count`) VALUES
+(1, 9, 'wood', 100, NULL, NULL, NULL, NULL, 'map', 1, 2, NULL),
+(31, 11, 'meat', 100, 10, NULL, NULL, 1, 'left_hand', NULL, NULL, 8);
 
 -- --------------------------------------------------------
 
@@ -107,7 +108,8 @@ INSERT INTO `item_type` (`id`, `type`, `name`, `default_hp`, `calories`, `armor`
 (7, 'animal', 'human', 100, 100, NULL, 5),
 (8, 'animal', 'cow', 40, 10, NULL, NULL),
 (9, 'resource', 'wood', 100, NULL, NULL, NULL),
-(10, 'resource', 'stone', 100, NULL, NULL, NULL);
+(10, 'resource', 'stone', 100, NULL, NULL, NULL),
+(11, 'food', 'meat', 100, 10, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -128,7 +130,7 @@ CREATE TABLE `maps` (
 --
 
 INSERT INTO `maps` (`id`, `name`, `hash`, `width`, `height`) VALUES
-(1, 'первая карта', '5a285dc6e29ef5249f626fe00374866a', 50, 50);
+(1, 'первая карта', '8bbb9402760bed3483b99b8720ca377f', 50, 50);
 
 -- --------------------------------------------------------
 
@@ -2731,13 +2733,13 @@ ALTER TABLE `gamer`
 -- AUTO_INCREMENT для таблицы `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT для таблицы `item_type`
 --
 ALTER TABLE `item_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT для таблицы `maps`
