@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Дек 19 2020 г., 19:17
+-- Время создания: Дек 20 2020 г., 13:10
 -- Версия сервера: 10.3.22-MariaDB
 -- Версия PHP: 7.1.33
 
@@ -43,7 +43,7 @@ CREATE TABLE `gamer` (
 --
 
 INSERT INTO `gamer` (`id`, `user_id`, `status`, `direction`, `x`, `y`, `hp`, `satiety`) VALUES
-(1, 1, 'online', 'left', 0, 4, 100, 68),
+(1, 1, 'offline', 'left', 3, 3, 100, 56),
 (2, 2, 'offline', 'down', 4, 2, 90, 91),
 (3, 3, 'offline', 'down', 2, 1, 100, 100),
 (4, 4, 'offline', 'down', 1, 2, 100, 100),
@@ -75,7 +75,7 @@ CREATE TABLE `items` (
 
 INSERT INTO `items` (`id`, `type_id`, `name`, `hp`, `calories`, `armor`, `damage`, `gamer_id`, `inventory`, `x`, `y`) VALUES
 (1, 9, 'wood', 100, NULL, NULL, NULL, NULL, 'map', 1, 2),
-(2, 9, 'wood', 100, NULL, NULL, NULL, 1, 'backpack', 3, 2);
+(28, 1, 'axe', 100, NULL, NULL, 15, 1, 'right_hand', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -86,28 +86,28 @@ INSERT INTO `items` (`id`, `type_id`, `name`, `hp`, `calories`, `armor`, `damage
 CREATE TABLE `item_type` (
   `id` int(11) NOT NULL,
   `type` varchar(16) NOT NULL,
+  `name` varchar(16) NOT NULL,
   `default_hp` int(11) NOT NULL,
   `calories` int(11) DEFAULT NULL,
-  `name` varchar(16) NOT NULL,
   `armor` int(11) DEFAULT NULL,
-  `damage` int(11) DEFAULT NULL,
-  `sprite` varchar(32) DEFAULT NULL
+  `damage` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `item_type`
 --
 
-INSERT INTO `item_type` (`id`, `type`, `default_hp`, `calories`, `name`, `armor`, `damage`, `sprite`) VALUES
-(1, 'weapon', 100, NULL, 'Axe', NULL, 15, NULL),
-(2, 'weapon', 100, NULL, 'Bow', NULL, 15, NULL),
-(3, 'weapon', 100, NULL, 'Spear', NULL, 20, NULL),
-(4, 'weapon', 100, NULL, 'Shield', 5, 5, NULL),
-(5, 'building', 250, NULL, 'hut', 5, NULL, NULL),
-(6, 'building', 150, NULL, 'wall', 5, NULL, NULL),
-(7, 'animal', 100, 100, 'human', NULL, 5, NULL),
-(8, 'animal', 40, 10, 'cow', NULL, NULL, NULL),
-(9, 'resource', 100, NULL, 'Wood', NULL, NULL, NULL);
+INSERT INTO `item_type` (`id`, `type`, `name`, `default_hp`, `calories`, `armor`, `damage`) VALUES
+(1, 'weapon', 'axe', 100, NULL, NULL, 15),
+(2, 'weapon', 'bow', 100, NULL, NULL, 15),
+(3, 'weapon', 'spear', 100, NULL, NULL, 20),
+(4, 'weapon', 'shield', 100, NULL, 5, 5),
+(5, 'building', 'hut', 250, NULL, 5, NULL),
+(6, 'building', 'wall', 150, NULL, 5, NULL),
+(7, 'animal', 'human', 100, 100, NULL, 5),
+(8, 'animal', 'cow', 40, 10, NULL, NULL),
+(9, 'resource', 'wood', 100, NULL, NULL, NULL),
+(10, 'resource', 'stone', 100, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -129,7 +129,7 @@ CREATE TABLE `maps` (
 --
 
 INSERT INTO `maps` (`id`, `name`, `hash`, `field`, `width`, `height`) VALUES
-(1, 'первая карта', '868ae45eb7c6d40748ebca733d6c3ffa', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
+(1, 'первая карта', '36cea70e56df3987c66e1eafcbac2df1', '1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1', 6, 5);
 
 -- --------------------------------------------------------
 
@@ -200,7 +200,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `login`, `password`, `token`) VALUES
-(1, 'Вася', 'vasya', '4a2d247d0c05a4f798b0b03839d94cf0', 'e0eec26f4b8afd34b59eb3256fb9a671'),
+(1, 'Вася', 'vasya', '4a2d247d0c05a4f798b0b03839d94cf0', ''),
 (2, 'Петя', 'petya', 'd7ba312b012b3374ef53eb2e3f9830a5', ''),
 (3, 'МарияИванна', 'masha', '68626ed9a3adbaf5bfd9148d42edd26b', 'b834f47eea96a26d61ba894a2a3e5964'),
 (4, 'Виталик228', 'Vitalek', 'be102ee3f322c437670ae29934756240', ''),
@@ -261,13 +261,13 @@ ALTER TABLE `gamer`
 -- AUTO_INCREMENT для таблицы `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT для таблицы `item_type`
 --
 ALTER TABLE `item_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT для таблицы `maps`
