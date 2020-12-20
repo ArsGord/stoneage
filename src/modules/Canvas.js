@@ -27,7 +27,11 @@ export default class Canvas {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             for (let i = 0; i < map.map.height; i++) {
                 for (let j = 0; j < map.map.width; j++) {
-                    this.drawImage(tiles[count].name, j * dx + i * dx + shifts.x, -(j * dy) + (i * dy) + shifts.y);
+                    let x = j * dx + i * dx + shifts.x;
+                    let y = -(j * dy) + (i * dy) + shifts.y;
+                    if (x > -64 && x < this.canvas.width && y > -64 && y < this.canvas.height) {
+                        this.drawImage(tiles[count].name, x, y);
+                    }
                     count++;
                 }
             }
