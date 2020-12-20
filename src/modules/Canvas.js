@@ -184,6 +184,7 @@ export default class Canvas {
                 this.ctx.drawImage(this.img, 0, 48, 64, 48, x, y, 64, 48);
                 break;
             case 'tree':
+                this.ctx.drawImage(this.img, 64, 0, 64, 48, x, y, 64, 48);
                 this.ctx.drawImage(this.img, 64, 48, 64, 64, x, y - 24, 64, 64);
                 break;
             case 'wood':
