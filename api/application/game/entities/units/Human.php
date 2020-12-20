@@ -205,11 +205,6 @@ class Human extends Animal {
         ];
     }
 
-    public function dropItem() {
-        return $this->right_hand;
-        return false;
-    }
-
     public function putOn() {
         // для проверки
         //$this->right_hand = (object) ['type' => 'clothes'];
@@ -267,14 +262,44 @@ class Human extends Animal {
     }
 
     public function eat() {
-        // для проверки
-        //$this->right_hand = (object) ['type' => 'food'];
-        if($this->right_hand->type === 'food') {
-            return $this->right_hand;
-        } elseif ($this->left_hand->type === 'food') {
-            return $this->left_hand;
+        $result = [];
+        if ($this->hp < 100 || $this->satiety < 100) {
+            if($this->right_hand->type === 'food') {
+                if ($this->hp < 100) {
+                    $this->hp += $this->right_hand->calories;
+                    if ($this->hp > 100) $this->hp = 100;
+                } else {
+                    $this->satiety += $this->right_hand->calories;
+                    if ($this->satiety > 100) $this->satiety = 100;
+                }
+                $this->right_hand->count--;
+                $result[] = [
+                    'type' => 'food',
+                    'id' => $this->right_hand->id,
+                    'count' => $this->right_hand->count
+                ];
+            } elseif ($this->left_hand->type === 'food') {
+                if ($this->hp < 100) {
+                    $this->hp += $this->left_hand->calories;
+                    if ($this->hp > 100) $this->hp = 100;
+                } else {
+                    $this->satiety += $this->left_hand->calories;
+                    if ($this->satiety > 100) $this->satiety = 100;
+                }
+                $this->left_hand->count--;
+                $result[] = [
+                    'type' => 'food',
+                    'id' => $this->left_hand->id,
+                    'count' => $this->left_hand->count
+                ];
+            }
+            $result[] = [
+                'type' => 'human',
+                'hp' => $this->hp,
+                'satiety' => $this->satiety
+            ];
         }
-        return false;
+        return $result;
     }
 
     public function makeItem() {

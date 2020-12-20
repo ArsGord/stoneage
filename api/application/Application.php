@@ -123,7 +123,7 @@ class Application {
     public function eat($params) {
         $user = $this->user->getUserByToken($params['token']);
         if ($user) {
-            return $this->game->eat($user->id);
+            return $this->game->eat($user['id']);
         }
     }
 
@@ -148,7 +148,7 @@ class Application {
         }
     }
 
-    public function fillMap() {
+    /*public function fillMap() {
         return $this->game->fillMap();
-    }
+    }*/
 }

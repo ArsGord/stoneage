@@ -166,19 +166,26 @@ class Game {
 
     // поесть
     public function eat($userId) {
-        $human = new Human($this->db->getHumanByUserId($userId));
+        $human = new Human($this->db->getGamer($userId));
         if ($human) {
-            $itemId = $human->eat();
-            $item = $this->db->getItemById($itemId);
-        }
-        if ($item) {
-            $human->satiety += $item->calories; // добавляем сытость
-            $item->count--; // уменьшаем кол-во еды
-            if ($item->count <= 0) {
-                $item = null;
+            $result = $human->eat();
+            if ($result) {
+                foreach ($result as $key => $val) {
+                    switch ($val['type']) {
+                        case 'human':
+                            unset($result[$key]['type']);
+                            $this->db->updateGamer($result[$key], $human->id);
+                        case 'food':
+                            if ((int)$result[$key]['count'] === 0) {
+                                $this->db->deleteItem($result[$key]['id']);
+                            } else {
+                                unset($result[$key]['type']);
+                                $this->db->updateItem($result[$key], $result[$key]['id']);
+                            }
+                    }
+                }
+                return true;
             }
-            // обновить в БД
-            return true;
         }
         return false;
     }
@@ -309,7 +316,7 @@ class Game {
         return $Tiles;
     }
 
-    public function fillMap() {
+    /*public function fillMap() {
         $tile = [];
         $map = $this->db->getMap();
         $sizes = [
@@ -368,7 +375,7 @@ class Game {
             }
         }
         return true;
-    }
+    }*/
     // обновить игровое окружение
         // (проголодать всех живых существ, умереть голодных,
         // сходить коровками, вырасти травку, сменить время суток, протухнуть еду)

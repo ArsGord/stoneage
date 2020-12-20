@@ -32,6 +32,11 @@ class DB {
         $stmt = $this->conn->prepare("SELECT * FROM items WHERE gamer_id=$id");
         $stmt->execute();
         $items = $stmt->fetchAll(PDO::FETCH_CLASS);
+        foreach($items as $key => $val) {
+            $defParams = $this->getDefaultItemById($val->type_id);
+            $items[$key]->type = $defParams->type;
+        }
+
         for ($i = 0; $i < count($items); $i++) {
             if($items[$i]->inventory === 'left_hand') {
                 $gamer->left_hand = $items[$i];
@@ -181,13 +186,21 @@ class DB {
         return true;
     }
 
-    public function deleteItem($item_id) {
-        $stmt = $this->conn->prepare("DELETE FROM `items` WHERE `items`.`id` = $item_id ");
+    public function deleteItem($itemId) {
+        $stmt = $this->conn->prepare("DELETE FROM `items` WHERE `items`.`id` = $itemId ");
         $stmt->execute();
     }
 
-    public function addTile($tile) {
+    public function updateItem($params, $itemId) {
+        foreach ($params as $key => $val) {
+            $stmt = $this->conn->prepare("UPDATE `items` SET `$key` = '$val' WHERE `id` = '$itemId'");
+            $stmt->execute();
+        }
+        return true;
+    }
+
+    /*public function addTile($tile) {
         $stmt = $this->conn->prepare("INSERT INTO `tiles` (`type`, `name`, `x`, `y`) VALUES ($tile->type, '$tile->name', $tile->x, $tile->y)");
         $stmt->execute();
-    }
+    }*/
 }
