@@ -13,7 +13,7 @@ export default class Scene {
     }
 
     map = {};
-    update = setInterval(() => { this.updateScene() }, 3000);
+    update = setInterval(() => { this.updateScene() }, 300);
 
     clInterval() {
         delete this.canvas;
