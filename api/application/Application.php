@@ -147,4 +147,8 @@ class Application {
             return $this->game->keepBuilding();
         }
     }
+
+    public function fillMap() {
+        return $this->game->fillMap();
+    }
 }

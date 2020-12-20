@@ -37,6 +37,7 @@ function router($params) {
             case 'getGamers': return $app->getGamers($params);
             case 'getGamer': return $app->getGamer($params);
             case 'join': return $app->join($params);
+            //case 'fillMap': return $app->fillMap();
         }
     }
     return false;

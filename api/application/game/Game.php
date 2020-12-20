@@ -308,6 +308,67 @@ class Game {
         }
         return $Tiles;
     }
+
+    public function fillMap() {
+        $tile = [];
+        $map = $this->db->getMap();
+        $sizes = [
+            'width' => (int)$map->width,
+            'height' => (int)$map->height
+        ];
+        for ($i = 40; $i < 50; $i++) { // y (высота)
+            for ($j = 0; $j < $sizes['width']; $j++) { // x (ширина)
+                switch (rand(1, 5)) {
+                    case 1:
+                        $tile = (object) [
+                            'type' => 1,
+                            'name' => 'dirt',
+                            'x' => $j,
+                            'y' => $i
+                        ];
+                        $this->db->addTile($tile);
+                        break;
+                    case 2:
+                        $tile = (object) [
+                            'type' => 1,
+                            'name' => 'grass',
+                            'x' => $j,
+                            'y' => $i
+                        ];
+                        $this->db->addTile($tile);
+                        break;
+                    case 3:
+                        $tile = (object) [
+                            'type' => 1,
+                            'name' => 'snow',
+                            'x' => $j,
+                            'y' => $i
+                        ];
+                        $this->db->addTile($tile);
+                        break;
+                    case 4:
+                        $tile = (object) [
+                            'type' => 1,
+                            'name' => 'sand',
+                            'x' => $j,
+                            'y' => $i
+                        ];
+                        $this->db->addTile($tile);
+                        break;
+                    case 5:
+                        $tile = (object) [
+                            'type' => 0,
+                            'name' => 'water',
+                            'x' => $j,
+                            'y' => $i
+                        ];
+                        $this->db->addTile($tile);
+                        break;
+                }
+            }
+        }
+        return true;
+    }
     // обновить игровое окружение
         // (проголодать всех живых существ, умереть голодных,
         // сходить коровками, вырасти травку, сменить время суток, протухнуть еду)

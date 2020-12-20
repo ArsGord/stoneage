@@ -185,4 +185,9 @@ class DB {
         $stmt = $this->conn->prepare("DELETE FROM `items` WHERE `items`.`id` = $item_id ");
         $stmt->execute();
     }
+
+    public function addTile($tile) {
+        $stmt = $this->conn->prepare("INSERT INTO `tiles` (`type`, `name`, `x`, `y`) VALUES ($tile->type, '$tile->name', $tile->x, $tile->y)");
+        $stmt->execute();
+    }
 }
