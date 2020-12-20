@@ -4,7 +4,6 @@ class Entity {
     function __construct($data) {
         $this->id    = $data->id;
         $this->type  = $data->type;
-        $this->image = $data->image;
         $this->name  = $data->name;
         $this->hp    = $data->hp;
         $this->x     = $data->x;

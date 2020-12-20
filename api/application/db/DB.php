@@ -141,6 +141,12 @@ class DB {
         }
     }
 
+    public function getDefaultItemById($item_id) {
+        $stmt = $this->conn->prepare("SELECT * FROM `item_type` WHERE `id` = $item_id");
+        $stmt->execute();
+        return $stmt->fetchObject();
+    }
+
     public function getItems() {
         $stmt = $this->conn->prepare("SELECT * FROM items WHERE inventory = 'map'");
         $stmt->execute();
@@ -165,11 +171,18 @@ class DB {
         $stmt = $this->conn->prepare("UPDATE items SET gamer_id = null, inventory = 'map', x = '$x', y = '$y' WHERE id = '$item->id'");
         $stmt->execute();
     }
-    public function getItemById($itemId) {
-        return ['calories' => 10, 'count' => 2];
+
+    public function createItem($item) {
+        $stmt = $this->conn->prepare(
+            "INSERT INTO `items` (`type_id`, `name`, `hp`, `calories`, `armor`, `damage`, `gamer_id`, `inventory`) 
+            VALUES ($item->type_id, '$item->name', $item->hp, $item->calories, $item->armor, $item->damage, $item->gamer_id, '$item->inventory')"
+        );
+        $stmt->execute();
+        return true;
     }
 
-    public function updateInventory($humanId) {
-        //$this->getHumanByUserId($humanId);
+    public function deleteItem($item_id) {
+        $stmt = $this->conn->prepare("DELETE FROM `items` WHERE `items`.`id` = $item_id ");
+        $stmt->execute();
     }
 }

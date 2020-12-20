@@ -278,7 +278,37 @@ class Human extends Animal {
     }
 
     public function makeItem() {
-        return true;
+        $result = [];
+        if ($this->right_hand && $this->left_hand) {
+            if ($this->right_hand->name === 'stone' && $this->left_hand->name === 'wood') {
+                $result[] = [
+                    'type' => 'delete',
+                    'id' => $this->right_hand->id,
+                ];
+                $result[] = [
+                    'type' => 'delete',
+                    'id' => $this->left_hand->id,
+                ];
+                $result[] = [
+                    'type' => 'create',
+                    'type_id' => 1
+                ];
+            } elseif ($this->right_hand->name === 'wood' && $this->left_hand->name === 'stone') {
+                $result[] = [
+                    'type' => 'delete',
+                    'id' => $this->right_hand->id,
+                ];
+                $result[] = [
+                    'type' => 'delete',
+                    'id' => $this->left_hand->id,
+                ];
+                $result[] = [
+                    'type' => 'create',
+                    'type_id' => 1
+                ];
+            }
+        }
+        return $result;
     }
 
     public function makeBuilding($userId) {

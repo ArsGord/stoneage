@@ -185,9 +185,32 @@ class Game {
 
     // сделать предмет
     public function makeItem($userId) {
-        $human = new Human($this->db->getHumanByUserId($userId));
+        $human = new Human($this->db->getGamer($userId));
         if ($human) {
-            $human->makeItem();
+            $result = $human->makeItem();
+            if ($result) {
+                foreach ($result as $key => $val) {
+                    switch ($val['type']) {
+                        case 'delete':
+                            $this->db->deleteItem($val['id']);
+                            break;
+                        case 'create':
+                            $item = $this->db->getDefaultItemById($val['type_id']); // берем предмет из БД
+                            // переименование свойств объекта
+                            $item->hp = $item->default_hp;
+                            $item->type_id = $item->id;
+                            unset($item->default_hp, $item->type, $item->id);
+                            $item->gamer_id = $human->id;
+                            $item->inventory = 'right_hand';
+                            foreach ($item as $key => $val) {
+                                if (!$val) {
+                                    $item->$key = 'NULL';
+                                }
+                            }
+                            return $this->db->createItem($item);
+                    }
+                }
+            }
         }
         return false;
     }

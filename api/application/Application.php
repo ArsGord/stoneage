@@ -130,7 +130,7 @@ class Application {
     public function makeItem($params) {
         $user = $this->user->getUserByToken($params['token']);
         if ($user) {
-            return $this->game->makeItem($user->id);
+            return $this->game->makeItem($user['id']);
         }
     }
 
